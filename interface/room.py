@@ -10,7 +10,7 @@ class Room(QtGui.QWidget):
         self.x = x
         self.y = y
         self.initUI()
-        print str.format("Creating room at x:{0}, y:{1}", x, y)
+
         self.activecolor = '#FF0000'
         self.idlecolor = '#000000'
 
@@ -18,13 +18,9 @@ class Room(QtGui.QWidget):
 
     def markActive(self):
         self.bordercolor = self.activecolor
-        self.repaint()
-        if hasattr(TFMapperRegistry.activeRoom, 'markInActive'):
-            TFMapperRegistry.activeRoom.markInActive()
-        TFMapperRegistry.activeRoom = self
 
     def markInActive(self):
-        self.repaint()
+        self.bordercolor = self.idlecolor
 
     def mousePressEvent(self, QMouseEvent):
         self.markActive()
@@ -34,7 +30,7 @@ class Room(QtGui.QWidget):
         self.setGeometry(self.x, self.y, self.edgeSize, self.edgeSize)
 
     def paintEvent(self, e):
-        #print 'PAINTING with'+self.bordercolor
+
         color = QtGui.QColor(0, 0, 0)
         color.setNamedColor(self.bordercolor)
 
@@ -76,5 +72,3 @@ class Room(QtGui.QWidget):
         if 'nw' in self.exits:
             qp.drawLine(0, 0, sizeChunk, sizeChunk)
         qp.end()
-
-        self.bordercolor = self.idlecolor
