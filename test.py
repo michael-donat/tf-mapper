@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '../ui/test.ui'
+# Form implementation generated from reading ui file '../ui\test.ui'
 #
-# Created: Wed Feb 27 22:50:34 2013
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Thu Feb 28 09:20:26 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -127,30 +136,30 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuView.setTitle(QtGui.QApplication.translate("MainWindow", "View", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("MainWindow", "MAPNAME", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        self.menuFile.setTitle(_translate("MainWindow", "File", None))
+        self.menuView.setTitle(_translate("MainWindow", "View", None))
+        self.label.setText(_translate("MainWindow", "MAPNAME", None))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(QtGui.QApplication.translate("MainWindow", "Property", None, QtGui.QApplication.UnicodeUTF8))
+        item.setText(_translate("MainWindow", "Property", None))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(QtGui.QApplication.translate("MainWindow", "Value", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setText(QtGui.QApplication.translate("MainWindow", "NW", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_4.setText(QtGui.QApplication.translate("MainWindow", "W", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_3.setText(QtGui.QApplication.translate("MainWindow", "NE", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_6.setText(QtGui.QApplication.translate("MainWindow", "E", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_2.setText(QtGui.QApplication.translate("MainWindow", "N", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_7.setText(QtGui.QApplication.translate("MainWindow", "SW", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_8.setText(QtGui.QApplication.translate("MainWindow", "S", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_9.setText(QtGui.QApplication.translate("MainWindow", "SE", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox.setItemText(0, QtGui.QApplication.translate("MainWindow", "Walk", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox.setItemText(1, QtGui.QApplication.translate("MainWindow", "Create", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNew.setText(QtGui.QApplication.translate("MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpen.setText(QtGui.QApplication.translate("MainWindow", "Open", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave_As.setText(QtGui.QApplication.translate("MainWindow", "Save As", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDummy.setText(QtGui.QApplication.translate("MainWindow", "Dummy", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit_2.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionTollbox.setText(QtGui.QApplication.translate("MainWindow", "Tollbox", None, QtGui.QApplication.UnicodeUTF8))
+        item.setText(_translate("MainWindow", "Value", None))
+        self.toolButton.setText(_translate("MainWindow", "NW", None))
+        self.toolButton_4.setText(_translate("MainWindow", "W", None))
+        self.toolButton_3.setText(_translate("MainWindow", "NE", None))
+        self.toolButton_6.setText(_translate("MainWindow", "E", None))
+        self.toolButton_2.setText(_translate("MainWindow", "N", None))
+        self.toolButton_7.setText(_translate("MainWindow", "SW", None))
+        self.toolButton_8.setText(_translate("MainWindow", "S", None))
+        self.toolButton_9.setText(_translate("MainWindow", "SE", None))
+        self.comboBox.setItemText(0, _translate("MainWindow", "Walk", None))
+        self.comboBox.setItemText(1, _translate("MainWindow", "Create", None))
+        self.actionNew.setText(_translate("MainWindow", "New", None))
+        self.actionOpen.setText(_translate("MainWindow", "Open", None))
+        self.actionSave.setText(_translate("MainWindow", "Save", None))
+        self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
+        self.actionDummy.setText(_translate("MainWindow", "Dummy", None))
+        self.actionQuit_2.setText(_translate("MainWindow", "Quit", None))
+        self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+        self.actionTollbox.setText(_translate("MainWindow", "Tollbox", None))
 

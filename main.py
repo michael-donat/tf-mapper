@@ -14,6 +14,16 @@ class Drawer:
     frame = None
     @staticmethod
     def drawRoom(x, y, exits):
+
+        #before we draw lets check if there is already a room at given coordinates
+        possibleRoom = Drawer.frame.childAt(x, y)
+
+        print possibleRoom if possibleRoom else 'NO ROOM'
+
+        if possibleRoom:
+            #no need to draw again, just link rooms again if needed
+            return
+
         return Room(Drawer.frame, x, y, exits)
 
     @staticmethod
@@ -27,6 +37,10 @@ class Drawer:
     @staticmethod
     def drawNFrom(room, exits):
         return Drawer.drawRoom(room.x, room.y-Room.edgeSize, exits)
+
+    @staticmethod
+    def drawSWFrom(room, exits):
+        return Drawer.drawRoom(room.x-Room.edgeSize, room.y+Room.edgeSize, exits)
 
 class TFMapperRegistry:
     activeRoom=None
@@ -44,8 +58,21 @@ class TFMapper(QtGui.QMainWindow):
         room = Drawer.drawRoom(150, 150, ['ne', 'e'])
         room = Drawer.drawEFrom(room, ['w', 'n'])
         room = Drawer.drawNFrom(room, ['sw', 's'])
+        room = Drawer.drawSWFrom(room, ['ne'])
 
+class Map:
+    """
+    Class to hold map data (rooms, links, etc)
+    """
+    def __init__(self):
+        pass
 
+class Link:
+    """
+    Represents links between rooms, each room should have a link from one exit to another
+    """
+    def __init__(self):
+        pass
 
 class Room(QtGui.QWidget):
     edgeSize=90
@@ -55,7 +82,7 @@ class Room(QtGui.QWidget):
         self.x = x
         self.y = y
         self.initUI()
-
+        print str.format("Creating room at x:{0}, y:{1}", x, y)
         self.activecolor = '#FF0000'
         self.idlecolor = '#000000'
 
@@ -83,19 +110,26 @@ class Room(QtGui.QWidget):
         color = QtGui.QColor(0, 0, 0)
         color.setNamedColor(self.bordercolor)
 
+        pen = QtGui.QPen(color)
+        pen.setWidth(1)
+
         qp = QtGui.QPainter()
 
         sizeChunk = self.edgeSize / 6
 
         qp.begin(self)
-        qp.setPen(color)
+        qp.setPen(pen)
+
         qp.drawRect(sizeChunk, sizeChunk, sizeChunk*4, sizeChunk*4)
+        qp.drawText(sizeChunk+10, sizeChunk+10, str.format("{0}x{1}", self.x, self.y))
         qp.end()
 
         qp.begin(self)
         color = QtGui.QColor(0, 0, 0)
         color.setNamedColor(self.idlecolor)
-        qp.setPen(color)
+        pen.setColor(color)
+        qp.setPen(pen)
+
 
         if 'n' in self.exits:
             qp.drawLine(sizeChunk*3, 0, sizeChunk*3, sizeChunk)

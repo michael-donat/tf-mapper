@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '../ui/app_ui.ui'
+# Form implementation generated from reading ui file '../ui\main.ui'
 #
-# Created: Wed Feb 27 22:50:34 2013
-#      by: PyQt4 UI code generator 4.9.4
+# Created: Thu Feb 28 09:20:26 2013
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -32,7 +41,7 @@ class Ui_MainWindow(object):
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
         self.frame.setObjectName(_fromUtf8("frame"))
-        self.gridLayout.addWidget(self.frame, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.frame, 0, 1, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 725, 22))
@@ -60,21 +69,12 @@ class Ui_MainWindow(object):
         self.label = QtGui.QLabel(self.dockWidgetContents_2)
         self.label.setObjectName(_fromUtf8("label"))
         self.verticalLayout.addWidget(self.label)
-        self.tableWidget = QtGui.QTableWidget(self.dockWidgetContents_2)
-        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
-        self.tableWidget.setColumnCount(2)
-        self.tableWidget.setRowCount(0)
-        item = QtGui.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(0, item)
-        item = QtGui.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(1, item)
-        self.verticalLayout.addWidget(self.tableWidget)
+        spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.gridLayout_2 = QtGui.QGridLayout()
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem, 1, 0, 1, 1)
         self.toolButton_2 = QtGui.QToolButton(self.dockWidgetContents_2)
         self.toolButton_2.setMinimumSize(QtCore.QSize(30, 30))
         self.toolButton_2.setMaximumSize(QtCore.QSize(30, 30))
@@ -95,12 +95,21 @@ class Ui_MainWindow(object):
         self.toolButton_9.setObjectName(_fromUtf8("toolButton_9"))
         self.buttonGroup.addButton(self.toolButton_9)
         self.gridLayout_2.addWidget(self.toolButton_9, 2, 3, 1, 1)
+        self.toolButton_10 = QtGui.QToolButton(self.dockWidgetContents_2)
+        self.toolButton_10.setMinimumSize(QtCore.QSize(30, 30))
+        self.toolButton_10.setMaximumSize(QtCore.QSize(30, 30))
+        self.toolButton_10.setObjectName(_fromUtf8("toolButton_10"))
+        self.gridLayout_2.addWidget(self.toolButton_10, 0, 4, 1, 1)
         self.toolButton_7 = QtGui.QToolButton(self.dockWidgetContents_2)
         self.toolButton_7.setMinimumSize(QtCore.QSize(30, 30))
         self.toolButton_7.setMaximumSize(QtCore.QSize(30, 30))
         self.toolButton_7.setObjectName(_fromUtf8("toolButton_7"))
         self.buttonGroup.addButton(self.toolButton_7)
         self.gridLayout_2.addWidget(self.toolButton_7, 2, 1, 1, 1)
+        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.gridLayout_2.addItem(spacerItem1, 1, 0, 1, 1)
+        spacerItem2 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.gridLayout_2.addItem(spacerItem2, 1, 5, 1, 1)
         self.toolButton = QtGui.QToolButton(self.dockWidgetContents_2)
         self.toolButton.setEnabled(True)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
@@ -131,8 +140,17 @@ class Ui_MainWindow(object):
         self.toolButton_4.setObjectName(_fromUtf8("toolButton_4"))
         self.buttonGroup.addButton(self.toolButton_4)
         self.gridLayout_2.addWidget(self.toolButton_4, 1, 1, 1, 1)
-        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.gridLayout_2.addItem(spacerItem1, 1, 4, 1, 1)
+        self.toolButton_5 = QtGui.QToolButton(self.dockWidgetContents_2)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Fixed, QtGui.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.toolButton_5.sizePolicy().hasHeightForWidth())
+        self.toolButton_5.setSizePolicy(sizePolicy)
+        self.toolButton_5.setMinimumSize(QtCore.QSize(30, 70))
+        self.toolButton_5.setMaximumSize(QtCore.QSize(30, 70))
+        self.toolButton_5.setFocusPolicy(QtCore.Qt.TabFocus)
+        self.toolButton_5.setObjectName(_fromUtf8("toolButton_5"))
+        self.gridLayout_2.addWidget(self.toolButton_5, 1, 4, 2, 1)
         self.horizontalLayout_2.addLayout(self.gridLayout_2)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.comboBox = QtGui.QComboBox(self.dockWidgetContents_2)
@@ -175,30 +193,38 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuView.setTitle(QtGui.QApplication.translate("MainWindow", "View", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("MainWindow", "ROOM#", None, QtGui.QApplication.UnicodeUTF8))
-        item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(QtGui.QApplication.translate("MainWindow", "Property", None, QtGui.QApplication.UnicodeUTF8))
-        item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(QtGui.QApplication.translate("MainWindow", "Value", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_2.setText(QtGui.QApplication.translate("MainWindow", "N", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_8.setText(QtGui.QApplication.translate("MainWindow", "S", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_9.setText(QtGui.QApplication.translate("MainWindow", "SE", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_7.setText(QtGui.QApplication.translate("MainWindow", "SW", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton.setText(QtGui.QApplication.translate("MainWindow", "NW", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_3.setText(QtGui.QApplication.translate("MainWindow", "NE", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_6.setText(QtGui.QApplication.translate("MainWindow", "E", None, QtGui.QApplication.UnicodeUTF8))
-        self.toolButton_4.setText(QtGui.QApplication.translate("MainWindow", "W", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox.setItemText(0, QtGui.QApplication.translate("MainWindow", "Walk", None, QtGui.QApplication.UnicodeUTF8))
-        self.comboBox.setItemText(1, QtGui.QApplication.translate("MainWindow", "Create", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionNew.setText(QtGui.QApplication.translate("MainWindow", "New", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpen.setText(QtGui.QApplication.translate("MainWindow", "Open", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave_As.setText(QtGui.QApplication.translate("MainWindow", "Save As", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionDummy.setText(QtGui.QApplication.translate("MainWindow", "Dummy", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit_2.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionTollbox.setText(QtGui.QApplication.translate("MainWindow", "Tollbox", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        self.menuFile.setTitle(_translate("MainWindow", "File", None))
+        self.menuView.setTitle(_translate("MainWindow", "View", None))
+        self.label.setText(_translate("MainWindow", "ROOM#", None))
+        self.toolButton_2.setText(_translate("MainWindow", "N", None))
+        self.toolButton_2.setShortcut(_translate("MainWindow", "8", None))
+        self.toolButton_8.setText(_translate("MainWindow", "S", None))
+        self.toolButton_8.setShortcut(_translate("MainWindow", "2", None))
+        self.toolButton_9.setText(_translate("MainWindow", "SE", None))
+        self.toolButton_9.setShortcut(_translate("MainWindow", "3", None))
+        self.toolButton_10.setText(_translate("MainWindow", "-", None))
+        self.toolButton_10.setShortcut(_translate("MainWindow", "-", None))
+        self.toolButton_7.setText(_translate("MainWindow", "SW", None))
+        self.toolButton_7.setShortcut(_translate("MainWindow", "1", None))
+        self.toolButton.setText(_translate("MainWindow", "NW", None))
+        self.toolButton.setShortcut(_translate("MainWindow", "7", None))
+        self.toolButton_3.setText(_translate("MainWindow", "NE", None))
+        self.toolButton_3.setShortcut(_translate("MainWindow", "9", None))
+        self.toolButton_6.setText(_translate("MainWindow", "E", None))
+        self.toolButton_6.setShortcut(_translate("MainWindow", "6", None))
+        self.toolButton_4.setText(_translate("MainWindow", "W", None))
+        self.toolButton_4.setShortcut(_translate("MainWindow", "4", None))
+        self.toolButton_5.setText(_translate("MainWindow", "+", None))
+        self.toolButton_5.setShortcut(_translate("MainWindow", "+", None))
+        self.comboBox.setItemText(0, _translate("MainWindow", "Walk", None))
+        self.comboBox.setItemText(1, _translate("MainWindow", "Create", None))
+        self.actionNew.setText(_translate("MainWindow", "New", None))
+        self.actionOpen.setText(_translate("MainWindow", "Open", None))
+        self.actionSave.setText(_translate("MainWindow", "Save", None))
+        self.actionSave_As.setText(_translate("MainWindow", "Save As", None))
+        self.actionDummy.setText(_translate("MainWindow", "Dummy", None))
+        self.actionQuit_2.setText(_translate("MainWindow", "Quit", None))
+        self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+        self.actionTollbox.setText(_translate("MainWindow", "Tollbox", None))
 
