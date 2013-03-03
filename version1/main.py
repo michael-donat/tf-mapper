@@ -5,10 +5,10 @@
 __author__ = 'thornag'
 
 import sys
-import random
-from app_ui import Ui_MainWindow
+from PyQt4 import QtGui
 
-from PyQt4 import QtCore, QtGui, Qt
+from version1.app_ui import Ui_MainWindow
+
 
 class Drawer:
     frame = None

@@ -1,9 +1,12 @@
+from version1.interface import room as iRoom
+from version1.model import map, helper
+
 __author__ = 'thornag'
 
 import sys
-from interface.main import Ui_MainWindow
-from model import map, helper
-from PyQt4 import QtGui, QtCore, Qt
+from version1.interface.main import Ui_MainWindow
+from PyQt4 import QtGui
+
 
 class TFMapper(QtGui.QMainWindow):
     def __init__(self):
@@ -63,8 +66,6 @@ class TFMapper(QtGui.QMainWindow):
 
         #create first room
         middlePoint = self.Map.getMiddlePoint(helper.Config.roomSize)
-
-        from interface import room as iRoom
 
         room = iRoom.Room(mapLevel.widget, middlePoint[0], middlePoint[1], [])
         self.focusRoom(room)

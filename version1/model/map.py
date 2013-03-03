@@ -2,8 +2,8 @@ __author__ = 'thornag'
 
 from PyQt4 import QtGui, QtCore
 
-from interface.room import Room
-from model import helper
+from version1.interface.room import Room
+from version1.model import helper
 
 class Direction:
     N   =   1
