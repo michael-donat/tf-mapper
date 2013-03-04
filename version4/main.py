@@ -33,12 +33,14 @@ if __name__ == '__main__':
     window.mapView().setScene(scene)
     window.mapView().scale(0.5,0.5)
 
+    """
     room = factory.createAt(QtCore.QPointF(0,0),scene)
     navigator.enableCreation(True)
     navigator.go(room, model.Direction.SE, model.Direction.NW)
     navigator.go(room, model.Direction.E, model.Direction.W)
     registry.currentlyVisitedRoom.getView().moveBy(37,0)
     navigator.enableCreation(False)
+    """
 
 
     def zoomIn():
