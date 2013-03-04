@@ -10,12 +10,14 @@ if __name__ == '__main__':
 
     registry = model.Registry()
     navigator = model.Navigator()
+    factory = model.RoomFactory()
 
     di.container.register('Config', model.Config())
     di.container.register('CoordinatesHelper', model.CoordinatesHelper())
-    di.container.register('RoomFactory', model.RoomFactory())
+    di.container.register('RoomFactory', factory)
     di.container.register('Registry', registry)
     di.container.register('Navigator', navigator)
+    di.container.register('Map', model.Map)
 
     application = QtGui.QApplication(sys.argv)
     window = view.uiMainWindow()
@@ -30,6 +32,14 @@ if __name__ == '__main__':
 
     window.mapView().setScene(scene)
     window.mapView().scale(0.5,0.5)
+
+    room = factory.createAt(QtCore.QPointF(0,0),scene)
+    navigator.enableCreation(True)
+    navigator.go(room, model.Direction.SE, model.Direction.NW)
+    navigator.go(room, model.Direction.E, model.Direction.W)
+    registry.currentlyVisitedRoom.getView().moveBy(37,0)
+    navigator.enableCreation(False)
+
 
     def zoomIn():
         window.mapView().scale(1.2, 1.2)

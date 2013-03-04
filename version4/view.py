@@ -18,7 +18,7 @@ class uiMainWindow(window, base):
         return self.__mapView
 
     def keyPressEvent(self, QKeyEvent):
-        if QKeyEvent.key() == QtCore.Qt.Key_Insert:
+        if QKeyEvent.key() in [QtCore.Qt.Key_Insert, QtCore.Qt.Key_Equal]:
             print self.walkerModeSelector
             self.walkerModeSelector.setCurrentIndex(int(not self.walkerModeSelector.currentIndex()))
 
@@ -28,11 +28,6 @@ class uiMainWindow(window, base):
     def keyReleaseEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Shift:
             self.__mapView.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
-
-
-
-
-
 
 class uiMapLevel(QtGui.QGraphicsScene):
     def __init__(self):
@@ -69,7 +64,24 @@ class uiMapView(QtGui.QGraphicsView):
 
         event.accept()
 
+class Link(QtGui.QGraphicsLineItem):
+    __coordinateshelper=di.ComponentRequest('CoordinatesHelper')
+    __model=None
 
+    def __init__(self):
+        super(Link, self).__init__()
+
+    def setModel(self, model):
+        self.__model = model
+
+    def getModel(self,):
+        return self.__model
+
+    def redraw(self):
+        startPoint = self.__coordinateshelper.getExitPoint(self.getModel().getLeft())
+        endPoint = self.__coordinateshelper.getExitPoint(self.getModel().getRight())
+        self.setLine(startPoint.x(), startPoint.y(), endPoint.x(), endPoint.y())
+        self.update()
 
 class Room(QtGui.QGraphicsItem):
     __boundingRect=None
@@ -161,10 +173,10 @@ class Room(QtGui.QGraphicsItem):
         if QGraphicsItem_GraphicsItemChange == QtGui.QGraphicsItem.ItemPositionChange:
             return self.__coordinatesHelper.snapToGrid(QVariant.toPoint())
 
-        #if QGraphicsItem_GraphicsItemChange == QtGui.QGraphicsItem.ItemPositionHasChanged:
-        #    boundingRect = self.scene().itemsBoundingRect()
-        #    boundingRect.adjust(-50,-50,50,50)
-        #    self.scene().setSceneRect(boundingRect)
+        if QGraphicsItem_GraphicsItemChange == QtGui.QGraphicsItem.ItemPositionHasChanged:
+            links = self.getModel().getLinks()
+            for link in links:
+                links[link].getView().redraw()
 
         return super(Room, self).itemChange(QGraphicsItem_GraphicsItemChange, QVariant)
 
