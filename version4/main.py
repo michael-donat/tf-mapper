@@ -1,6 +1,6 @@
 
 import sys
-import di, view, model
+import di, view, model.entity as entity, model.model as model
 
 from PyQt4 import QtCore, QtGui
 
@@ -19,28 +19,46 @@ if __name__ == '__main__':
     di.container.register('Navigator', navigator)
     di.container.register('Map', model.Map)
 
+    registry.roomShadow = view.RoomShadow()
+    registry.roomShadow.hide()
+
+    registry.shadowLink = view.ShadowLink()
+    registry.shadowLink.hide()
+
     application = QtGui.QApplication(sys.argv)
     window = view.uiMainWindow()
     registry.mainWindow = window
     window.show()
 
-    scene = view.uiMapLevel()
-    #scene.setSceneRect(QtCore.QRectF(0,0,10,10))
-    scene.setBackgroundBrush(QtGui.QColor(217, 217, 217))
-
     navigator = model.Navigator()
 
-    window.mapView().setScene(scene)
     window.mapView().scale(0.5,0.5)
 
-    """
+
+    scene = factory.spawnLevel(0).getView()
+    window.mapView().setScene(scene)
+
+
     room = factory.createAt(QtCore.QPointF(0,0),scene)
     navigator.enableCreation(True)
     navigator.go(room, model.Direction.SE, model.Direction.NW)
-    navigator.go(room, model.Direction.E, model.Direction.W)
-    registry.currentlyVisitedRoom.getView().moveBy(37,0)
-    navigator.enableCreation(False)
+    navigator.goWest()
+    navigator.goUp()
+    navigator.goDown()
+
     """
+    sceneB = factory.spawnLevel(1).getView()
+    window.mapView().setScene(sceneB)
+    room = factory.createAt(QtCore.QPointF(0,0),sceneB)
+    navigator.go(room, model.Direction.S, model.Direction.N)
+    """
+
+
+    #window.mapView().setScene(scene)
+
+    navigator.enableCreation(False)
+
+
 
 
     def zoomIn():
@@ -51,6 +69,7 @@ if __name__ == '__main__':
         print window.mapView().transform()
 
     def deb(str):
+
         print str
 
     window.compassN.clicked.connect(navigator.goNorth)
@@ -61,13 +80,23 @@ if __name__ == '__main__':
     window.compassSW.clicked.connect(navigator.goSouthWest)
     window.compassW.clicked.connect(navigator.goWest)
     window.compassNW.clicked.connect(navigator.goNorthWest)
+    window.compassU.clicked.connect(navigator.goUp)
+    window.compassD.clicked.connect(navigator.goDown)
 
     window.zoomIn.clicked.connect(zoomIn)
     window.zoomOut.clicked.connect(zoomOut)
+    window.goLevelUp.clicked.connect(navigator.goLevelUp)
+    window.goLevelDown.clicked.connect(navigator.goLevelDown)
     window.walkerModeSelector.currentIndexChanged.connect(navigator.enableCreation)
+    window.autoPlacement.toggled.connect(navigator.enableAutoPlacement)
 
+    def reportSceneRect():
+        print window.mapView().sceneRect()
 
+    def reportActiveRoom():
+        print registry.currentlyVisitedRoom.getId()
 
+    window.pushButton.clicked.connect(reportActiveRoom)
 
     sys.exit(application.exec_())
 
