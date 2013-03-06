@@ -1,6 +1,7 @@
 
 import sys
 import di, view, model.entity as entity, model.model as model
+import server
 
 from PyQt4 import QtCore, QtGui
 
@@ -38,7 +39,7 @@ if __name__ == '__main__':
     scene = factory.spawnLevel(0).getView()
     window.mapView().setScene(scene)
 
-
+    """
     room = factory.createAt(QtCore.QPointF(0,0),scene)
     navigator.enableCreation(True)
     navigator.go(room, model.Direction.SE, model.Direction.NW)
@@ -46,7 +47,6 @@ if __name__ == '__main__':
     navigator.goUp()
     navigator.goDown()
 
-    """
     sceneB = factory.spawnLevel(1).getView()
     window.mapView().setScene(sceneB)
     room = factory.createAt(QtCore.QPointF(0,0),sceneB)
@@ -96,7 +96,25 @@ if __name__ == '__main__':
     def reportActiveRoom():
         print registry.currentlyVisitedRoom.getId()
 
-    window.pushButton.clicked.connect(reportActiveRoom)
+    def reportServerStatus():
+        print registry.broadcasterServer.tcpServer().isListening()
+
+    window.pushButton.clicked.connect(reportServerStatus)
+
+    def dispatchServerCommand(command):
+        if command == 'n': navigator.goNorth()
+        if command == 'ne': navigator.goNorthEast()
+        if command == 'e': navigator.goEast()
+        if command == 'se': navigator.goSouthEast()
+        if command == 's': navigator.goSouth()
+        if command == 'sw': navigator.goSouthWest()
+        if command == 'w': navigator.goWest()
+        if command == 'nw': navigator.goNorthWest()
+        if command == 'u': navigator.goUp()
+        if command == 'd': navigator.goDown()
+
+    registry.broadcasterServer = broadcasterServer = server.Broadcaster(23923)
+    broadcasterServer.dataReceived.connect(dispatchServerCommand)
 
     sys.exit(application.exec_())
 

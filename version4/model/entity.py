@@ -75,7 +75,7 @@ class Room:
     def delete(self):
         for linkPointer in self.__links:
             link = self.__links[linkPointer]
-            link.getView().scene().removeItem(link.getView())
+            if link.getView(): link.getView().scene().removeItem(link.getView())
             leftRoom = link.getLeft()
             if leftRoom[0].getId() is not self.getId(): leftRoom[0].removeExit(leftRoom[1])
             rightRoom = link.getRight()
