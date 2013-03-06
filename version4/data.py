@@ -62,8 +62,10 @@ class Serializer:
         mapData = string.join(f.readlines(), '')
         f.close()
 
-        mapData = json.loads(base64.standard_b64decode(mapData))
-
+        try:
+            mapData = json.loads(base64.standard_b64decode(mapData))
+        except: return False
+        
         levels = json.loads(base64.standard_b64decode(mapData['levels']))
         rooms = json.loads(base64.standard_b64decode(mapData['rooms']))
         links = json.loads(base64.standard_b64decode(mapData['links']))
