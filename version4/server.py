@@ -15,11 +15,12 @@ class Broadcaster(QtCore.QObject):
         if not self.__tcpServer.listen(QtNetwork.QHostAddress.LocalHost, port):
             raise Exception('Could not initialize socket server.')
         else:
-            print 'Server listening on %s' % port
+            pass
+            #print 'Server listening on %s' % port
 
         self.__tcpServer.newConnection.connect(self.registerClient)
 
-        print self.__tcpServer
+        #print self.__tcpServer
 
     def tcpServer(self):
         return self.__tcpServer

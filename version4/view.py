@@ -187,7 +187,7 @@ class RoomShadow(QtGui.QGraphicsItem):
         if not self.inProcess(): return
         self.__navigator.dropRoomFromShadow()
         self.stopProcess()
-        print 'fired priocess'
+        #print 'fired priocess'
 
     def paint(self, painter, option, widget):
 
@@ -212,9 +212,6 @@ class Room(QtGui.QGraphicsItem):
         self.setFlags(QtGui.QGraphicsItem.ItemSendsGeometryChanges | QtGui.QGraphicsItem.ItemIsSelectable | QtGui.QGraphicsItem.ItemIsMovable | QtGui.QGraphicsItem.ItemIsFocusable)
 
         #self.setFlag(QtGui.QGraphicsItem.ItemIsFocusable)
-
-    def dropEvent(self, QGraphicsSceneDragDropEvent):
-        print QGraphicsSceneDragDropEvent
 
     def setModel(self, model):
         self.__model = model

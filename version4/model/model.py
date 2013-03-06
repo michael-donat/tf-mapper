@@ -10,14 +10,30 @@ __author__ = 'thornag'
 class Map:
     __rooms={}
     __levels={}
+    __links={}
     def levels(self):
         return self.__levels
+
+    def rooms(self):
+        return self.__rooms
+
+    def links(self):
+        return self.__links
 
     def registerRoom(self, room):
         self.__rooms[room.getId()] = room
 
     def registerLevel(self, level):
         self.__levels[level.getMapIndex()] = level
+
+    def removeRoom(self, room):
+        del self.__rooms[room.getId()]
+
+    def registerLink(self, link):
+        self.__links[link.getId()] = link
+
+    def removeLink(self, link):
+        del self.__links[link.getId()]
 
 
 class Direction:
@@ -129,8 +145,8 @@ class RoomFactory:
     def createInDirection(self, direction, QPoint, QGraphicsScene):
         return self.createAt(self.__helper.movePointInDirection(QPoint, direction), QGraphicsScene)
 
-    def createAt(self, QPoint, QGraphicsScene):
-        room = self.spawnRoom()
+    def createAt(self, QPoint, QGraphicsScene, Id=None):
+        room = self.spawnRoom(Id)
         QGraphicsScene.addItem(room.getView())
         room.setPosition(QPoint)
         boundingRect = QGraphicsScene.itemsBoundingRect()
@@ -139,16 +155,20 @@ class RoomFactory:
         room.setLevel(QGraphicsScene.getModel())
         return room
 
-    def spawnRoom(self):
+    def spawnRoom(self, id=None):
         room = Room()
-        room.setId(uuid.uuid1())
+        id_ = uuid.uuid1() if id==None else id
+        room.setId(id_)
         viewRoom = view.Room()
         room.setView(viewRoom)
         self.__map.registerRoom(room)
         return room
 
-    def spawnLink(self, linkLess=False):
+    def spawnLink(self, linkLess=False, id=None):
         link = Link()
+        id_ = uuid.uuid1() if id==None else id
+        link.setId(id_)
+        self.__map.registerLink(link)
         if(linkLess): return link
         viewLink = view.Link()
         link.setView(viewLink)
@@ -178,9 +198,10 @@ class RoomFactory:
         link.getView().redraw()
         QGraphicsScene.addItem(link.getView())
 
-    def spawnLevel(self, mapIndex):
+    def spawnLevel(self, mapIndex, id=None):
         level = Level(mapIndex)
-        level.setId(uuid.uuid1())
+        id_ = uuid.uuid1() if id==None else id
+        level.setId(id_)
         viewLevel = view.uiMapLevel()
         viewLevel.setBackgroundBrush(QtGui.QColor(217, 217, 217))
         level.setView(viewLevel)
@@ -219,7 +240,7 @@ class Navigator:
         currentScene = self.__registry.currentLevel.getView()
         items = currentScene.selectedItems()
         for item in items:
-            print 'deleting'
+            #print 'deleting'
             item.getModel().delete()
 
 
@@ -230,11 +251,11 @@ class Navigator:
         self.__enableAutoPlacement = bool(enable)
 
     def goUp(self):
-        print 'goUp'
+        #print 'goUp'
         return self.goFromActive(Direction.U, Direction.D)
 
     def goDown(self):
-        print 'goDown'
+        #print 'goDown'
         return self.goFromActive(Direction.D, Direction.U)
 
     def goNorth(self):
@@ -320,7 +341,7 @@ class Navigator:
             """
 
             exitLink = currentRoom.linkAt(fromExit)
-            print exitLink
+            #print exitLink
             destinationRoom = exitLink.getDestinationFor(currentRoom)
             self.markVisitedRoom(destinationRoom)
             if fromExit == Direction.U: self.goLevelUp()
@@ -329,7 +350,7 @@ class Navigator:
         elif (self.__enableCreation):
 
             if fromExit in [Direction.U, Direction.D] or toExit in [Direction.D, Direction.U]:
-                print 'creating multilevel room'
+                #print 'creating multilevel room'
                 #what happens when changing level?
                 #if create mode check for collision and if no create ate the same coordinates but on different scene
                 otherLevelIndex = self.__registry.currentLevel.getMapIndex()

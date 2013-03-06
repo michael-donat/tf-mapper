@@ -14,8 +14,20 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="uiComponentCentralWidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>12</number>
+    </property>
+    <item>
      <widget class="QFrame" name="uiMapViewFrame">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -403,7 +415,7 @@
      <item row="3" column="2">
       <widget class="QPushButton" name="pushButton">
        <property name="text">
-        <string>Debug</string>
+        <string>SAVE</string>
        </property>
       </widget>
      </item>

@@ -2,6 +2,7 @@
 import sys
 import di, view, model.entity as entity, model.model as model
 import server
+from data import Serializer
 
 from PyQt4 import QtCore, QtGui
 
@@ -12,13 +13,14 @@ if __name__ == '__main__':
     registry = model.Registry()
     navigator = model.Navigator()
     factory = model.RoomFactory()
+    mapModel = model.Map()
 
     di.container.register('Config', model.Config())
     di.container.register('CoordinatesHelper', model.CoordinatesHelper())
     di.container.register('RoomFactory', factory)
     di.container.register('Registry', registry)
     di.container.register('Navigator', navigator)
-    di.container.register('Map', model.Map)
+    di.container.register('Map', mapModel)
 
     registry.roomShadow = view.RoomShadow()
     registry.roomShadow.hide()
@@ -28,6 +30,7 @@ if __name__ == '__main__':
 
     application = QtGui.QApplication(sys.argv)
     window = view.uiMainWindow()
+    window.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
     registry.mainWindow = window
     window.show()
 
@@ -35,41 +38,19 @@ if __name__ == '__main__':
 
     window.mapView().scale(0.5,0.5)
 
-
-    scene = factory.spawnLevel(0).getView()
-    window.mapView().setScene(scene)
-
-    """
-    room = factory.createAt(QtCore.QPointF(0,0),scene)
-    navigator.enableCreation(True)
-    navigator.go(room, model.Direction.SE, model.Direction.NW)
-    navigator.goWest()
-    navigator.goUp()
-    navigator.goDown()
-
-    sceneB = factory.spawnLevel(1).getView()
-    window.mapView().setScene(sceneB)
-    room = factory.createAt(QtCore.QPointF(0,0),sceneB)
-    navigator.go(room, model.Direction.S, model.Direction.N)
-    """
-
-
-    #window.mapView().setScene(scene)
-
-    navigator.enableCreation(False)
-
-
-
+    if not Serializer.loadMap(window.mapView()):
+        scene = factory.spawnLevel(0).getView()
+        window.mapView().setScene(scene)
+        navigator.enableCreation(False)
 
     def zoomIn():
         window.mapView().scale(1.2, 1.2)
 
     def zoomOut():
         window.mapView().scale(0.8, 0.8)
-        print window.mapView().transform()
+        #print window.mapView().transform()
 
     def deb(str):
-
         print str
 
     window.compassN.clicked.connect(navigator.goNorth)
@@ -99,7 +80,10 @@ if __name__ == '__main__':
     def reportServerStatus():
         print registry.broadcasterServer.tcpServer().isListening()
 
-    window.pushButton.clicked.connect(reportServerStatus)
+    def dumpMap():
+        Serializer.saveMap('123', mapModel)
+
+    window.pushButton.clicked.connect(dumpMap)
 
     def dispatchServerCommand(command):
         if command == 'n': navigator.goNorth()

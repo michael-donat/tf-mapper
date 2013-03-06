@@ -22,7 +22,7 @@ class Level:
         return self.__view
 
     def setId(self, id_):
-        self.__id = id_
+        self.__id = str(id_)
 
     def getId(self):
         return self.__id
@@ -31,6 +31,13 @@ class Link:
     __view=None
     __left=None
     __right=None
+    __id=None
+    def setId(self, id_):
+        self.__id = str(id_)
+
+    def getId(self):
+        return self.__id
+
     def setView(self, view):
         self.__view = view
         view.setModel(self)
@@ -82,16 +89,18 @@ class Room:
             if rightRoom[0].getId() is not self.getId(): rightRoom[0].removeExit(rightRoom[1])
             leftRoom[0].getView().update()
             rightRoom[0].getView().update()
+            self.__map.removeLink(link)
 
         del self.__links
         del self.__exits
         self.getView().scene().removeItem(self.getView())
+        self.__map.removeRoom(self)
 
     def exits(self):
         return self.__exits
 
     def setId(self, id_):
-        self.__id = id_
+        self.__id = str(id_)
 
     def getId(self):
         return self.__id
@@ -137,6 +146,12 @@ class Room:
 
     def setLevel(self, level):
         self.__level = level
+
+    def getLevel(self):
+        return self.__level
+
+    def getSettings(self):
+        return {}
 
 
 
