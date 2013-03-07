@@ -332,6 +332,8 @@ class Navigator:
         currentRoom.addExit(fromExit)
         self.__roomFactory.linkRooms(currentRoom, fromExit, newRoom, toExit, currentRoom.getView().scene())
 
+        self.__registry.mainWindow.autoPlacement.setCheckState(QtCore.Qt.Checked)
+
     def go(self, currentRoom, fromExit, toExit):
 
         """
