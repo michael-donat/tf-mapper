@@ -381,8 +381,8 @@ class Navigator:
 
                 self.markVisitedRoom(newRoom)
 
-                if fromExit == Direction.U: self.goLevelUp()
-                else: self.goLevelDown()
+                #if fromExit == Direction.U: self.goLevelUp()
+                #else: self.goLevelDown()
 
                 self.__roomFactory.linkRoomsBetweenLevels(currentRoom, fromExit, newRoom, toExit)
 
