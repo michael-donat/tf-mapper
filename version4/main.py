@@ -138,13 +138,19 @@ if __name__ == '__main__':
 
         navigator.mergeRooms(rightRoom, leftRoom)
 
-
+    def manualLinkInsertFromSelection():
+        items = registry.currentLevel.getView().selectedItems()
+        try:
+            window.manualLinkRoomLeft.setText(items[0].getModel().getId())
+            window.manualLinkRoomRight.setText(items[1].getModel().getId())
+        except: return False
 
     window.manualLinkRoomLeftInsert.clicked.connect(lambda: copyManualLinkRoomId())
     window.manualLinkRoomRightInsert.clicked.connect(lambda: copyManualLinkRoomId(True))
 
     window.manualLinkExecute.clicked.connect(executeManualLink)
     window.manualMergeExecute.clicked.connect(manualMergeRooms)
+    window.manualLinkInsertFromSelection.clicked.connect(manualLinkInsertFromSelection)
 
     registry.broadcasterServer = broadcasterServer = server.Broadcaster(23923)
     broadcasterServer.dataReceived.connect(dispatchServerCommand)
