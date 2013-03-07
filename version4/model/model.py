@@ -276,7 +276,7 @@ class Navigator:
     def goSouthWest(self):
         return self.goFromActive(Direction.SW, Direction.NE)
 
-    def goWest(self):
+    def     goWest(self):
         return self.goFromActive(Direction.W, Direction.E)
 
     def goNorthWest(self):
@@ -439,16 +439,35 @@ class Navigator:
 
         self.__registry.currentlyVisitedRoom = roomModel
 
+        print 'Before'
+        print str.format('Model coordinates {0}x{1}', roomModel.position().x(), roomModel.position().y())
+        print str.format('View coordinates {0}x{1}', roomModel.getView().pos().x(), roomModel.getView().pos().y())
+        print str.format('Scene rectangle {0}x{1}x{2}x{3}', roomModel.getView().scene().sceneRect().left(), roomModel.getView().scene().sceneRect().top(), roomModel.getView().scene().sceneRect().right(), roomModel.getView().scene().sceneRect().bottom())
+
         roomModel.setCurrentlyVisited(True)
         roomModel.getView().clearFocus()
 
         if len(roomModel.getView().scene().views()):
-            roomModel.getView().scene().views()[0].centerOn(roomModel.getView())
+            roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
+            roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
+            roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
+            pass
+
+        print 'update'
+        print str.format('Model coordinates {0}x{1}', roomModel.position().x(), roomModel.position().y())
+        print str.format('View coordinates {0}x{1}', roomModel.getView().pos().x(), roomModel.getView().pos().y())
+        print str.format('Scene rectangle {0}x{1}x{2}x{3}', roomModel.getView().scene().sceneRect().left(), roomModel.getView().scene().sceneRect().top(), roomModel.getView().scene().sceneRect().right(), roomModel.getView().scene().sceneRect().bottom())
+        print '----'
 
         for item in roomModel.getView().scene().selectedItems():
             item.setSelected(False)
+
+
+
         roomModel.getView().setPos(roomModel.position())
         roomModel.getView().update()
+
+
 
 
 

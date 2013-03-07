@@ -15,17 +15,8 @@
   </property>
   <widget class="QWidget" name="uiComponentCentralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="leftMargin">
+    <property name="margin">
      <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>12</number>
     </property>
     <item>
      <widget class="QFrame" name="uiMapViewFrame">
@@ -84,13 +75,13 @@
    <property name="minimumSize">
     <size>
      <width>250</width>
-     <height>400</height>
+     <height>482</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>250</width>
-     <height>400</height>
+     <height>600</height>
     </size>
    </property>
    <property name="features">
@@ -104,6 +95,26 @@
    </attribute>
    <widget class="QWidget" name="uiComponentToolsPanelContentWidget">
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="5" column="2">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>SAVE</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="2">
       <layout class="QGridLayout" name="compassButtonsGridLayout">
        <item row="0" column="2">
@@ -412,13 +423,6 @@
        </item>
       </layout>
      </item>
-     <item row="3" column="2">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>SAVE</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QComboBox" name="walkerModeSelector">
        <item>
@@ -433,7 +437,7 @@
        </item>
       </widget>
      </item>
-     <item row="4" column="2">
+     <item row="8" column="2">
       <spacer name="toolsPanelSpacerBottom">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -446,7 +450,7 @@
        </property>
       </spacer>
      </item>
-     <item row="6" column="2">
+     <item row="10" column="2">
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
         <widget class="QToolButton" name="zoomOut">
@@ -484,6 +488,39 @@
         <string>Auto placement</string>
        </property>
        <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="lineEdit_2"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLineEdit" name="lineEdit"/>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboBox_2"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QComboBox" name="comboBox"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="text">
+          <string>Create Link</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="4" column="2">
+      <widget class="QLineEdit" name="lineEdit_3">
+       <property name="text">
+        <string>roomId</string>
+       </property>
+       <property name="readOnly">
         <bool>true</bool>
        </property>
       </widget>
