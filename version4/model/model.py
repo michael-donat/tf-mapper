@@ -485,6 +485,7 @@ class Navigator:
 
         roomModel.getView().setPos(roomModel.position())
         roomModel.getView().update()
+        self.__registry.mainWindow.mapView().setScene(roomModel.getView().scene())
 
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
 

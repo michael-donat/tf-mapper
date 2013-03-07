@@ -171,7 +171,6 @@ if __name__ == '__main__':
         if roomId not in mapModel.rooms().keys(): return False
         room = mapModel.rooms()[roomId]
         navigator.markVisitedRoom(room)
-        window.mapView().setScene(room.getView().scene())
 
     def revertToLastRoom():
         if registry.previouslyVisitedRoom is not None:
