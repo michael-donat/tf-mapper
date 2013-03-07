@@ -3,6 +3,7 @@ import sys
 import di, view, model.entity as entity, model.model as model
 import server
 from data import Serializer
+import re
 
 from PyQt4 import QtCore, QtGui
 
@@ -85,16 +86,30 @@ if __name__ == '__main__':
     window.pushButton.clicked.connect(dumpMap)
 
     def dispatchServerCommand(command):
-        if command == 'n': navigator.goNorth()
-        if command == 'ne': navigator.goNorthEast()
-        if command == 'e': navigator.goEast()
-        if command == 'se': navigator.goSouthEast()
-        if command == 's': navigator.goSouth()
-        if command == 'sw': navigator.goSouthWest()
-        if command == 'w': navigator.goWest()
-        if command == 'nw': navigator.goNorthWest()
-        if command == 'u': navigator.goUp()
-        if command == 'd': navigator.goDown()
+        if command == 'navigate:n': navigator.goNorth()
+        if command == 'navigate:polnoc': navigator.goNorth()
+        if command == 'navigate:ne': navigator.goNorthEast()
+        if command == 'navigate:polnocny-wschod': navigator.goNorthEast()
+        if command == 'navigate:e': navigator.goEast()
+        if command == 'navigate:wschod': navigator.goEast()
+        if command == 'navigate:se': navigator.goSouthEast()
+        if command == 'navigate:poludniowy-wschod': navigator.goSouthEast()
+        if command == 'navigate:s': navigator.goSouth()
+        if command == 'navigate:poludnie': navigator.goSouth()
+        if command == 'navigate:sw': navigator.goSouthWest()
+        if command == 'navigate:poludnie-zachod': navigator.goSouthWest()
+        if command == 'navigate:w': navigator.goWest()
+        if command == 'navigate:zachod': navigator.goWest()
+        if command == 'navigate:nw': navigator.goNorthWest()
+        if command == 'navigate:polnocny-zachod': navigator.goNorthWest()
+        if command == 'navigate:u': navigator.goUp()
+        if command == 'navigate:gora': navigator.goUp()
+        if command == 'navigate:d': navigator.goDown()
+        if command == 'navigate:dol': navigator.goDown()
+
+        match =  re.match(r'lookup:([a-z0-9\-]*)', command)
+        if match is not None:
+            lookupRoom(match.group(1))
 
     def executeManualLink():
         leftRoomId = str(window.manualLinkRoomLeft.text())
@@ -145,12 +160,25 @@ if __name__ == '__main__':
             window.manualLinkRoomRight.setText(items[1].getModel().getId())
         except: return False
 
+    def manualLookupRoom():
+        if not window.roomIdDisplay.text(): return False
+        lookupRoom(str(window.roomIdDisplay.text()))
+
+    def lookupRoom(roomId):
+        if roomId not in mapModel.rooms().keys(): return False
+        room = mapModel.rooms()[roomId]
+        navigator.markVisitedRoom(room)
+        window.mapView().setScene(room.getView().scene())
+
+
     window.manualLinkRoomLeftInsert.clicked.connect(lambda: copyManualLinkRoomId())
     window.manualLinkRoomRightInsert.clicked.connect(lambda: copyManualLinkRoomId(True))
 
     window.manualLinkExecute.clicked.connect(executeManualLink)
     window.manualMergeExecute.clicked.connect(manualMergeRooms)
     window.manualLinkInsertFromSelection.clicked.connect(manualLinkInsertFromSelection)
+    window.manualLookupRoom.clicked.connect(manualLookupRoom)
+
 
     registry.broadcasterServer = broadcasterServer = server.Broadcaster(23923)
     broadcasterServer.dataReceived.connect(dispatchServerCommand)
