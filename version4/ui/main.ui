@@ -468,7 +468,7 @@
           <string>U</string>
          </property>
          <property name="shortcut">
-          <string>., -</string>
+          <string>.</string>
          </property>
         </widget>
        </item>
@@ -490,7 +490,7 @@
           <string>D</string>
          </property>
          <property name="shortcut">
-          <string>0, +</string>
+          <string>0</string>
          </property>
         </widget>
        </item>
