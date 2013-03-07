@@ -232,7 +232,10 @@ class Navigator:
     def switchLevel(self, newLevel):
         levels = self.__map.levels()
         if newLevel in levels:
-            self.__registry.currentLevel.getView().views()[0].setScene(levels[newLevel].getView())
+            view = self.__registry.currentLevel.getView().views()[0]
+            self.__registry.mainWindow.mapView().setScene(levels[newLevel].getView())
+            scene = self.__registry.mainWindow.mapView().scene().getModel()
+            print scene
 
     def goLevelDown(self):
         return self.switchLevel(self.__registry.currentLevel.getMapIndex() - 1)
@@ -485,8 +488,8 @@ class Navigator:
 
         roomModel.getView().setPos(roomModel.position())
         roomModel.getView().update()
-        self.__registry.mainWindow.mapView().setScene(roomModel.getView().scene())
 
+        self.switchLevel(roomModel.getLevel().getMapIndex())
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
 
 
