@@ -45,7 +45,7 @@ class Serializer:
         fileData = base64.standard_b64encode(json.dumps(fileData))
 
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
-        baseDir = baseDir+'/.tf-mapper'
+        baseDir = baseDir+'/.tf-mapper/'
         mapFile = baseDir+Serializer.mapFile
 
         try:
@@ -67,7 +67,7 @@ class Serializer:
     @staticmethod
     def loadMap(mapView):
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
-        baseDir = baseDir+'/.tf-mapper'
+        baseDir = baseDir+'/.tf-mapper/'
         mapFile = baseDir+Serializer.mapFile
 
         try:
