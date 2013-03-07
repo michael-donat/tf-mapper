@@ -15,6 +15,7 @@ if __name__ == '__main__':
     navigator = model.Navigator()
     factory = model.RoomFactory()
     mapModel = model.Map()
+    clipboard = model.Clipboard()
 
     di.container.register('Config', model.Config())
     di.container.register('CoordinatesHelper', model.CoordinatesHelper())
@@ -22,6 +23,7 @@ if __name__ == '__main__':
     di.container.register('Registry', registry)
     di.container.register('Navigator', navigator)
     di.container.register('Map', mapModel)
+    di.container.register('Clipboard', clipboard)
 
     registry.roomShadow = view.RoomShadow()
     registry.roomShadow.hide()

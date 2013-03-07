@@ -108,8 +108,9 @@ class Serializer:
         for link in links:
             leftRoom, leftExit = link[:2]
             rightRoom, rightExit = link[2:]
-            leftRoom = rooms[leftRoom]
-            rightRoom = rooms[rightRoom]
+            if leftRoom not in rooms or rightRoom not in rooms: continue
+            leftRoom = rooms[str(leftRoom)]
+            rightRoom = rooms[str(rightRoom)]
 
             leftRoom.addExit(leftExit)
             rightRoom.addExit(rightExit)

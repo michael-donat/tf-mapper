@@ -1,6 +1,7 @@
 
 from PyQt4 import uic, QtGui, QtCore
 import di, model.model as model
+import json, base64
 
 window, base = uic.loadUiType("ui/main.ui")
 
@@ -9,6 +10,7 @@ class uiMainWindow(window, base):
     __registry=di.ComponentRequest('Registry')
     __navigator=di.ComponentRequest('Navigator')
     __factory=di.ComponentRequest('RoomFactory')
+    __clipboard=di.ComponentRequest('Clipboard')
     def __init__(self, parent=None):
         super(base, self).__init__(parent)
         self.setupUi(self)
@@ -52,6 +54,12 @@ class uiMainWindow(window, base):
         if QKeyEvent.key() == QtCore.Qt.Key_Delete:
             self.__navigator.removeRoom()
 
+        if QKeyEvent.matches(QtGui.QKeySequence.Copy):
+            QRectF = QtCore.QRectF()
+            items = self.mapView().scene().selectedItems()
+            for item in items:
+                QRectF = QRectF.united(item.sceneBoundingRect())
+            self.__clipboard.copy(self.mapView().scene(), QRectF)
 
     def keyReleaseEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Shift:
@@ -120,8 +128,15 @@ class uiMapView(QtGui.QGraphicsView):
         action.triggered.connect(lambda: self.roomFactory().createAt(createAt, self.scene()))
 
         menu.addAction(action)
-        menu.exec_(event.globalPos())
 
+        action = QtGui.QAction(str.format('Paste at {0}x{1}', eventPos.x(), eventPos.y()), self)
+        action.setDisabled(True)
+        if QtGui.QApplication.clipboard().text():
+            action.setDisabled(False)
+            action.triggered.connect(lambda: self.roomFactory().pasteAt(createAt, self.scene(), json.loads(base64.standard_b64decode(QtGui.QApplication.clipboard().text()))))
+        menu.addAction(action)
+
+        menu.exec_(event.globalPos())
         event.accept()
 
 class Link(QtGui.QGraphicsLineItem):

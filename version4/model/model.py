@@ -3,6 +3,7 @@ import di, view
 import math, uuid
 from entity import *
 from PyQt4 import QtCore, QtGui
+import json, base64
 
 
 __author__ = 'thornag'
@@ -491,6 +492,19 @@ class Navigator:
 
         self.switchLevel(roomModel.getLevel().getMapIndex())
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
+
+class Clipboard:
+    def copy(self, scene, QRectF):
+        items = []
+        for item in scene.selectedItems():
+            pos = item.sceneBoundingRect()
+            x = pos.x()-QRectF.x()
+            y = pos.y()-QRectF.y()
+            item = (x,y)
+            items.append(item)
+        data = {'rooms':items}
+        QtGui.QApplication.clipboard().setText(base64.standard_b64encode(json.dumps(data)))
+
 
 
 
