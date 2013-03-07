@@ -461,6 +461,7 @@ class Navigator:
 
     def markVisitedRoom(self, roomModel):
         if self.__registry.currentlyVisitedRoom is not None:
+            self.__registry.previouslyVisitedRoom = self.__registry.currentlyVisitedRoom
             self.__registry.currentlyVisitedRoom.setCurrentlyVisited(False)
             self.__registry.currentlyVisitedRoom.getView().update()
 

@@ -96,6 +96,13 @@
    </attribute>
    <widget class="QWidget" name="uiComponentToolsPanelContentWidget">
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="18" column="2">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>SAVE MAP</string>
+       </property>
+      </widget>
+     </item>
      <item row="17" column="2">
       <spacer name="verticalSpacer_2">
        <property name="orientation">
@@ -696,10 +703,10 @@
        </item>
       </layout>
      </item>
-     <item row="18" column="2">
-      <widget class="QPushButton" name="pushButton">
+     <item row="19" column="2">
+      <widget class="QPushButton" name="debugButton">
        <property name="text">
-        <string>SAVE MAP</string>
+        <string>DEBUG</string>
        </property>
       </widget>
      </item>

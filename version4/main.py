@@ -106,6 +106,7 @@ if __name__ == '__main__':
         if command == 'navigate:gora': navigator.goUp()
         if command == 'navigate:d': navigator.goDown()
         if command == 'navigate:dol': navigator.goDown()
+        if command == 'revert': revertToLastRoom()
 
         match =  re.match(r'lookup:([a-z0-9\-]*)', command)
         if match is not None:
@@ -170,6 +171,10 @@ if __name__ == '__main__':
         navigator.markVisitedRoom(room)
         window.mapView().setScene(room.getView().scene())
 
+    def revertToLastRoom():
+        if registry.previouslyVisitedRoom is not None:
+            lookupRoom(registry.previouslyVisitedRoom.getId())
+
 
     window.manualLinkRoomLeftInsert.clicked.connect(lambda: copyManualLinkRoomId())
     window.manualLinkRoomRightInsert.clicked.connect(lambda: copyManualLinkRoomId(True))
@@ -178,6 +183,7 @@ if __name__ == '__main__':
     window.manualMergeExecute.clicked.connect(manualMergeRooms)
     window.manualLinkInsertFromSelection.clicked.connect(manualLinkInsertFromSelection)
     window.manualLookupRoom.clicked.connect(manualLookupRoom)
+    window.debugButton.clicked.connect(revertToLastRoom)
 
 
     registry.broadcasterServer = broadcasterServer = server.Broadcaster(23923)
