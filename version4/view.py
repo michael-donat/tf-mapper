@@ -297,7 +297,6 @@ class Room(QtGui.QGraphicsItem):
     #    self.setSelected(True)
 
     def mouseDoubleClickEvent(self, QGraphicsSceneMouseEvent):
-
        self.__navigator.markVisitedRoom(self.__model)
 
     def itemChange(self, QGraphicsItem_GraphicsItemChange, QVariant):
@@ -305,6 +304,7 @@ class Room(QtGui.QGraphicsItem):
             return self.__coordinatesHelper.snapToGrid(QVariant.toPoint())
 
         if QGraphicsItem_GraphicsItemChange == QtGui.QGraphicsItem.ItemPositionHasChanged:
+            self.getModel().setPositionFromView()
             links = self.getModel().getLinks()
             for link in links:
                 if links[link].getView():

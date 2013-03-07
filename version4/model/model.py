@@ -447,7 +447,7 @@ class Navigator:
 
         for item in roomModel.getView().scene().selectedItems():
             item.setSelected(False)
-
+        roomModel.getView().setPos(roomModel.position())
         roomModel.getView().update()
 
 

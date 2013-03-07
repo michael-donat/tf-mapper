@@ -13,25 +13,34 @@ class Serializer:
     @staticmethod
     def saveMap(fileLocation, mapObject):
         levels = []
+        print 'Gathering levels'
         for index, level in mapObject.levels().items():
             levels.append([level.getId(), level.getMapIndex(), level.getView().sceneRect().x(),level.getView().sceneRect().y(), level.getView().sceneRect().width(), level.getView().sceneRect().height()])
+        print 'Serializing levels'
         levelsData = base64.standard_b64encode(json.dumps(levels))
+        print 'Done -----'
 
         rooms = []
+        print 'Gathering rooms'
         for index, room in mapObject.rooms().items():
             rooms.append([room.getId(), room.getLevel().getId(), room.getView().pos().x(), room.getView().pos().y(), room.getSettings()])
-
+        print 'Serializing rooms'
         roomsData = base64.standard_b64encode(json.dumps(rooms))
+        print 'Done -----'
 
         links = []
+        print 'Gathering rooms'
         for index, link in mapObject.links().items():
             links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getRight()[0].getId(), link.getRight()[1]])
-
+        print 'Serializing rooms'
         linksData = base64.standard_b64encode(json.dumps(links))
+        print 'Done -----'
 
+        print 'Creating data dictionary'
         fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData)])
 
-        fileData = string.join(textwrap.wrap(base64.standard_b64encode(json.dumps(fileData))), '\n')
+        print 'Serializing it'
+        fileData = base64.standard_b64encode(json.dumps(fileData))
 
         baseDir = os.getenv("HOME")+'/.tf-mapper'
         mapFile = baseDir+'/map.db'
@@ -45,11 +54,12 @@ class Serializer:
         if os.path.exists(mapFile):
             shutil.move(mapFile, mapFile+'.bak')
 
+        print 'Writing data dictionary'
         f = open(mapFile, 'w')
         f.write(fileData+'\n')
         f.close()
 
-        #print fileData
+        print ' ------ SAVE COMPLETE -------'
 
     @staticmethod
     def loadMap(mapView):
@@ -65,7 +75,7 @@ class Serializer:
         try:
             mapData = json.loads(base64.standard_b64decode(mapData))
         except: return False
-        
+
         levels = json.loads(base64.standard_b64decode(mapData['levels']))
         rooms = json.loads(base64.standard_b64decode(mapData['rooms']))
         links = json.loads(base64.standard_b64decode(mapData['links']))

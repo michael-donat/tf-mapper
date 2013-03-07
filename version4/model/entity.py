@@ -79,6 +79,9 @@ class Room:
         self.__exits = exits
         self.__links={}
 
+    def position(self):
+        return self.__position
+
     def delete(self):
         for linkPointer in self.__links:
             link = self.__links[linkPointer]
@@ -131,6 +134,9 @@ class Room:
     def setPosition(self, QPoint):
         self.__position = QPoint
         self.__view.setPos(QtCore.QPointF(QPoint))
+
+    def setPositionFromView(self):
+        self.__position = self.__view.pos()
 
     def hasLinkAt(self, direction):
         return direction in self.__links
