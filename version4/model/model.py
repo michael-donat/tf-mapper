@@ -354,9 +354,9 @@ class Navigator:
             destinationRoom = exitLink.getDestinationFor(currentRoom)
             self.markVisitedRoom(destinationRoom)
 
-            if destinationRoom.getLevel().getId() != currentRoom.getLevel().getId():
-                if fromExit == Direction.U: self.goLevelUp()
-                elif fromExit == Direction.D: self.goLevelDown()
+            #if destinationRoom.getLevel().getId() != currentRoom.getLevel().getId():
+            #    if fromExit == Direction.U: self.goLevelUp()
+            #    elif fromExit == Direction.D: self.goLevelDown()
 
         elif (self.__enableCreation):
 
