@@ -11,6 +11,22 @@ from PyQt4 import QtGui, QtCore
 
 if __name__ == '__main__':
 
+    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity"])
+
+    spawnRemoteConnection = False
+    noServer = False
+    mapFile='map.db'
+
+    for opt, arg in opts:
+        if opt in ("-m", "--map"):
+            mapFile=arg
+        if opt in ("-r", "--remote"):
+            spawnRemoteConnection = True
+        if opt == "--disable-connectivity":
+            noServer = True
+
+    Serializer.mapFile = mapFile
+
     registry = model.Registry()
     navigator = model.Navigator()
     factory = model.RoomFactory()
@@ -188,16 +204,13 @@ if __name__ == '__main__':
     window.manualLookupRoom.clicked.connect(manualLookupRoom)
     window.debugButton.clicked.connect(revertToLastRoom)
 
-    spawnRemoteConnection = False
-    for arg in sys.argv:
-        if arg == '--remote': spawnRemoteConnection = True
-
-    if not spawnRemoteConnection:
-        registry.broadcasterServer = broadcasterServer = network.Broadcaster(23923)
-        broadcasterServer.dataReceived.connect(dispatchServerCommand)
-    else:
-        registry.clientServer = clientServer = network.Listener('localhost', 9999)
-        clientServer.dataReceived.connect(dispatchServerCommand)
+    if not noServer:
+        if not spawnRemoteConnection:
+            registry.broadcasterServer = broadcasterServer = network.Broadcaster(23923)
+            broadcasterServer.dataReceived.connect(dispatchServerCommand)
+        else:
+            registry.clientServer = clientServer = network.Listener('localhost', 9999)
+            clientServer.dataReceived.connect(dispatchServerCommand)
 
 
 

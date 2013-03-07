@@ -11,6 +11,7 @@ import di
 class Serializer:
     factory = di.ComponentRequest('RoomFactory')
     registry = di.ComponentRequest('Map')
+    mapFile=None
     @staticmethod
     def saveMap(fileLocation, mapObject):
         levels = []
@@ -45,7 +46,7 @@ class Serializer:
 
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
         baseDir = baseDir+'/.tf-mapper'
-        mapFile = baseDir+'/map.db'
+        mapFile = baseDir+Serializer.mapFile
 
         try:
             os.mkdir(baseDir)
@@ -67,7 +68,8 @@ class Serializer:
     def loadMap(mapView):
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
         baseDir = baseDir+'/.tf-mapper'
-        mapFile = baseDir+'/map.db'
+        mapFile = baseDir+Serializer.mapFile
+
         try:
             f = open(mapFile, 'r')
         except: return False
