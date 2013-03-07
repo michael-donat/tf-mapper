@@ -8,6 +8,7 @@ class uiMainWindow(window, base):
     __mapView=None
     __registry=di.ComponentRequest('Registry')
     __navigator=di.ComponentRequest('Navigator')
+    __factory=di.ComponentRequest('RoomFactory')
     def __init__(self, parent=None):
         super(base, self).__init__(parent)
         self.setupUi(self)
@@ -210,6 +211,7 @@ class Room(QtGui.QGraphicsItem):
     __navigator= di.ComponentRequest('Navigator')
     __coordinatesHelper= di.ComponentRequest('CoordinatesHelper')
     __model=None
+    __factory=di.ComponentRequest('RoomFactory')
     def __init__(self):
         super(Room, self).__init__()
         self.__boundingRect = QtCore.QRectF(0,0,self.__config.getSize(),self.__config.getSize())
@@ -247,7 +249,7 @@ class Room(QtGui.QGraphicsItem):
             painter.setBrush(currentColor)
             if self.isSelected():
                 painter.setPen(QtCore.Qt.DashLine)
-            painter.drawRect(0,0,objectSize,objectSize)
+            painter.drawEllipse(0,0,objectSize,objectSize)
         else:
             currentColor = self.color
             painter.setBrush(self.color)

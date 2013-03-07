@@ -562,6 +562,20 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="manualLinkRoomRightInsert">
+         <property name="text">
+          <string>Insert</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="manualLinkRoomLeftInsert">
+         <property name="text">
+          <string>Insert</string>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="1">
         <widget class="QComboBox" name="manualLinkLinkRight">
          <item>
@@ -616,17 +630,10 @@
          </item>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="manualLinkRoomRightInsert">
+       <item row="4" column="0" colspan="2">
+        <widget class="QPushButton" name="manualMergeExecute">
          <property name="text">
-          <string>Insert</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QPushButton" name="manualLinkRoomLeftInsert">
-         <property name="text">
-          <string>Insert</string>
+          <string>Merge Rooms</string>
          </property>
         </widget>
        </item>

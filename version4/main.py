@@ -125,10 +125,26 @@ if __name__ == '__main__':
         else:
             window.manualLinkRoomRight.setText(window.roomIdDisplay.text())
 
+    def manualMergeRooms():
+        leftRoomId = str(window.manualLinkRoomLeft.text())
+        rightRoomId = str(window.manualLinkRoomRight.text())
+
+        if not leftRoomId or not rightRoomId: return False
+
+        leftRoom = mapModel.rooms()[leftRoomId] if leftRoomId in mapModel.rooms() else None
+        rightRoom = mapModel.rooms()[rightRoomId] if rightRoomId in mapModel.rooms() else None
+
+        if not leftRoom or not rightRoom: return False
+
+        navigator.mergeRooms(rightRoom, leftRoom)
+
+
+
     window.manualLinkRoomLeftInsert.clicked.connect(lambda: copyManualLinkRoomId())
     window.manualLinkRoomRightInsert.clicked.connect(lambda: copyManualLinkRoomId(True))
 
     window.manualLinkExecute.clicked.connect(executeManualLink)
+    window.manualMergeExecute.clicked.connect(manualMergeRooms)
 
     registry.broadcasterServer = broadcasterServer = server.Broadcaster(23923)
     broadcasterServer.dataReceived.connect(dispatchServerCommand)

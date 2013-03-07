@@ -438,6 +438,27 @@ class Navigator:
                 @todo: Need to refactor this so navigator doesnt create set active
                 """
 
+    def mergeRooms(self, existingRoom, overlappingRoom):
+        print 'running room merge for'
+        print existingRoom
+        print overlappingRoom
+        for exit, link in existingRoom.getLinks().items():
+            if overlappingRoom.hasExit(exit):
+                raise Exception('Cannot merge rooms as some exits are overlapping')
+
+        #we will delete the old room cause new one is half way through update event so we don't want to screw with it
+        links = existingRoom.getLinks()
+        for exit_, link in links.items():
+            link.replaceRoomPointer(existingRoom, overlappingRoom)
+            existingRoom.removeExit(exit_)
+            overlappingRoom.addExit(exit_)
+            overlappingRoom.addLink(exit_, link)
+            link.getView().redraw()
+
+        overlappingRoom.getView().update()
+
+        existingRoom.delete()
+
     def markVisitedRoom(self, roomModel):
         if self.__registry.currentlyVisitedRoom is not None:
             self.__registry.currentlyVisitedRoom.setCurrentlyVisited(False)
