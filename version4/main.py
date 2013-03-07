@@ -30,7 +30,6 @@ if __name__ == '__main__':
 
     application = QtGui.QApplication(sys.argv)
     window = view.uiMainWindow()
-    window.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
     registry.mainWindow = window
     window.show()
 
@@ -96,6 +95,40 @@ if __name__ == '__main__':
         if command == 'nw': navigator.goNorthWest()
         if command == 'u': navigator.goUp()
         if command == 'd': navigator.goDown()
+
+    def executeManualLink():
+        leftRoomId = str(window.manualLinkRoomLeft.text())
+        rightRoomId = str(window.manualLinkRoomRight.text())
+        leftExit = window.manualLinkLinkLeft.currentText()
+        rightExit = window.manualLinkLinkRight.currentText()
+
+        if not leftRoomId or not rightRoomId or not leftExit or not rightExit: return False
+
+        leftRoom = mapModel.rooms()[leftRoomId] if leftRoomId in mapModel.rooms() else None
+        rightRoom = mapModel.rooms()[rightRoomId] if rightRoomId in mapModel.rooms() else None
+
+        if not leftRoom or not rightRoom: return False
+
+        leftExit = model.Direction.mapFromLabel(leftExit)
+        rightExit = model.Direction.mapFromLabel(rightExit)
+
+        factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, rightRoom.getLevel().getView() if leftExit not in [model.Direction.U, model.Direction.D] and rightExit not in [model.Direction.U, model.Direction.D] and rightRoom.getLevel().getId() == leftRoom.getLevel().getId() else None)
+
+        leftRoom.addExit(leftExit)
+        rightRoom.addExit(rightExit)
+        leftRoom.getView().update()
+        rightRoom.getView().update()
+
+    def copyManualLinkRoomId(isRight=False):
+        if not isRight:
+            window.manualLinkRoomLeft.setText(window.roomIdDisplay.text())
+        else:
+            window.manualLinkRoomRight.setText(window.roomIdDisplay.text())
+
+    window.manualLinkRoomLeftInsert.clicked.connect(lambda: copyManualLinkRoomId())
+    window.manualLinkRoomRightInsert.clicked.connect(lambda: copyManualLinkRoomId(True))
+
+    window.manualLinkExecute.clicked.connect(executeManualLink)
 
     registry.broadcasterServer = broadcasterServer = server.Broadcaster(23923)
     broadcasterServer.dataReceived.connect(dispatchServerCommand)

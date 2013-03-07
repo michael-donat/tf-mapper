@@ -42,7 +42,7 @@
      <x>0</x>
      <y>0</y>
      <width>868</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -61,6 +61,7 @@
      <string>View</string>
     </property>
     <addaction name="menuActionShowToolsPanel"/>
+    <addaction name="menuActionKepOnTop"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -494,31 +495,150 @@
      </item>
      <item row="7" column="2">
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_2"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLineEdit" name="lineEdit"/>
-       </item>
        <item row="1" column="1">
-        <widget class="QComboBox" name="comboBox_2"/>
+        <widget class="QLineEdit" name="manualLinkRoomRight"/>
        </item>
        <item row="1" column="0">
-        <widget class="QComboBox" name="comboBox"/>
+        <widget class="QLineEdit" name="manualLinkRoomLeft"/>
        </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QPushButton" name="pushButton_2">
+       <item row="2" column="0">
+        <widget class="QComboBox" name="manualLinkLinkLeft">
+         <item>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>NE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>E</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>S</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SW</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>W</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>NW</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>U</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>D</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QPushButton" name="manualLinkExecute">
          <property name="text">
           <string>Create Link</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="manualLinkLinkRight">
+         <item>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>NE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>E</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SE</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>S</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SW</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>W</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>NW</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>U</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>D</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="manualLinkRoomRightInsert">
+         <property name="text">
+          <string>Insert</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="manualLinkRoomLeftInsert">
+         <property name="text">
+          <string>Insert</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item row="4" column="2">
-      <widget class="QLineEdit" name="lineEdit_3">
+      <widget class="QLineEdit" name="roomIdDisplay">
        <property name="text">
-        <string>roomId</string>
+        <string/>
+       </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -568,6 +688,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="menuActionKepOnTop">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Always on top</string>
    </property>
   </action>
  </widget>
@@ -621,7 +749,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>menuActionKepOnTop</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setKeepOnTop(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>433</x>
+     <y>263</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>setKeepOnTop(bool)</slot>
+ </slots>
  <buttongroups>
   <buttongroup name="compassButtons"/>
  </buttongroups>

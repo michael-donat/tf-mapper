@@ -47,6 +47,10 @@ class Direction:
     NW=128
     U=256
     D=512
+    @staticmethod
+    def mapFromLabel(label):
+        return getattr(Direction, str(label))
+
 
 class CoordinatesHelper:
     __config = di.ComponentRequest('Config')
@@ -344,8 +348,10 @@ class Navigator:
             #print exitLink
             destinationRoom = exitLink.getDestinationFor(currentRoom)
             self.markVisitedRoom(destinationRoom)
-            if fromExit == Direction.U: self.goLevelUp()
-            elif fromExit == Direction.D: self.goLevelDown()
+
+            if destinationRoom.getLevel().getId() != currentRoom.getLevel().getId():
+                if fromExit == Direction.U: self.goLevelUp()
+                elif fromExit == Direction.D: self.goLevelDown()
 
         elif (self.__enableCreation):
 
@@ -439,33 +445,24 @@ class Navigator:
 
         self.__registry.currentlyVisitedRoom = roomModel
 
-        print 'Before'
-        print str.format('Model coordinates {0}x{1}', roomModel.position().x(), roomModel.position().y())
-        print str.format('View coordinates {0}x{1}', roomModel.getView().pos().x(), roomModel.getView().pos().y())
-        print str.format('Scene rectangle {0}x{1}x{2}x{3}', roomModel.getView().scene().sceneRect().left(), roomModel.getView().scene().sceneRect().top(), roomModel.getView().scene().sceneRect().right(), roomModel.getView().scene().sceneRect().bottom())
-
         roomModel.setCurrentlyVisited(True)
         roomModel.getView().clearFocus()
 
         if len(roomModel.getView().scene().views()):
+            #workaround to a bug with centerAt
             roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
             roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
             roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
             pass
 
-        print 'update'
-        print str.format('Model coordinates {0}x{1}', roomModel.position().x(), roomModel.position().y())
-        print str.format('View coordinates {0}x{1}', roomModel.getView().pos().x(), roomModel.getView().pos().y())
-        print str.format('Scene rectangle {0}x{1}x{2}x{3}', roomModel.getView().scene().sceneRect().left(), roomModel.getView().scene().sceneRect().top(), roomModel.getView().scene().sceneRect().right(), roomModel.getView().scene().sceneRect().bottom())
-        print '----'
 
         for item in roomModel.getView().scene().selectedItems():
             item.setSelected(False)
 
-
-
         roomModel.getView().setPos(roomModel.position())
         roomModel.getView().update()
+
+        self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
 
 
 

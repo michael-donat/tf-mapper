@@ -16,6 +16,13 @@ class uiMainWindow(window, base):
         self.uiMapViewFrame.layout().addWidget(self.__mapView)
         self.__mapView.show()
 
+    def setKeepOnTop(self, keep):
+        if keep:
+            self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
+        else:
+            self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowStaysOnTopHint)
+        self.show()
+
     def mapView(self):
         return self.__mapView
 

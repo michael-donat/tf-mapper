@@ -3,7 +3,8 @@ __author__ = 'thornag'
 import json
 import base64
 import textwrap, string
-import os, shutil
+import os, shutil, sys
+import model.model as model
 
 import di
 
@@ -42,7 +43,8 @@ class Serializer:
         print 'Serializing it'
         fileData = base64.standard_b64encode(json.dumps(fileData))
 
-        baseDir = os.getenv("HOME")+'/.tf-mapper'
+        baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
+        baseDir = baseDir+'/.tf-mapper'
         mapFile = baseDir+'/map.db'
 
         try:
@@ -63,7 +65,8 @@ class Serializer:
 
     @staticmethod
     def loadMap(mapView):
-        baseDir = os.getenv("HOME")+'/.tf-mapper'
+        baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
+        baseDir = baseDir+'/.tf-mapper'
         mapFile = baseDir+'/map.db'
         try:
             f = open(mapFile, 'r')
@@ -111,7 +114,9 @@ class Serializer:
             leftRoom.addExit(leftExit)
             rightRoom.addExit(rightExit)
 
-            if leftRoom.getLevel().getId() == rightRoom.getLevel().getId():
+            isUpDown = leftExit in [model.Direction.U, model.Direction.D] or rightExit in [model.Direction.U, model.Direction.D]
+
+            if leftRoom.getLevel().getId() == rightRoom.getLevel().getId() and not isUpDown:
                 factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, levelsById[rightRoom.getLevel().getId()].getView())
             else:
                 factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit)
