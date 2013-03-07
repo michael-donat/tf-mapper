@@ -1,7 +1,7 @@
 
-import sys
+import sys, getopt
 import di, view, model.entity as entity, model.model as model
-import server
+import network
 from data import Serializer
 import re
 
@@ -86,6 +86,7 @@ if __name__ == '__main__':
     window.pushButton.clicked.connect(dumpMap)
 
     def dispatchServerCommand(command):
+        print 'received command %s' % command
         if command == 'navigate:n': navigator.goNorth()
         if command == 'navigate:polnoc': navigator.goNorth()
         if command == 'navigate:ne': navigator.goNorthEast()
@@ -166,6 +167,7 @@ if __name__ == '__main__':
         lookupRoom(str(window.roomIdDisplay.text()))
 
     def lookupRoom(roomId):
+        roomId = str(roomId)
         if roomId not in mapModel.rooms().keys(): return False
         room = mapModel.rooms()[roomId]
         navigator.markVisitedRoom(room)
@@ -185,9 +187,18 @@ if __name__ == '__main__':
     window.manualLookupRoom.clicked.connect(manualLookupRoom)
     window.debugButton.clicked.connect(revertToLastRoom)
 
+    spawnRemoteConnection = False
+    for arg in sys.argv:
+        if arg == '--remote': spawnRemoteConnection = True
 
-    registry.broadcasterServer = broadcasterServer = server.Broadcaster(23923)
-    broadcasterServer.dataReceived.connect(dispatchServerCommand)
+    if not spawnRemoteConnection:
+        registry.broadcasterServer = broadcasterServer = network.Broadcaster(23923)
+        broadcasterServer.dataReceived.connect(dispatchServerCommand)
+    else:
+        registry.clientServer = clientServer = network.Listener('localhost', 9999)
+        clientServer.dataReceived.connect(dispatchServerCommand)
+
+
 
     sys.exit(application.exec_())
 
