@@ -150,6 +150,22 @@ class RoomFactory:
     def createInDirection(self, direction, QPoint, QGraphicsScene):
         return self.createAt(self.__helper.movePointInDirection(QPoint, direction), QGraphicsScene)
 
+    def pasteAt(self, QPoint, QGraphicsScene, data):
+        for room in data['rooms']:
+            self.createAt(QtCore.QPointF(QPoint.x()+room[0],QPoint.y()+room[1]), QGraphicsScene, room[2])
+        rooms = self.__map.rooms()
+        for link in data['links']:
+            leftRoom, leftExit = link[:2]
+            rightRoom, rightExit = link[2:]
+            if leftRoom not in rooms or rightRoom not in rooms: continue
+            leftRoom = rooms[str(leftRoom)]
+            rightRoom = rooms[str(rightRoom)]
+
+            leftRoom.addExit(leftExit)
+            rightRoom.addExit(rightExit)
+
+            self.linkRooms(leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene)
+
     def createAt(self, QPoint, QGraphicsScene, Id=None):
         room = self.spawnRoom(Id)
         QGraphicsScene.addItem(room.getView())
@@ -494,15 +510,28 @@ class Navigator:
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
 
 class Clipboard:
-    def copy(self, scene, QRectF):
+    def copyRooms(self, scene, QRectF):
         items = []
+        idMap = {}
         for item in scene.selectedItems():
             pos = item.sceneBoundingRect()
             x = pos.x()-QRectF.x()
             y = pos.y()-QRectF.y()
-            item = (x,y)
+            id_ = str(uuid.uuid1())
+            idMap[item.getModel().getId()] = id_
+            item = (x,y, id_)
             items.append(item)
-        data = {'rooms':items}
+
+        links = []
+        for item in scene.selectedItems():
+            for exit, link in item.getModel().getLinks().items():
+                if link.getLeft()[0].getId() not in idMap: continue
+                if link.getRight()[0].getId() not in idMap: continue
+                #we now know the link is within selection
+                links.append([idMap[link.getLeft()[0].getId()],link.getLeft()[1],idMap[link.getRight()[0].getId()],link.getRight()[1]])
+
+
+        data = {'rooms':items, 'links':links}
         QtGui.QApplication.clipboard().setText(base64.standard_b64encode(json.dumps(data)))
 
 

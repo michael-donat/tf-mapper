@@ -59,7 +59,7 @@ class uiMainWindow(window, base):
             items = self.mapView().scene().selectedItems()
             for item in items:
                 QRectF = QRectF.united(item.sceneBoundingRect())
-            self.__clipboard.copy(self.mapView().scene(), QRectF)
+            self.__clipboard.copyRooms(self.mapView().scene(), QRectF)
 
     def keyReleaseEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Shift:
