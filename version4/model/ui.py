@@ -55,7 +55,7 @@ class RoomProperties(QtCore.QObject):
 
     def pickColor(self):
         QColor = QtGui.QColorDialog.getColor()
-        self.__uiColor.setText(QColor.name())
+        self.__uiColor.setText(str(QColor.name()))
         self.__uiColor.textEdited.emit('dummy')
 
     def updatePropertiesFromRoom(self, roomModel):
@@ -72,7 +72,7 @@ class RoomProperties(QtCore.QObject):
 
 
     def updateRoomFromProperties(self):
-        self.__room.setProperty(entity.Room.PROP_NAME, self.__uiRoomName.text())
-        self.__room.setProperty(entity.Room.PROP_COMMANDS, self.__uiCommands.toPlainText())
-        self.__room.setProperty(entity.Room.PROP_COLOR, self.__uiColor.text())
+        self.__room.setProperty(entity.Room.PROP_NAME, str(self.__uiRoomName.text()))
+        self.__room.setProperty(entity.Room.PROP_COMMANDS, str(self.__uiCommands.toPlainText()))
+        self.__room.setProperty(entity.Room.PROP_COLOR, str(self.__uiColor.text()))
         self.__room.getView().update()
