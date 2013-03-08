@@ -1,6 +1,7 @@
 __author__ = 'thornag'
 
 from PyQt4 import QtCore, QtGui
+import model
 
 import di
 
@@ -199,6 +200,11 @@ class Room:
 
     def getLinks(self):
         return self.__links
+
+    def getNonCustomLinks(self):
+        links = self.__links
+        if model.Direction.OTHER in links: del links[model.Direction.OTHER]
+        return links
 
     def setLevel(self, level):
         self.__level = level

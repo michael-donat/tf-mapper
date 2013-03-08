@@ -54,6 +54,20 @@ class Direction:
         if str.upper(str(label)) == 'CUSTOM': label='OTHER'
         return getattr(Direction, str.upper(str(label)))
 
+    @staticmethod
+    def mapToLabel(exit):
+        if exit == Direction.N: return 'N'
+        if exit == Direction.NE: return 'NE'
+        if exit == Direction.E: return 'E'
+        if exit == Direction.SE: return 'SE'
+        if exit == Direction.S: return 'S'
+        if exit == Direction.SW: return 'SW'
+        if exit == Direction.W: return 'W'
+        if exit == Direction.NW: return 'NW'
+        if exit == Direction.U: return 'Up'
+        if exit == Direction.D: return 'Down'
+        if exit == Direction.OTHER: return 'Other/Custom'
+
 
 class CoordinatesHelper:
     __config = di.ComponentRequest('Config')

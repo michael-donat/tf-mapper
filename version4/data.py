@@ -32,17 +32,31 @@ class Serializer:
         roomsData = rooms
         print 'Done -----'
 
+        customLinksSource = []
+
         links = []
-        print 'Gathering rooms'
+        print 'Gathering links'
         for index, link in mapObject.links().items():
-            links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getRight()[0].getId(), link.getRight()[1]])
-        print 'Serializing rooms'
+            if link.isCustom():
+                customLinksSource.append(link)
+                continue
+            links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2]])
+        print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
         linksData = links
         print 'Done -----'
 
+        customLinks = []
+        print 'Gathering custom links'
+        for link in customLinksSource:
+            customLinks.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2]])
+        print 'Serializing links'
+        #linksData = base64.standard_b64encode(json.dumps(links))
+        customLinksData = customLinks
+        print 'Done -----'
+
         print 'Creating data dictionary'
-        fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData)])
+        fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData)])
 
         print 'Serializing it'
         fileData = base64.standard_b64encode(json.dumps(fileData))
@@ -95,10 +109,14 @@ class Serializer:
             levels = json.loads(base64.standard_b64decode(mapData['levels']))
             rooms = json.loads(base64.standard_b64decode(mapData['rooms']))
             links = json.loads(base64.standard_b64decode(mapData['links']))
+            customLinks = []
         else:
             levels = mapData['levels']
             rooms = mapData['rooms']
             links = mapData['links']
+            try:
+                customLinks = mapData['customLinks']
+            except: customLinks = []
 
         factory = Serializer.factory
 
@@ -113,7 +131,6 @@ class Serializer:
 
         if not len(Serializer.registry.levels()): return False
 
-
         for room in rooms:
             roomModel = factory.createAt(QtCore.QPointF(room[2], room[3]), levelsById[room[1]].getView(), room[0], room[4])
 
@@ -121,9 +138,17 @@ class Serializer:
 
         rooms = Serializer.registry.rooms()
 
+        links =  links + customLinks
+
         for link in links:
-            leftRoom, leftExit = link[:2]
-            rightRoom, rightExit = link[2:]
+            if len(link) == 4:
+                leftRoom, leftExit = link[:2]
+                rightRoom, rightExit = link[2:]
+                leftExitLabel = rightExitLabel = None
+            else:
+                leftRoom, leftExit, leftExitLabel = link[:3]
+                rightRoom, rightExit, rightExitLabel = link[3:]
+
             if leftRoom not in rooms or rightRoom not in rooms: continue
             leftRoom = rooms[str(leftRoom)]
             rightRoom = rooms[str(rightRoom)]
@@ -134,7 +159,7 @@ class Serializer:
             isUpDown = leftExit in [model.Direction.U, model.Direction.D] or rightExit in [model.Direction.U, model.Direction.D]
 
             if leftRoom.getLevel().getId() == rightRoom.getLevel().getId() and not isUpDown:
-                factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, levelsById[rightRoom.getLevel().getId()].getView())
+                factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, levelsById[rightRoom.getLevel().getId()].getView(), leftExitLabel, rightExitLabel)
             else:
                 factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit)
 
