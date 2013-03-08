@@ -559,6 +559,10 @@ class Navigator(QtCore.QObject):
         self.switchLevel(roomModel.getLevel().getMapIndex())
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
         self.__properties.updatePropertiesFromRoom(roomModel)
+        if len(roomModel.getProperty(Room.PROP_COMMANDS)):
+            if  hasattr(self.__registry, 'connection'):
+                self.__registry.connection.send(roomModel.getProperty(Room.PROP_COMMANDS)+'\n')
+
 
 
 class Clipboard:

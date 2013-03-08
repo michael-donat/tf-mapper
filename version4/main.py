@@ -265,10 +265,10 @@ if __name__ == '__main__':
 
     if not noServer:
         if not spawnRemoteConnection:
-            registry.broadcasterServer = broadcasterServer = network.Broadcaster(23923)
+            registry.connection = broadcasterServer = network.Broadcaster(23923)
             broadcasterServer.dataReceived.connect(dispatchServerCommand)
         else:
-            registry.clientServer = clientServer = network.Listener('localhost', 9999)
+            registry.connection = clientServer = network.Listener('localhost', 9999)
             clientServer.dataReceived.connect(dispatchServerCommand)
 
     sys.exit(application.exec_())

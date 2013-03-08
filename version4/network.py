@@ -40,6 +40,10 @@ class Broadcaster(QtCore.QObject):
         data = clientSocket.readAll()
         self.dataReceived.emit(data.trimmed().data())
 
+    def send(self, data):
+        if self.__clientSocket is not None:
+            self.__clientSocket.write(data)
+
 class Listener(QtCore.QObject):
     __tcpSocket=None
     dataReceived=QtCore.pyqtSignal(str)
@@ -63,4 +67,7 @@ class Listener(QtCore.QObject):
     def read(self):
         data = self.__tcpSocket.readAll()
         self.dataReceived.emit(data.trimmed().data())
+
+    def send(self, data):
+        self.__tcpSocket.write(data)
 
