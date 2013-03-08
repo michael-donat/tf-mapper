@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>868</width>
+    <width>1111</width>
     <height>622</height>
    </rect>
   </property>
@@ -41,7 +41,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>868</width>
+     <width>1111</width>
      <height>22</height>
     </rect>
    </property>
@@ -96,39 +96,6 @@
    </attribute>
    <widget class="QWidget" name="uiComponentToolsPanelContentWidget">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="18" column="2">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>SAVE MAP</string>
-       </property>
-      </widget>
-     </item>
-     <item row="17" column="2">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="14" column="2">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item row="0" column="2">
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="2">
@@ -187,6 +154,57 @@
      </item>
      <item row="6" column="2">
       <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+     </item>
+     <item row="9" column="2">
+      <widget class="QComboBox" name="walkerModeSelector">
+       <item>
+        <property name="text">
+         <string>Walk</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Create</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="17" column="2">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="18" column="2">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>SAVE MAP</string>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="2">
+      <widget class="QCheckBox" name="autoPlacement">
+       <property name="text">
+        <string>Auto placement</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="19" column="2">
+      <widget class="QPushButton" name="debugButton">
+       <property name="text">
+        <string>DEBUG</string>
+       </property>
+      </widget>
      </item>
      <item row="11" column="2">
       <layout class="QGridLayout" name="compassButtonsGridLayout">
@@ -496,30 +514,6 @@
        </item>
       </layout>
      </item>
-     <item row="9" column="2">
-      <widget class="QComboBox" name="walkerModeSelector">
-       <item>
-        <property name="text">
-         <string>Walk</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Create</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="10" column="2">
-      <widget class="QCheckBox" name="autoPlacement">
-       <property name="text">
-        <string>Auto placement</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="16" column="2">
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
@@ -703,15 +697,42 @@
        </item>
       </layout>
      </item>
-     <item row="19" column="2">
-      <widget class="QPushButton" name="debugButton">
-       <property name="text">
-        <string>DEBUG</string>
+     <item row="14" column="2">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QDockWidget" name="uiComponentPropertiesPanel">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>250</width>
+     <height>400</height>
+    </size>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::RightDockWidgetArea</set>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="uiComponentPropertiesPanel_2"/>
   </widget>
   <action name="menuActionNew">
    <property name="text">
