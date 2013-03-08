@@ -15,51 +15,50 @@ class Serializer:
     @staticmethod
     def saveMap(fileLocation, mapObject):
         levels = []
-        print 'Gathering levels'
+        #print 'Gathering levels'
         for index, level in mapObject.levels().items():
             levels.append([level.getId(), level.getMapIndex(), level.getView().sceneRect().x(),level.getView().sceneRect().y(), level.getView().sceneRect().width(), level.getView().sceneRect().height()])
-        print 'Serializing levels'
+        #print 'Serializing levels'
         #levelsData = base64.standard_b64encode(json.dumps(levels))
         levelsData = levels
-        print 'Done -----'
+        #print 'Done -----'
 
         rooms = []
-        print 'Gathering rooms'
+        #print 'Gathering rooms'
         for index, room in mapObject.rooms().items():
-            print room.getSettings()
             rooms.append([room.getId(), room.getLevel().getId(), room.getView().pos().x(), room.getView().pos().y(), room.getSettings()])
-        print 'Serializing rooms'
+        #print 'Serializing rooms'
         #roomsData = base64.standard_b64encode(json.dumps(rooms))
         roomsData = rooms
-        print 'Done -----'
+        #print 'Done -----'
 
         customLinksSource = []
 
         links = []
-        print 'Gathering links'
+        #print 'Gathering links'
         for index, link in mapObject.links().items():
             if link.isCustom():
                 customLinksSource.append(link)
                 continue
             links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2]])
-        print 'Serializing links'
+        #print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
         linksData = links
-        print 'Done -----'
+        #print 'Done -----'
 
         customLinks = []
-        print 'Gathering custom links'
+        #print 'Gathering custom links'
         for link in customLinksSource:
             customLinks.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2]])
-        print 'Serializing links'
+        #print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
         customLinksData = customLinks
-        print 'Done -----'
+        #print 'Done -----'
 
-        print 'Creating data dictionary'
-        fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData)])
+        #print 'Creating data dictionary'
+        mapData = fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData)])
 
-        print 'Serializing it'
+        #print 'Serializing it'
         fileData = base64.standard_b64encode(json.dumps(fileData))
 
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
@@ -77,12 +76,17 @@ class Serializer:
 
         fileData = zlib.compress(fileData)
 
-        print 'Writing data dictionary'
+        #print 'Writing data dictionary'
         f = open(mapFile, 'wb')
         f.write(fileData)
         f.close()
 
-        print ' ------ SAVE COMPLETE -------'
+        print 'Levels: %s' % len(mapData['levels'])
+        print 'Rooms: %s' % len(mapData['rooms'])
+        print 'Links: %s' % len(mapData['links'])
+        print 'Saved %s to %s ' % (Serializer.humanize_bytes(os.path.getsize(mapFile)), mapFile)
+
+        #print ' ------ SAVE COMPLETE -------'
 
     @staticmethod
     def loadMap(mapView):
@@ -165,3 +169,20 @@ class Serializer:
                 factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit)
 
         return True
+
+    @staticmethod
+    def humanize_bytes(bytes, precision=1):
+        abbrevs = (
+            (1<<50L, 'PB'),
+            (1<<40L, 'TB'),
+            (1<<30L, 'GB'),
+            (1<<20L, 'MB'),
+            (1<<10L, 'kB'),
+            (1, 'bytes')
+        )
+        if bytes == 1:
+            return '1 byte'
+        for factor, suffix in abbrevs:
+            if bytes >= factor:
+                break
+        return '%.*f %s' % (precision, bytes / factor, suffix)

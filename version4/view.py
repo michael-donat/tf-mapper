@@ -237,7 +237,7 @@ class Room(QtGui.QGraphicsItem):
         super(Room, self).__init__()
         self.__boundingRect = QtCore.QRectF(0,0,self.__config.getSize(),self.__config.getSize())
 
-        self.color = QtGui.QColor(100,100,100)
+        self.color = self.defColor = QtGui.QColor(100,100,100)
 
         self.setFlags(QtGui.QGraphicsItem.ItemSendsGeometryChanges | QtGui.QGraphicsItem.ItemIsSelectable | QtGui.QGraphicsItem.ItemIsMovable | QtGui.QGraphicsItem.ItemIsFocusable)
 
@@ -253,7 +253,7 @@ class Room(QtGui.QGraphicsItem):
         return self.__boundingRect
 
     def paint(self, painter, option, widget):
-
+        self.color = self.defColor
         if self.getModel().getProperty(model.Room.PROP_COLOR) is not None:
             color = QtGui.QColor()
             color.setNamedColor(self.getModel().getProperty(model.Room.PROP_COLOR))
