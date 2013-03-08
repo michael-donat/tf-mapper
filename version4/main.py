@@ -256,7 +256,7 @@ if __name__ == '__main__':
 
     def updateSelectionColor(color):
         for item in window.mapView().scene().selectedItems():
-            item.getModel().setProperty(model.Room.PROP_COLOR, color)
+            item.getModel().setProperty(model.Room.PROP_COLOR, str(color))
 
 
     window.uiCreationColor.textChanged.connect(registry.setDefaultColor)
