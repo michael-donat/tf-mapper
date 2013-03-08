@@ -187,7 +187,7 @@ class RoomFactory:
     def createAt(self, QPoint, QGraphicsScene, Id=None, properties=None):
         if properties is None:
             properties={}
-            properties[Room.PROP_COLOR] = self.__registry.defColor
+            properties[Room.PROP_COLOR] = str(self.__registry.defColor)
         room = self.spawnRoom(Id, properties)
         QGraphicsScene.addItem(room.getView())
         room.setPosition(QPoint)
@@ -263,7 +263,7 @@ class Registry:
         if isinstance(color, QtGui.QColor):
             color = color.name()
         if not len(color): self.defColor=None
-        else: self.defColor=color
+        else: self.defColor=str(color)
 
 
 class Navigator(QtCore.QObject):
