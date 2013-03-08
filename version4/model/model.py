@@ -5,7 +5,6 @@ from entity import *
 from PyQt4 import QtCore, QtGui
 import json, base64
 
-
 __author__ = 'thornag'
 
 class Map:
@@ -146,7 +145,7 @@ class RoomFactory:
     __config = di.ComponentRequest('Config')
     __helper = di.ComponentRequest('CoordinatesHelper')
     __map = di.ComponentRequest('Map')
-
+    __registry = di.ComponentRequest('Registry')
     def createInDirection(self, direction, QPoint, QGraphicsScene):
         return self.createAt(self.__helper.movePointInDirection(QPoint, direction), QGraphicsScene)
 
@@ -166,8 +165,11 @@ class RoomFactory:
 
             self.linkRooms(leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene)
 
-    def createAt(self, QPoint, QGraphicsScene, Id=None):
-        room = self.spawnRoom(Id)
+    def createAt(self, QPoint, QGraphicsScene, Id=None, properties=None):
+        if properties is None:
+            properties={}
+            properties[Room.PROP_COLOR] = self.__registry.defColor
+        room = self.spawnRoom(Id, properties)
         QGraphicsScene.addItem(room.getView())
         room.setPosition(QPoint)
         boundingRect = QGraphicsScene.itemsBoundingRect()
@@ -176,8 +178,8 @@ class RoomFactory:
         room.setLevel(QGraphicsScene.getModel())
         return room
 
-    def spawnRoom(self, id=None):
-        room = Room()
+    def spawnRoom(self, id=None, properties=None):
+        room = Room(0, properties)
         id_ = uuid.uuid1() if id==None else id
         room.setId(id_)
         viewRoom = view.Room()
@@ -233,11 +235,19 @@ class RoomFactory:
 class Registry:
     currentlyVisitedRoom=None
     roomShadow=None
+    defColor=None
     def __init__(self):
         self.__rooms=[]
 
+    def setDefaultColor(self, color):
+        if isinstance(color, QtGui.QColor):
+            color = color.name()
+        if not len(color): self.defColor=None
+        else: self.defColor=color
 
-class Navigator:
+
+class Navigator(QtCore.QObject):
+    roomSelectedSignal=QtCore.pyqtSignal(object)
     __map=di.ComponentRequest('Map')
     __config=di.ComponentRequest('Config')
     __registry=di.ComponentRequest('Registry')
@@ -245,6 +255,9 @@ class Navigator:
     __coordinatesHelper=di.ComponentRequest('CoordinatesHelper')
     __enableCreation=False
     __enableAutoPlacement=True
+    __properties=di.ComponentRequest('Properties')
+    def __init__(self):
+        super(Navigator, self).__init__()
 
     def switchLevel(self, newLevel):
         levels = self.__map.levels()
@@ -252,7 +265,7 @@ class Navigator:
             view = self.__registry.currentLevel.getView().views()[0]
             self.__registry.mainWindow.mapView().setScene(levels[newLevel].getView())
             scene = self.__registry.mainWindow.mapView().scene().getModel()
-            print scene
+            #print scene
 
     def goLevelDown(self):
         return self.switchLevel(self.__registry.currentLevel.getMapIndex() - 1)
@@ -357,7 +370,7 @@ class Navigator:
     def go(self, currentRoom, fromExit, toExit):
 
         """
-        To refactor this horros
+        To refactor this horrors
         Think about a proper navigator that can accept any object type and move it on the grid using coordinatesHelper
          this class should not be responsible for any room creation / collision check
         """
@@ -499,7 +512,6 @@ class Navigator:
             roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
             pass
 
-
         for item in roomModel.getView().scene().selectedItems():
             item.setSelected(False)
 
@@ -508,6 +520,8 @@ class Navigator:
 
         self.switchLevel(roomModel.getLevel().getMapIndex())
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
+        self.__properties.updatePropertiesFromRoom(roomModel)
+
 
 class Clipboard:
     def copyRooms(self, scene, QRectF):

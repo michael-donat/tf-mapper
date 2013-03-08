@@ -1,6 +1,6 @@
 
 import sys, getopt
-import di, view, model.entity as entity, model.model as model
+import di, view, model.entity as entity, model.model as model, model.ui as modelui
 import network
 from data import Serializer
 import re
@@ -51,6 +51,11 @@ if __name__ == '__main__':
     window = view.uiMainWindow()
     registry.mainWindow = window
     window.show()
+
+    roomProperties = modelui.RoomProperties(window)
+    #navigator.roomSelectedSignal.connect(roomProperties.updatePropertiesFromRoom)
+
+    di.container.register('Properties', roomProperties)
 
     navigator = model.Navigator()
 
@@ -204,6 +209,13 @@ if __name__ == '__main__':
     window.manualLookupRoom.clicked.connect(manualLookupRoom)
     window.debugButton.clicked.connect(revertToLastRoom)
 
+    def showCreationColorPicker():
+        registry.setDefaultColor(QtGui.QColorDialog.getColor())
+        window.uiCreationColor.setText(registry.defColor)
+
+    window.uiCreationColor.textChanged.connect(registry.setDefaultColor)
+    window.uiCreationColorPicker.clicked.connect(showCreationColorPicker)
+
     if not noServer:
         if not spawnRemoteConnection:
             registry.broadcasterServer = broadcasterServer = network.Broadcaster(23923)
@@ -211,8 +223,6 @@ if __name__ == '__main__':
         else:
             registry.clientServer = clientServer = network.Listener('localhost', 9999)
             clientServer.dataReceived.connect(dispatchServerCommand)
-
-
 
     sys.exit(application.exec_())
 

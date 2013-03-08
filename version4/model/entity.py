@@ -82,9 +82,27 @@ class Room:
     __id=None
     __level=None
     __map=di.ComponentRequest('Map')
-    def __init__(self, exits=0):
+    __properties=None
+    PROP_NAME='name'
+    PROP_COMMANDS='commands'
+    PROP_COLOR='color'
+    def __init__(self, exits=0, properties=None):
         self.__exits = exits
         self.__links={}
+        if properties is None: properties={}
+        if self.PROP_NAME not in properties: properties[ self.PROP_NAME] = ''
+        if self.PROP_COLOR not in properties: properties[ self.PROP_COLOR]=None
+        if self.PROP_COMMANDS not in properties: properties[ self.PROP_COMMANDS]=''
+        self.__properties=properties
+
+    def properties(self):
+        return self.__properties
+
+    def getProperty(self, property):
+        return self.__properties[property]
+
+    def setProperty(self, property, value):
+        self.__properties[property] = value
 
     def position(self):
         return self.__position
@@ -164,7 +182,7 @@ class Room:
         return self.__level
 
     def getSettings(self):
-        return {}
+        return self.properties()
 
 
 

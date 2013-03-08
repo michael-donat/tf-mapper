@@ -1,6 +1,6 @@
 __author__ = 'thornag'
 
-import json
+import json, zlib
 import base64
 import textwrap, string
 import os, shutil, sys
@@ -19,7 +19,8 @@ class Serializer:
         for index, level in mapObject.levels().items():
             levels.append([level.getId(), level.getMapIndex(), level.getView().sceneRect().x(),level.getView().sceneRect().y(), level.getView().sceneRect().width(), level.getView().sceneRect().height()])
         print 'Serializing levels'
-        levelsData = base64.standard_b64encode(json.dumps(levels))
+        #levelsData = base64.standard_b64encode(json.dumps(levels))
+        levelsData = levels
         print 'Done -----'
 
         rooms = []
@@ -27,7 +28,8 @@ class Serializer:
         for index, room in mapObject.rooms().items():
             rooms.append([room.getId(), room.getLevel().getId(), room.getView().pos().x(), room.getView().pos().y(), room.getSettings()])
         print 'Serializing rooms'
-        roomsData = base64.standard_b64encode(json.dumps(rooms))
+        #roomsData = base64.standard_b64encode(json.dumps(rooms))
+        roomsData = rooms
         print 'Done -----'
 
         links = []
@@ -35,7 +37,8 @@ class Serializer:
         for index, link in mapObject.links().items():
             links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getRight()[0].getId(), link.getRight()[1]])
         print 'Serializing rooms'
-        linksData = base64.standard_b64encode(json.dumps(links))
+        #linksData = base64.standard_b64encode(json.dumps(links))
+        linksData = links
         print 'Done -----'
 
         print 'Creating data dictionary'
@@ -57,9 +60,11 @@ class Serializer:
         if os.path.exists(mapFile):
             shutil.move(mapFile, mapFile+'.bak')
 
+        fileData = zlib.compress(fileData)
+
         print 'Writing data dictionary'
         f = open(mapFile, 'w')
-        f.write(fileData+'\n')
+        f.write(fileData)
         f.close()
 
         print ' ------ SAVE COMPLETE -------'
@@ -78,13 +83,21 @@ class Serializer:
         f.close()
 
         try:
+            newData = zlib.decompress(mapData)
+        except: pass
+
+        try:
             mapData = json.loads(base64.standard_b64decode(mapData))
         except: return False
 
-        levels = json.loads(base64.standard_b64decode(mapData['levels']))
-        rooms = json.loads(base64.standard_b64decode(mapData['rooms']))
-        links = json.loads(base64.standard_b64decode(mapData['links']))
-
+        if isinstance(mapData['levels'], basestring):
+            levels = json.loads(base64.standard_b64decode(mapData['levels']))
+            rooms = json.loads(base64.standard_b64decode(mapData['rooms']))
+            links = json.loads(base64.standard_b64decode(mapData['links']))
+        else:
+            levels = mapData['levels']
+            rooms = mapData['rooms']
+            links = mapData['links']
 
         factory = Serializer.factory
 

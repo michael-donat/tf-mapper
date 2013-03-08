@@ -224,8 +224,8 @@ class Room(QtGui.QGraphicsItem):
     __config = di.ComponentRequest('Config')
     __registry= di.ComponentRequest('Registry')
     __navigator= di.ComponentRequest('Navigator')
-    __coordinatesHelper= di.ComponentRequest('CoordinatesHelper')
-    __model=None
+    __coordinatesHelper = di.ComponentRequest('CoordinatesHelper')
+    __model = None
     __factory=di.ComponentRequest('RoomFactory')
     def __init__(self):
         super(Room, self).__init__()
@@ -248,6 +248,12 @@ class Room(QtGui.QGraphicsItem):
 
     def paint(self, painter, option, widget):
 
+        if self.getModel().getProperty(model.Room.PROP_COLOR) is not None:
+            color = QtGui.QColor()
+            color.setNamedColor(self.getModel().getProperty(model.Room.PROP_COLOR))
+            if color.isValid():
+                self.color = color
+
         objectSize = self.__config.getSize()
         edgeSize = self.__config.getEdgeLength()
         exitSize = self.__config.getExitLength()
@@ -265,9 +271,9 @@ class Room(QtGui.QGraphicsItem):
             if self.isSelected():
                 painter.setPen(QtCore.Qt.DashLine)
             painter.drawEllipse(0,0,objectSize,objectSize)
-        else:
-            currentColor = self.color
-            painter.setBrush(self.color)
+
+        currentColor = self.color
+        painter.setBrush(self.color)
 
         painter.setPen(QtCore.Qt.SolidLine)
         painter.drawRect(exitSize, exitSize, edgeSize, edgeSize)
