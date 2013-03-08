@@ -3,6 +3,8 @@ from PyQt4 import uic, QtGui, QtCore
 import di, model.model as model
 import json, base64
 
+import icons_rc
+
 window, base = uic.loadUiType("ui/main.ui")
 
 class uiMainWindow(window, base):
@@ -156,6 +158,10 @@ class Link(QtGui.QGraphicsLineItem):
         startPoint = self.__coordinateshelper.getExitPoint(self.getModel().getLeft())
         endPoint = self.__coordinateshelper.getExitPoint(self.getModel().getRight())
         self.setLine(startPoint.x(), startPoint.y(), endPoint.x(), endPoint.y())
+        if self.getModel().isCustom():
+            self.setPen(QtGui.QPen(QtCore.Qt.DotLine))
+        else:
+            self.setPen(QtGui.QPen(QtCore.Qt.SolidLine))
         self.update()
 
 class ShadowLink(QtGui.QGraphicsLineItem):
@@ -164,7 +170,7 @@ class ShadowLink(QtGui.QGraphicsLineItem):
     def __init__(self):
         super(ShadowLink, self).__init__()
     def redraw(self):
-        startPoint = self.__coordinateshelper.getExitPoint((self.__registry.currentlyVisitedRoom, self.__registry.roomShadow.exitBy()))
+        startPoint = self.__coordinateshelper.getExitPoint((self.__registry.currentlyVisitedRoom, self.__registry.roomShadow.exitBy(), None))
         endPoint = self.__coordinateshelper.getExitPointFromPoint(self.__registry.roomShadow.pos(), self.__registry.roomShadow.entryBy())
         self.setLine(startPoint.x(), startPoint.y(), endPoint.x(), endPoint.y())
         self.update()
@@ -339,8 +345,13 @@ class Room(QtGui.QGraphicsItem):
             self.getModel().setPositionFromView()
             links = self.getModel().getLinks()
             for link in links:
+                if links[link].isCustom(): continue
                 if links[link].getView():
                     links[link].getView().redraw()
+            links = self.getModel().getCustomLinks()
+            for link in links:
+                if link.getView():
+                    link.getView().redraw()
 
         return super(Room, self).itemChange(QGraphicsItem_GraphicsItemChange, QVariant)
 

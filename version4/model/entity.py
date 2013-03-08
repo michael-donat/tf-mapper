@@ -52,11 +52,11 @@ class Link:
     def getView(self):
         return self.__view
 
-    def setLeft(self, room, exit_):
-        self.__left = (room, exit_)
+    def setLeft(self, room, exit_, label):
+        self.__left = (room, exit_, str(label))
 
-    def setRight(self, room, exit_):
-        self.__right = (room, exit_)
+    def setRight(self, room, exit_, label):
+        self.__right = (room, exit_, str(label))
 
     def getLeft(self):
         return self.__left
@@ -73,6 +73,23 @@ class Link:
         if room.getId() == self.__right[0].getId():
             return self.__left[0]
 
+    def getDestinationSideFor(self, room):
+        if room.getId() == self.__left[0].getId():
+            return self.__right
+        if room.getId() == self.__right[0].getId():
+            return self.__left
+
+    def getSourceSideFor(self, room):
+        if room.getId() == self.__left[0].getId():
+            return self.__left
+        if room.getId() == self.__right[0].getId():
+            return self.__right
+
+
+    def isCustom(self): return False
+
+class CustomLink(Link):
+    def isCustom(self): return True
 
 class Room:
     __exits=0
@@ -89,6 +106,7 @@ class Room:
     def __init__(self, exits=0, properties=None):
         self.__exits = exits
         self.__links={}
+        self.__customLinks=[]
         if properties is None: properties={}
         if self.PROP_NAME not in properties: properties[ self.PROP_NAME] = ''
         if self.PROP_COLOR not in properties: properties[ self.PROP_COLOR]=None
@@ -170,7 +188,14 @@ class Room:
         return self.__links[direction]
 
     def addLink(self, exit_, link):
+        if isinstance(link, CustomLink): self.addCustomLink(link)
         self.__links[exit_] = link
+
+    def addCustomLink(self, link):
+        self.__customLinks.append(link)
+
+    def getCustomLinks(self):
+        return self.__customLinks
 
     def getLinks(self):
         return self.__links

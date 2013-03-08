@@ -47,9 +47,12 @@ class Direction:
     NW=128
     U=256
     D=512
+    OTHER=1024
+
     @staticmethod
     def mapFromLabel(label):
-        return getattr(Direction, str(label))
+        if str.upper(str(label)) == 'CUSTOM': label='OTHER'
+        return getattr(Direction, str.upper(str(label)))
 
 
 class CoordinatesHelper:
@@ -77,11 +80,13 @@ class CoordinatesHelper:
             newPosition = QPoint + QtCore.QPointF(0, midPoint)
         if direction == Direction.NW:
             newPosition = QPoint + QtCore.QPointF(0, 0)
+        if direction == Direction.OTHER:
+            newPosition = QPoint + QtCore.QPointF(midPoint, midPoint)
 
         return newPosition
 
     def getExitPoint(self, exitDescription):
-        room, direction = exitDescription
+        room, direction, label = exitDescription
 
         return self.getExitPointFromPoint(room.getView().pos(), direction)
 
@@ -187,8 +192,9 @@ class RoomFactory:
         self.__map.registerRoom(room)
         return room
 
-    def spawnLink(self, linkLess=False, id=None):
-        link = Link()
+    def spawnLink(self, linkLess=False, id=None, isCustomLink=False):
+        #print isCustomLink
+        link = Link() if not isCustomLink else CustomLink()
         id_ = uuid.uuid1() if id==None else id
         link.setId(id_)
         self.__map.registerLink(link)
@@ -201,18 +207,18 @@ class RoomFactory:
         return self.linkRooms(leftRoom, leftExit, rightRoom, rightExit)
 
 
-    def linkRooms(self, leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene=None):
+    def linkRooms(self, leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene=None, leftLinkCustomLabel=None, rightLinkCustomLabel=None):
         #need to validate first
-        if(leftRoom.hasLinkAt(leftExit) and not leftRoom.linkAt(leftExit).pointsAt(rightRoom)):
+        if(Direction.OTHER != leftExit and leftRoom.hasLinkAt(leftExit) and not leftRoom.linkAt(leftExit).pointsAt(rightRoom)):
             raise Exception('Left room already links somewhere through given exit')
 
-        if(rightRoom.hasLinkAt(rightExit) and not rightRoom.linkAt(rightExit).pointsAt(leftRoom)):
-            raise Exception('Left room already links somewhere through given exit')
+        if(Direction.OTHER != rightExit and rightRoom.hasLinkAt(rightExit) and not rightRoom.linkAt(rightExit).pointsAt(leftRoom)):
+            raise Exception('Right room already links somewhere through given exit')
 
         #good to link
-        link = self.spawnLink(QGraphicsScene is None)
-        link.setLeft(leftRoom, leftExit)
-        link.setRight(rightRoom, rightExit)
+        link = self.spawnLink(QGraphicsScene is None, None, Direction.OTHER in [leftExit, rightExit])
+        link.setLeft(leftRoom, leftExit, leftLinkCustomLabel)
+        link.setRight(rightRoom, rightExit, rightLinkCustomLabel)
         leftRoom.addLink(leftExit, link)
         rightRoom.addLink(rightExit, link)
 
@@ -366,6 +372,24 @@ class Navigator(QtCore.QObject):
         self.__roomFactory.linkRooms(currentRoom, fromExit, newRoom, toExit, currentRoom.getView().scene())
 
         self.__registry.mainWindow.autoPlacement.setCheckState(QtCore.Qt.Checked)
+
+    def goCustom(self, direction):
+        if self.__registry.currentlyVisitedRoom is None:
+            return QtGui.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtGui.QMessageBox.Ok)
+
+        currentRoom = self.__registry.currentlyVisitedRoom
+
+        #let's check for masked exists first
+        for exit_, link in currentRoom.getLinks().items():
+            #print link.getSourceSideFor(currentRoom)[2]
+            pass
+
+        #still here? then maybe a custom link?
+        for link in currentRoom.getCustomLinks():
+            sourceSide = link.getSourceSideFor(currentRoom)
+            if sourceSide[2] is not None and sourceSide[2] == direction:
+                return self.markVisitedRoom(link.getDestinationFor(currentRoom))
+
 
     def go(self, currentRoom, fromExit, toExit):
 

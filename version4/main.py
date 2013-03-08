@@ -48,6 +48,7 @@ if __name__ == '__main__':
     registry.shadowLink.hide()
 
     application = QtGui.QApplication(sys.argv)
+    application.setStyle('plastique')
     window = view.uiMainWindow()
     registry.mainWindow = window
     window.show()
@@ -106,7 +107,18 @@ if __name__ == '__main__':
     def dumpMap():
         Serializer.saveMap('123', mapModel)
 
+    def dumpRoom():
+        room = registry.currentlyVisitedRoom
+        print registry.currentlyVisitedRoom
+
+    window.debugButton.clicked.connect(dumpRoom)
+
     window.pushButton.clicked.connect(dumpMap)
+
+    def fireCommand():
+        dispatchServerCommand(str(window.commandInput.text()))
+
+    window.commandTrigger.clicked.connect(fireCommand)
 
     def dispatchServerCommand(command):
         print 'received command %s' % command
@@ -132,6 +144,10 @@ if __name__ == '__main__':
         if command == 'navigate:dol': navigator.goDown()
         if command == 'revert': revertToLastRoom()
 
+        match =  re.match(r'navigate:custom:(.*)', command)
+        if match is not None:
+            navigator.goCustom(match.group(1))
+
         match =  re.match(r'lookup:([a-z0-9\-]*)', command)
         if match is not None:
             lookupRoom(match.group(1))
@@ -152,7 +168,18 @@ if __name__ == '__main__':
         leftExit = model.Direction.mapFromLabel(leftExit)
         rightExit = model.Direction.mapFromLabel(rightExit)
 
-        factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, rightRoom.getLevel().getView() if leftExit not in [model.Direction.U, model.Direction.D] and rightExit not in [model.Direction.U, model.Direction.D] and rightRoom.getLevel().getId() == leftRoom.getLevel().getId() else None)
+        rightLinkMask = leftLinkMask = None
+
+        if model.Direction.OTHER in [leftExit, rightExit]:
+            leftLinkMask = window.manualLinkCustomLinkLeft.text()
+            rightLinkMask = window.manualLinkCustomLinkRight.text()
+
+        factory.linkRooms(\
+            leftRoom, leftExit, rightRoom, rightExit, \
+            rightRoom.getLevel().getView() if leftExit not in [model.Direction.U, model.Direction.D] and rightExit not in [model.Direction.U, model.Direction.D] and rightRoom.getLevel().getId() == leftRoom.getLevel().getId() else None,\
+            leftLinkMask, \
+            rightLinkMask \
+        )
 
         leftRoom.addExit(leftExit)
         rightRoom.addExit(rightExit)
@@ -199,6 +226,18 @@ if __name__ == '__main__':
         if registry.previouslyVisitedRoom is not None:
             lookupRoom(registry.previouslyVisitedRoom.getId())
 
+    def toggleCustomLinkInput(isRight=False):
+        if isRight:
+            if window.manualLinkLinkRight.currentText() == 'Custom':
+                window.manualLinkCustomLinkRight.setEnabled(True)
+            else:
+                window.manualLinkCustomLinkRight.setEnabled(False)
+        else:
+            if window.manualLinkLinkLeft.currentText() == 'Custom':
+                window.manualLinkCustomLinkLeft.setEnabled(True)
+            else:
+                window.manualLinkCustomLinkLeft.setEnabled(False)
+
 
     window.manualLinkRoomLeftInsert.clicked.connect(lambda: copyManualLinkRoomId())
     window.manualLinkRoomRightInsert.clicked.connect(lambda: copyManualLinkRoomId(True))
@@ -207,7 +246,9 @@ if __name__ == '__main__':
     window.manualMergeExecute.clicked.connect(manualMergeRooms)
     window.manualLinkInsertFromSelection.clicked.connect(manualLinkInsertFromSelection)
     window.manualLookupRoom.clicked.connect(manualLookupRoom)
-    window.debugButton.clicked.connect(revertToLastRoom)
+    window.manualLinkLinkLeft.currentIndexChanged.connect(lambda: toggleCustomLinkInput())
+    window.manualLinkLinkRight.currentIndexChanged.connect(lambda: toggleCustomLinkInput(True))
+
 
     def showCreationColorPicker():
         registry.setDefaultColor(QtGui.QColorDialog.getColor())
