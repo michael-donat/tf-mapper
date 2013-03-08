@@ -155,9 +155,20 @@
       </layout>
      </item>
      <item row="6" column="2">
-      <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_4"/>
+       </item>
+      </layout>
      </item>
-     <item row="9" column="2">
+     <item row="11" column="2">
       <widget class="QComboBox" name="walkerModeSelector">
        <item>
         <property name="text">
@@ -171,7 +182,7 @@
        </item>
       </widget>
      </item>
-     <item row="17" column="2">
+     <item row="21" column="2">
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -184,14 +195,14 @@
        </property>
       </spacer>
      </item>
-     <item row="18" column="2">
+     <item row="22" column="2">
       <widget class="QPushButton" name="pushButton">
        <property name="text">
         <string>SAVE MAP</string>
        </property>
       </widget>
      </item>
-     <item row="10" column="2">
+     <item row="12" column="2">
       <widget class="QCheckBox" name="autoPlacement">
        <property name="text">
         <string>Auto placement</string>
@@ -201,14 +212,14 @@
        </property>
       </widget>
      </item>
-     <item row="19" column="2">
+     <item row="23" column="2">
       <widget class="QPushButton" name="debugButton">
        <property name="text">
         <string>DEBUG</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="2">
+     <item row="13" column="2">
       <layout class="QGridLayout" name="compassButtonsGridLayout">
        <item row="0" column="2">
         <widget class="QToolButton" name="compassN">
@@ -516,25 +527,23 @@
        </item>
       </layout>
      </item>
-     <item row="16" column="2">
+     <item row="20" column="2">
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
+       <item row="4" column="1">
+        <widget class="QPushButton" name="manualLinkRoomRightInsert">
          <property name="text">
-          <string>RoomId:</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          <string>Insert</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="manualLinkRoomRight"/>
-       </item>
        <item row="4" column="0">
-        <widget class="QLineEdit" name="manualLinkRoomLeft"/>
+        <widget class="QPushButton" name="manualLinkRoomLeftInsert">
+         <property name="text">
+          <string>Insert</string>
+         </property>
+        </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QComboBox" name="manualLinkLinkLeft">
          <item>
           <property name="text">
@@ -588,28 +597,14 @@
          </item>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <widget class="QPushButton" name="manualLinkExecute">
          <property name="text">
           <string>Create Link</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QPushButton" name="manualLinkRoomRightInsert">
-         <property name="text">
-          <string>Insert</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="manualLinkRoomLeftInsert">
-         <property name="text">
-          <string>Insert</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
+       <item row="6" column="1">
         <widget class="QComboBox" name="manualLinkLinkRight">
          <item>
           <property name="text">
@@ -663,21 +658,34 @@
          </item>
         </widget>
        </item>
-       <item row="7" column="0" colspan="2">
-        <widget class="QPushButton" name="manualMergeExecute">
-         <property name="text">
-          <string>Merge Rooms</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="2">
+       <item row="3" column="0" colspan="2">
         <widget class="QPushButton" name="manualLinkInsertFromSelection">
          <property name="text">
           <string>Insert from selection</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="manualLinkRoomRight"/>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="manualLookupRoom">
+         <property name="text">
+          <string>Find room</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLineEdit" name="manualLinkRoomLeft"/>
+       </item>
+       <item row="8" column="0" colspan="2">
+        <widget class="QPushButton" name="manualMergeExecute">
+         <property name="text">
+          <string>Merge Rooms</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" rowspan="2" colspan="2">
         <widget class="QLineEdit" name="roomIdDisplay">
          <property name="text">
           <string/>
@@ -690,16 +698,9 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QPushButton" name="manualLookupRoom">
-         <property name="text">
-          <string>Find room</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
-     <item row="14" column="2">
+     <item row="17" column="2">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
