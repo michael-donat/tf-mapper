@@ -63,7 +63,7 @@ class Serializer:
         fileData = zlib.compress(fileData)
 
         print 'Writing data dictionary'
-        f = open(mapFile, 'w')
+        f = open(mapFile, 'wb')
         f.write(fileData)
         f.close()
 
@@ -76,14 +76,15 @@ class Serializer:
         mapFile = baseDir+Serializer.mapFile
 
         try:
-            f = open(mapFile, 'r')
+            f = open(mapFile, 'rb')
         except: return False
 
-        mapData = string.join(f.readlines(), '')
+        mapData = f.read()
+
         f.close()
 
         try:
-            newData = zlib.decompress(mapData)
+            mapData = zlib.decompress(mapData)
         except: pass
 
         try:
@@ -114,7 +115,7 @@ class Serializer:
 
 
         for room in rooms:
-            roomModel = factory.createAt(QtCore.QPointF(room[2], room[3]), levelsById[room[1]].getView(), room[0])
+            roomModel = factory.createAt(QtCore.QPointF(room[2], room[3]), levelsById[room[1]].getView(), room[0], room[4])
 
         mapView.setScene(Serializer.registry.levels()[0].getView())
 

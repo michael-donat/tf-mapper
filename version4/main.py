@@ -213,7 +213,13 @@ if __name__ == '__main__':
         registry.setDefaultColor(QtGui.QColorDialog.getColor())
         window.uiCreationColor.setText(registry.defColor)
 
+    def updateSelectionColor(color):
+        for item in window.mapView().scene().selectedItems():
+            item.getModel().setProperty(model.Room.PROP_COLOR, color)
+
+
     window.uiCreationColor.textChanged.connect(registry.setDefaultColor)
+    window.uiCreationColor.textChanged.connect(updateSelectionColor)
     window.uiCreationColorPicker.clicked.connect(showCreationColorPicker)
 
     if not noServer:

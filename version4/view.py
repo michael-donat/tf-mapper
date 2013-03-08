@@ -303,16 +303,18 @@ class Room(QtGui.QGraphicsItem):
             painter.drawLine(0, 0, exitSize, exitSize)
 
         if self.__model.hasExit(model.Direction.U):
-            if self.__model.isCurrentlyVisited(): painter.setBrush(QtGui.QColor(100,100,100))
-            else: painter.setBrush(QtGui.QColor(255,255,255))
+            #if self.__model.isCurrentlyVisited(): painter.setBrush(QtGui.QColor(100,100,100))
+            #else: painter.setBrush(QtGui.QColor(255,255,255))
+            painter.setBrush(QtGui.QColor(255,255,255))
             painter.setPen(QtCore.Qt.NoPen)
             QRect = QtCore.QRectF(exitSize, exitSize, edgeSize, edgeSize/2)
             QRect.adjust(edgeSize/float(5),edgeSize/10,-1*edgeSize/5,-1*edgeSize/10)
             painter.drawRect(QRect)
 
         if self.__model.hasExit(model.Direction.D):
-            if self.__model.isCurrentlyVisited(): painter.setBrush(QtGui.QColor(100,100,100))
-            else: painter.setBrush(QtGui.QColor(255,255,255))
+            #if self.__model.isCurrentlyVisited(): painter.setBrush(QtGui.QColor(100,100,100))
+            #else: painter.setBrush(QtGui.QColor(255,255,255))
+            painter.setBrush(QtGui.QColor(255,255,255))
             painter.setPen(QtCore.Qt.NoPen)
             QRect = QtCore.QRectF(exitSize, midPoint, edgeSize, edgeSize/2)
             QRect.adjust(edgeSize/float(5),edgeSize/10,-1*edgeSize/5,-1*edgeSize/10)

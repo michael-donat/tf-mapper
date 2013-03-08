@@ -102,7 +102,7 @@ class Room:
         return self.__properties[property]
 
     def setProperty(self, property, value):
-        self.__properties[property] = value
+        self.__properties[property] = str(value)
 
     def position(self):
         return self.__position
