@@ -73,6 +73,9 @@ class Serializer:
         baseDir = baseDir+'/.tf-mapper/'
         mapFile = baseDir+Serializer.mapFile
 
+        if Serializer.mapFile[0] == '/':
+            mapFile = Serializer.mapFile
+
         try:
             os.mkdir(baseDir)
         except OSError as e:
@@ -102,6 +105,9 @@ class Serializer:
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
         baseDir = baseDir+'/.tf-mapper/'
         mapFile = baseDir+Serializer.mapFile
+
+        if Serializer.mapFile[0] == '/':
+            mapFile = Serializer.mapFile
 
         try:
             f = open(mapFile, 'rb')

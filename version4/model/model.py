@@ -303,8 +303,7 @@ class Navigator(QtCore.QObject):
         currentScene = self.__registry.currentLevel.getView()
         items = currentScene.selectedItems()
         for item in items:
-            if isinstance(item, Room):
-                #print 'deleting'
+            if isinstance(item, view.Room):
                 item.getModel().delete()
             elif isinstance(item, view.Label):
                 item.scene().removeItem(item)
