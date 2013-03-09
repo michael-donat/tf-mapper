@@ -184,6 +184,12 @@ class RoomFactory:
 
             self.linkRooms(leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene)
 
+    def createLabelAt(self, QPoint, QGraphicsScene, labeltext='LABEL'):
+        text = view.Label(labeltext)
+        QGraphicsScene.addItem(text)
+        text.setFlags(QtGui.QGraphicsItem.ItemIsSelectable | QtGui.QGraphicsItem.ItemIsFocusable | QtGui.QGraphicsItem.ItemIsMovable);
+        text.setPos(QtCore.QPointF(QPoint))
+
     def createAt(self, QPoint, QGraphicsScene, Id=None, properties=None):
         if properties is None:
             properties={}
@@ -297,8 +303,11 @@ class Navigator(QtCore.QObject):
         currentScene = self.__registry.currentLevel.getView()
         items = currentScene.selectedItems()
         for item in items:
-            #print 'deleting'
-            item.getModel().delete()
+            if isinstance(item, Room):
+                #print 'deleting'
+                item.getModel().delete()
+            elif isinstance(item, view.Label):
+                item.scene().removeItem(item)
 
 
     def enableCreation(self, enable):

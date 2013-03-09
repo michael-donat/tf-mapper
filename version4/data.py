@@ -5,6 +5,7 @@ import base64
 import textwrap, string
 import os, shutil, sys
 import model.model as model
+import view
 
 import di
 
@@ -55,8 +56,15 @@ class Serializer:
         customLinksData = customLinks
         #print 'Done -----'
 
+        labels = []
+        for index, level in mapObject.levels().items():
+            for item in level.getView().items():
+                if isinstance(item, view.Label):
+                    labels.append([item.x(), item.y(), level.getId(), str(item.toPlainText())])
+
+
         #print 'Creating data dictionary'
-        mapData = fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData)])
+        mapData = fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData), ('labels', labels)])
 
         #print 'Serializing it'
         fileData = base64.standard_b64encode(json.dumps(fileData))
@@ -84,6 +92,7 @@ class Serializer:
         print 'Levels: %s' % len(mapData['levels'])
         print 'Rooms: %s' % len(mapData['rooms'])
         print 'Links: %s' % len(mapData['links'])
+        print 'Labels: %s' % len(mapData['labels'])
         print 'Saved %s to %s ' % (Serializer.humanize_bytes(os.path.getsize(mapFile)), mapFile)
 
         #print ' ------ SAVE COMPLETE -------'
@@ -115,6 +124,7 @@ class Serializer:
             rooms = json.loads(base64.standard_b64decode(mapData['rooms']))
             links = json.loads(base64.standard_b64decode(mapData['links']))
             customLinks = []
+            labels=[]
         else:
             levels = mapData['levels']
             rooms = mapData['rooms']
@@ -122,6 +132,9 @@ class Serializer:
             try:
                 customLinks = mapData['customLinks']
             except: customLinks = []
+            try:
+                labels = mapData['labels']
+            except: labels = []
 
         factory = Serializer.factory
 
@@ -144,6 +157,9 @@ class Serializer:
         rooms = Serializer.registry.rooms()
 
         links =  links + customLinks
+
+        for label in labels:
+            factory.createLabelAt(QtCore.QPointF(label[0], label[1]), levelsById[label[2]].getView(), label[3])
 
         for link in links:
             if len(link) == 4:

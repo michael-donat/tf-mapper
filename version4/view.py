@@ -138,6 +138,11 @@ class uiMapView(QtGui.QGraphicsView):
             action.triggered.connect(lambda: self.roomFactory().pasteAt(createAt, self.scene(), json.loads(base64.standard_b64decode(QtGui.QApplication.clipboard().text()))))
         menu.addAction(action)
 
+        action = QtGui.QAction(str.format('Create label at {0}x{1}', eventPos.x(), eventPos.y()), self)
+        action.triggered.connect(lambda: self.roomFactory().createLabelAt(createAt, self.scene()))
+        menu.addAction(action)
+
+
         menu.exec_(event.globalPos())
         event.accept()
 
@@ -355,3 +360,15 @@ class Room(QtGui.QGraphicsItem):
 
         return super(Room, self).itemChange(QGraphicsItem_GraphicsItemChange, QVariant)
 
+class Label(QtGui.QGraphicsTextItem):
+    def __init__(self, text):
+        super(Label, self).__init__(text)
+        font = QtGui.QFont(QtGui.QApplication.font())
+        font.setPointSize(font.pointSize()*1.4)
+        self.setFont(font)
+
+    def mouseDoubleClickEvent(self, QGraphicsSceneMouseEvent):
+        self.setTextInteractionFlags(QtCore.Qt.TextEditorInteraction);
+
+    def focusOutEvent(self, QFocusEvent):
+        self.setTextInteractionFlags(QtCore.Qt.NoTextInteraction);
