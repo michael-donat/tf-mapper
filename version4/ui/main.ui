@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1295</width>
-    <height>717</height>
+    <width>1330</width>
+    <height>833</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,6 +30,12 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
       </property>
@@ -45,8 +51,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1295</width>
-     <height>21</height>
+     <width>1330</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -65,6 +71,7 @@
      <string>View</string>
     </property>
     <addaction name="menuActionShowToolsPanel"/>
+    <addaction name="menuActionShowPropertiesPanel"/>
     <addaction name="menuActionKepOnTop"/>
    </widget>
    <addaction name="menuFile"/>
@@ -72,7 +79,7 @@
   </widget>
   <widget class="QDockWidget" name="uiComponentToolsPanel">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+    <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -80,13 +87,13 @@
    <property name="minimumSize">
     <size>
      <width>250</width>
-     <height>655</height>
+     <height>250</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>250</width>
-     <height>1080</height>
+     <height>700</height>
     </size>
    </property>
    <property name="features">
@@ -100,134 +107,6 @@
    </attribute>
    <widget class="QWidget" name="uiComponentToolsPanelContentWidget">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="0" column="2">
-      <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="2">
-        <widget class="QToolButton" name="zoomIn">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>+</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QToolButton" name="zoomOut">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>-</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QToolButton" name="goLevelDown">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>DOWN</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QToolButton" name="goLevelUp">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>UP</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="6" column="2">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>Color</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="uiCreationColor"/>
-       </item>
-       <item>
-        <widget class="QToolButton" name="uiCreationColorPicker">
-         <property name="text">
-          <string>...</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="11" column="2">
-      <widget class="QComboBox" name="walkerModeSelector">
-       <item>
-        <property name="text">
-         <string>Walk</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Create</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="21" column="2">
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="22" column="2">
-      <widget class="QPushButton" name="pushButton">
-       <property name="text">
-        <string>SAVE MAP</string>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="2">
-      <widget class="QCheckBox" name="autoPlacement">
-       <property name="text">
-        <string>Auto placement</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="23" column="2">
-      <widget class="QPushButton" name="debugButton">
-       <property name="text">
-        <string>DEBUG</string>
-       </property>
-      </widget>
-     </item>
      <item row="13" column="2">
       <layout class="QGridLayout" name="compassButtonsGridLayout">
        <item row="0" column="2">
@@ -534,9 +413,19 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="autoPlacement">
+         <property name="text">
+          <string>Auto</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
-     <item row="20" column="2">
+     <item row="19" column="2">
       <layout class="QGridLayout" name="gridLayout">
        <item row="4" column="1">
         <widget class="QPushButton" name="manualLinkRoomRightInsert">
@@ -733,40 +622,122 @@
        </item>
       </layout>
      </item>
-     <item row="17" column="2">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="26" column="2">
+     <item row="23" column="2">
       <widget class="QLineEdit" name="commandInput"/>
      </item>
-     <item row="24" column="2">
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="25" column="2">
+     <item row="22" column="2">
       <widget class="QPushButton" name="commandTrigger">
        <property name="text">
         <string>Send Command</string>
        </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="3">
+        <widget class="QToolButton" name="zoomIn">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>+</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QToolButton" name="zoomOut">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QToolButton" name="goLevelDown">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>DOWN</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QToolButton" name="goLevelUp">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>UP</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="20" column="2">
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>SAVE MAP</string>
+       </property>
+      </widget>
+     </item>
+     <item row="21" column="2">
+      <widget class="QPushButton" name="debugButton">
+       <property name="text">
+        <string>DEBUG</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="text">
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="uiCreationColor"/>
+       </item>
+       <item>
+        <widget class="QToolButton" name="uiCreationColorPicker">
+         <property name="text">
+          <string>...</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="11" column="2">
+      <widget class="QComboBox" name="walkerModeSelector">
+       <item>
+        <property name="text">
+         <string>Walk</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Create</string>
+        </property>
+       </item>
       </widget>
      </item>
     </layout>
@@ -777,7 +748,7 @@
     <bool>true</bool>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+    <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
@@ -790,8 +761,8 @@
    </property>
    <property name="maximumSize">
     <size>
-     <width>260</width>
-     <height>524287</height>
+     <width>350</width>
+     <height>450</height>
     </size>
    </property>
    <property name="features">
@@ -818,9 +789,6 @@
         <string>Send text</string>
        </property>
       </widget>
-     </item>
-     <item row="2" column="2" colspan="2">
-      <widget class="QPlainTextEdit" name="uiPropertiesCommands"/>
      </item>
      <item row="3" column="3">
       <widget class="QToolButton" name="uiPropertiesColorPicker">
@@ -854,6 +822,9 @@
      </item>
      <item row="4" column="0" colspan="4">
       <widget class="QTableView" name="uiPropertiesExits"/>
+     </item>
+     <item row="2" column="2" colspan="2">
+      <widget class="QPlainTextEdit" name="uiPropertiesCommands"/>
      </item>
     </layout>
    </widget>
@@ -906,6 +877,23 @@
    </property>
    <property name="text">
     <string>Always on top</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+[</string>
+   </property>
+  </action>
+  <action name="menuActionShowPropertiesPanel">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Properties panel</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>
@@ -974,6 +962,22 @@
     <hint type="destinationlabel">
      <x>433</x>
      <y>263</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>menuActionShowPropertiesPanel</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>uiComponentPropertiesPanel</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1264</x>
+     <y>436</y>
     </hint>
    </hints>
   </connection>
