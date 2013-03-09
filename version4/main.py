@@ -251,8 +251,16 @@ if __name__ == '__main__':
 
 
     def showCreationColorPicker():
-        registry.setDefaultColor(QtGui.QColorDialog.getColor())
+        if registry.defColor:
+            color = QtGui.QColorDialog.getColor(QtGui.QColor(registry.defColor))
+        else: color = QtGui.QColorDialog.getColor()
+
+        if not color.isValid(): return
+        registry.setDefaultColor(color)
+        window.uiCreationColor.blockSignals(True)
         window.uiCreationColor.setText(registry.defColor)
+        window.uiCreationColor.blockSignals(False)
+        window.uiCreationColor.textChanged.emit(registry.defColor)
 
     def updateSelectionColor(color):
         for item in window.mapView().scene().selectedItems():
