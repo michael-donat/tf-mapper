@@ -170,7 +170,7 @@ class RoomFactory:
 
     def pasteAt(self, QPoint, QGraphicsScene, data):
         for room in data['rooms']:
-            self.createAt(QtCore.QPointF(QPoint.x()+room[0],QPoint.y()+room[1]), QGraphicsScene, room[2])
+            self.createAt(QtCore.QPointF(QPoint.x()+room[0],QPoint.y()+room[1]), QGraphicsScene, room[2], room[3])
         rooms = self.__map.rooms()
         for link in data['links']:
             leftRoom, leftExit = link[:2]
@@ -583,7 +583,7 @@ class Clipboard:
             y = pos.y()-QRectF.y()
             id_ = str(uuid.uuid1())
             idMap[item.getModel().getId()] = id_
-            item = (x,y, id_)
+            item = (x,y, id_, item.getModel().getSettings())
             items.append(item)
 
         links = []
