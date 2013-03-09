@@ -36,9 +36,9 @@ class Link:
 
     def replaceRoomPointer(self, oldRoom, newRoom):
         if oldRoom.getId() == self.__left[0].getId():
-            self.setLeft(newRoom, self.__left[1])
+            self.setLeft(newRoom, self.__left[1], self.__left[2])
         if oldRoom.getId() == self.__right[0].getId():
-            self.setRight(newRoom, self.__right[1])
+            self.setRight(newRoom, self.__right[1], self.__right[2])
 
     def setId(self, id_):
         self.__id = str(id_)
