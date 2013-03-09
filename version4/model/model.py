@@ -94,7 +94,7 @@ class CoordinatesHelper:
             newPosition = QPoint + QtCore.QPointF(0, midPoint)
         if direction == Direction.NW:
             newPosition = QPoint + QtCore.QPointF(0, 0)
-        if direction == Direction.OTHER:
+        if direction in [Direction.OTHER, Direction.U, Direction.D]:
             newPosition = QPoint + QtCore.QPointF(midPoint, midPoint)
 
         return newPosition

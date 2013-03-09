@@ -179,7 +179,7 @@ class Serializer:
 
             isUpDown = leftExit in [model.Direction.U, model.Direction.D] or rightExit in [model.Direction.U, model.Direction.D]
 
-            if leftRoom.getLevel().getId() == rightRoom.getLevel().getId() and not isUpDown:
+            if leftRoom.getLevel().getId() == rightRoom.getLevel().getId():
                 factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, levelsById[rightRoom.getLevel().getId()].getView(), leftExitLabel, rightExitLabel)
             else:
                 factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit)

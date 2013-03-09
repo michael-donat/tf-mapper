@@ -71,6 +71,7 @@ class uiMapLevel(QtGui.QGraphicsScene):
     __model=None
     def __init__(self):
         super(uiMapLevel, self).__init__()
+        self.setBackgroundBrush(QtGui.QColor(255, 255, 255, 127))
 
     def setModel(self, model):
         self.__model = model
@@ -163,10 +164,13 @@ class Link(QtGui.QGraphicsLineItem):
         startPoint = self.__coordinateshelper.getExitPoint(self.getModel().getLeft())
         endPoint = self.__coordinateshelper.getExitPoint(self.getModel().getRight())
         self.setLine(startPoint.x(), startPoint.y(), endPoint.x(), endPoint.y())
-        if self.getModel().isCustom():
-            self.setPen(QtGui.QPen(QtCore.Qt.DotLine))
+        isUpDown = self.getModel().getLeft()[1] in [model.Direction.U, model.Direction.D] or self.getModel().getRight()[1] in [model.Direction.U, model.Direction.D]
+        if self.getModel().isCustom() or isUpDown:
+            pen = QtGui.QPen(QtCore.Qt.DashDotDotLine)
+            self.setPen(pen)
         else:
             self.setPen(QtGui.QPen(QtCore.Qt.SolidLine))
+        self.setZValue(-1)
         self.update()
 
 class ShadowLink(QtGui.QGraphicsLineItem):
