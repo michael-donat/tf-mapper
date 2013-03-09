@@ -129,11 +129,23 @@ class Room:
     def delete(self):
         for linkPointer in self.__links:
             link = self.__links[linkPointer]
+            if link.isCustom(): continue
             if link.getView(): link.getView().scene().removeItem(link.getView())
             leftRoom = link.getLeft()
             if leftRoom[0].getId() is not self.getId(): leftRoom[0].removeExit(leftRoom[1])
             rightRoom = link.getRight()
             if rightRoom[0].getId() is not self.getId(): rightRoom[0].removeExit(rightRoom[1])
+            leftRoom[0].getView().update()
+            rightRoom[0].getView().update()
+            self.__map.removeLink(link)
+
+        for link in self.__customLinks:
+            print 'loop'
+            if link.getView() and link.getView().scene(): link.getView().scene().removeItem(link.getView())
+            leftRoom = link.getLeft()
+            if leftRoom[0].getId() is not self.getId(): leftRoom[0].removeExit(leftRoom[1], leftRoom[2])
+            rightRoom = link.getRight()
+            if rightRoom[0].getId() is not self.getId(): rightRoom[0].removeExit(rightRoom[1], rightRoom[2])
             leftRoom[0].getView().update()
             rightRoom[0].getView().update()
             self.__map.removeLink(link)
@@ -158,9 +170,21 @@ class Room:
     def addExit(self, exit_):
         self.__exits = self.__exits | exit_
 
-    def removeExit(self, exit_):
+    def removeExit(self, exit_, label=None):
+        if exit_ == model.Direction.OTHER: return self.removeCustomLink(label)
         self.__exits = self.__exits ^ exit_
         del self.__links[exit_]
+
+    def removeCustomLink(self, label):
+        for index, link in enumerate(self.__customLinks):
+            thisRoomsLink = link.getSourceSideFor(self)
+            if thisRoomsLink[2] == label:
+                del self.__customLinks[index]
+                break;
+        if not len(self.__customLinks):
+            self.__exits = self.__exits ^ model.Direction.OTHER
+        del self.__links[model.Direction.OTHER]
+
 
     def setCurrentlyVisited(self, bVisited):
         self.__currentlyVisited = bool(bVisited)
