@@ -169,6 +169,7 @@ class RoomFactory:
         return self.createAt(self.__helper.movePointInDirection(QPoint, direction), QGraphicsScene)
 
     def pasteAt(self, QPoint, QGraphicsScene, data):
+
         for room in data['rooms']:
             self.createAt(QtCore.QPointF(QPoint.x()+room[0],QPoint.y()+room[1]), QGraphicsScene, room[2], room[3])
         rooms = self.__map.rooms()
@@ -577,6 +578,7 @@ class Clipboard:
     def copyRooms(self, scene, QRectF):
         items = []
         idMap = {}
+        linkIdMap = []
         for item in scene.selectedItems():
             pos = item.sceneBoundingRect()
             x = pos.x()-QRectF.x()
@@ -591,6 +593,8 @@ class Clipboard:
             for exit, link in item.getModel().getLinks().items():
                 if link.getLeft()[0].getId() not in idMap: continue
                 if link.getRight()[0].getId() not in idMap: continue
+                if link.getId() in linkIdMap: continue
+                linkIdMap.append(link.getId())
                 #we now know the link is within selection
                 links.append([idMap[link.getLeft()[0].getId()],link.getLeft()[1],idMap[link.getRight()[0].getId()],link.getRight()[1]])
 

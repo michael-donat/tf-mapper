@@ -130,7 +130,9 @@ class Room:
         for linkPointer in self.__links:
             link = self.__links[linkPointer]
             if link.isCustom(): continue
-            if link.getView(): link.getView().scene().removeItem(link.getView())
+            v = link.getView()
+            s = link.getView().scene()
+            if link.getView() and link.getView().scene(): link.getView().scene().removeItem(link.getView())
             leftRoom = link.getLeft()
             if leftRoom[0].getId() is not self.getId(): leftRoom[0].removeExit(leftRoom[1])
             rightRoom = link.getRight()
@@ -140,7 +142,8 @@ class Room:
             self.__map.removeLink(link)
 
         for link in self.__customLinks:
-            print 'loop'
+            v = link.getView()
+            s = link.getView().scene()
             if link.getView() and link.getView().scene(): link.getView().scene().removeItem(link.getView())
             leftRoom = link.getLeft()
             if leftRoom[0].getId() is not self.getId(): leftRoom[0].removeExit(leftRoom[1], leftRoom[2])
@@ -183,7 +186,8 @@ class Room:
                 break;
         if not len(self.__customLinks):
             self.__exits = self.__exits ^ model.Direction.OTHER
-        del self.__links[model.Direction.OTHER]
+        if hasattr(self, '__links'):
+            del self.__links[model.Direction.OTHER]
 
 
     def setCurrentlyVisited(self, bVisited):
