@@ -388,7 +388,7 @@ class Room(QtGui.QGraphicsItem):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)
-            painter.drawLine(0, 0, exitSize, exitSize)
+            painter.drawLine(0, objectSize, exitSize, exitSize + edgeSize)
             painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.W):
