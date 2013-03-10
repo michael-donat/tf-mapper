@@ -84,6 +84,8 @@ class RoomProperties(QtCore.QObject):
     __uiRoomName=None
     __uiCommands=None
     __uiColor=None
+    __uiClass=None
+    __uiLabel=None
     __room=None
     __uiExitsTable=None
     def __init__(self, mainWindow):
@@ -92,6 +94,8 @@ class RoomProperties(QtCore.QObject):
         self.__uiRoomName = mainWindow.uiPropertiesRoomName
         self.__uiCommands = mainWindow.uiPropertiesCommands
         self.__uiColor = mainWindow.uiPropertiesColor
+        self.__uiClass = mainWindow.uiPropertiesClass
+        self.__uiLabel = mainWindow.uiPropertiesLabel
         self.__uiExitsTable = mainWindow.uiPropertiesExits
         self.__uiExitsTable.verticalHeader().hide()
         self.__uiExitsTable.horizontalHeader().setResizeMode(QtGui.QHeaderView.ResizeToContents)
@@ -101,20 +105,34 @@ class RoomProperties(QtCore.QObject):
         self.__uiRoomName.textEdited.connect(self.updateRoomFromProperties)
         self.__uiCommands.textChanged.connect(self.updateRoomFromProperties)
         self.__uiColor.textEdited.connect(self.updateRoomFromProperties)
+        self.__uiLabel.textEdited.connect(self.updateRoomFromProperties)
+        self.__uiClass.currentIndexChanged.connect(self.updateRoomFromProperties)
 
     def pickColor(self):
-        QColor = QtGui.QColorDialog.getColor()
+        color = self.__room.getProperty(model.Room.PROP_COLOR)
+        if len(color):
+            QColor = QtGui.QColorDialog.getColor(QtGui.QColor(color))
+        else:
+            QColor = QtGui.QColorDialog.getColor()
+        if not QColor.isValid(): return
         self.__uiColor.setText(str(QColor.name()))
         self.__uiColor.textEdited.emit('dummy')
 
     def updatePropertiesFromRoom(self, roomModel):
+
+        self.__room = roomModel
+
         self.__uiRoomId.setText(roomModel.getId())
         self.__uiRoomName.setText(roomModel.getProperty('name'))
         self.__uiCommands.blockSignals(True)
         self.__uiCommands.setPlainText(roomModel.getProperty('commands'))
         self.__uiCommands.blockSignals(False)
         self.__uiColor.setText(str(roomModel.getProperty('color')))
-        self.__room = roomModel
+        self.__uiLabel.setText(str(roomModel.getProperty('label')))
+        label = roomModel.getProperty('class')
+        index = self.__uiClass.findText(str(label))
+        if index != -1: self.__uiClass.setCurrentIndex(index)
+
 
         model = PropertiesExitsTableModel(roomModel)
         self.__uiExitsTable.setModel(model)
@@ -132,4 +150,6 @@ class RoomProperties(QtCore.QObject):
         self.__room.setProperty(entity.Room.PROP_NAME, str(self.__uiRoomName.text()))
         self.__room.setProperty(entity.Room.PROP_COMMANDS, str(self.__uiCommands.toPlainText()))
         self.__room.setProperty(entity.Room.PROP_COLOR, str(self.__uiColor.text()))
+        self.__room.setProperty(entity.Room.PROP_LABEL, str(self.__uiLabel.text()))
+        self.__room.setProperty(entity.Room.PROP_CLASS, str(self.__uiClass.currentText()))
         self.__room.getView().update()

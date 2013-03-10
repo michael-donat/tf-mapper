@@ -197,6 +197,7 @@ class RoomFactory:
         if properties is None:
             properties={}
             properties[Room.PROP_COLOR] = str(self.__registry.defColor)
+            properties[Room.PROP_CLASS] = str(self.__registry.defClass)
         room = self.spawnRoom(Id, properties)
         QGraphicsScene.addItem(room.getView())
         room.setPosition(QPoint)
@@ -265,8 +266,12 @@ class Registry:
     currentlyVisitedRoom=None
     roomShadow=None
     defColor=None
+    defClass=None
     def __init__(self):
         self.__rooms=[]
+
+    def setDefaultClass(self, roomClass):
+        self.defClass = roomClass
 
     def setDefaultColor(self, color):
         if isinstance(color, QtGui.QColor):

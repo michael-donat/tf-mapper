@@ -110,6 +110,8 @@ class Room:
     PROP_NAME='name'
     PROP_COMMANDS='commands'
     PROP_COLOR='color'
+    PROP_CLASS='class'
+    PROP_LABEL='label'
     def __init__(self, exits=0, properties=None):
         self.__exits = exits
         self.__links={}
@@ -118,6 +120,8 @@ class Room:
         if self.PROP_NAME not in properties: properties[ self.PROP_NAME] = ''
         if self.PROP_COLOR not in properties: properties[ self.PROP_COLOR]=None
         if self.PROP_COMMANDS not in properties: properties[ self.PROP_COMMANDS]=''
+        if self.PROP_CLASS not in properties: properties[ self.PROP_CLASS]=''
+        if self.PROP_LABEL not in properties: properties[ self.PROP_LABEL]=''
         self.__properties=properties
 
     def hasMaskedExits(self):

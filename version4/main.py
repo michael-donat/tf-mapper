@@ -11,11 +11,12 @@ from PyQt4 import QtGui, QtCore
 
 if __name__ == '__main__':
 
-    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity"])
+    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "no-panels"])
 
     spawnRemoteConnection = False
     noServer = False
     mapFile='map.db'
+    noPanels=False
 
     for opt, arg in opts:
         if opt in ("-m", "--map"):
@@ -24,6 +25,8 @@ if __name__ == '__main__':
             spawnRemoteConnection = True
         if opt == "--disable-connectivity":
             noServer = True
+        if opt == "--no-panels":
+            noPanels = True
 
     Serializer.mapFile = mapFile
 
@@ -50,7 +53,11 @@ if __name__ == '__main__':
     application = QtGui.QApplication(sys.argv)
     application.setStyle('plastique')
     window = view.uiMainWindow()
+    if noPanels: window.hidePanels()
+    import roomClasses
+    window.buildClasses(roomClasses)
     registry.mainWindow = window
+
     window.show()
 
     roomProperties = modelui.RoomProperties(window)
@@ -266,10 +273,21 @@ if __name__ == '__main__':
         for item in window.mapView().scene().selectedItems():
             item.getModel().setProperty(model.Room.PROP_COLOR, str(color))
 
-
     window.uiCreationColor.textChanged.connect(registry.setDefaultColor)
     window.uiCreationColor.textChanged.connect(updateSelectionColor)
     window.uiCreationColorPicker.clicked.connect(showCreationColorPicker)
+
+    def reapplyCreationClass():
+        window.uiCreationClass.currentIndexChanged.emit(window.uiCreationClass.currentIndex())
+
+    def applyCreationClass(roomClassIndex):
+        registry.setDefaultClass(window.uiCreationClass.currentText())
+        for item in window.mapView().scene().selectedItems():
+            item.getModel().setProperty(model.Room.PROP_CLASS, window.uiCreationClass.currentText())
+
+
+    window.uiCreationClass.currentIndexChanged.connect(applyCreationClass)
+    window.uiCreationClassApply.clicked.connect(reapplyCreationClass)
 
     if not noServer:
         if not spawnRemoteConnection:

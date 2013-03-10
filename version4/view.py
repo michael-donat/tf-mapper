@@ -2,6 +2,8 @@
 from PyQt4 import uic, QtGui, QtCore
 import di, model.model as model
 import json, base64
+import types
+import roomClasses
 
 import icons_rc
 
@@ -20,6 +22,19 @@ class uiMainWindow(window, base):
         self.uiMapViewFrame.setLayout(QtGui.QVBoxLayout())
         self.uiMapViewFrame.layout().addWidget(self.__mapView)
         self.__mapView.show()
+
+    def hidePanels(self):
+        self.uiComponentToolsPanel.hide()
+        self.uiComponentPropertiesPanel.hide()
+
+    def buildClasses(self, classes):
+        self.uiCreationClass.addItem('')
+        self.uiPropertiesClass.addItem('')
+        for function in dir(classes):
+            if isinstance(classes.__dict__.get(function), types.FunctionType):
+                self.uiCreationClass.addItem(function)
+                self.uiPropertiesClass.addItem(function)
+
 
     def setKeepOnTop(self, keep):
         if keep:
@@ -269,6 +284,12 @@ class Room(QtGui.QGraphicsItem):
             if color.isValid():
                 self.color = color
 
+        className = self.getModel().getProperty(model.Room.PROP_CLASS)
+
+        if className in dir(roomClasses):
+            function = roomClasses.__dict__.get(className)
+            function(self)
+
         objectSize = self.__config.getSize()
         edgeSize = self.__config.getEdgeLength()
         exitSize = self.__config.getExitLength()
@@ -334,6 +355,17 @@ class Room(QtGui.QGraphicsItem):
             QRect = QtCore.QRectF(exitSize, midPoint, edgeSize, edgeSize/2)
             QRect.adjust(edgeSize/float(5),edgeSize/10,-1*edgeSize/5,-1*edgeSize/10)
             painter.drawRect(QRect)
+
+        label = self.__model.getProperty(model.Room.PROP_LABEL)
+        if len(label):
+            font = QtGui.QFont(QtGui.QApplication.font())
+            font.setPointSize(font.pointSize()*1.3)
+            font.setWeight(100)
+            painter.setFont(font)
+            label= label.rjust(2,' ')
+            label = label.ljust(3,' ')
+            painter.setPen(QtGui.QColor(0,0,0))
+            painter.drawText(QtCore.QPointF(exitSize+1,exitSize+edgeSize-5),label)
 
     #def mousePressEvent(self, QGraphicsSceneMouseEvent):
     #    print QGraphicsSceneMouseEvent.modifiers() & QtCore.Qt.ShiftModifier
