@@ -149,8 +149,6 @@ class Room:
         return self.__position
 
     def deleteLink(self, link, iteration=False):
-        v = link.getView()
-        s = link.getView().scene()
         if link.getView() and link.getView().scene(): link.getView().scene().removeItem(link.getView())
         leftRoom = link.getLeft()
         if not iteration or leftRoom[0].getId() is not self.getId():
