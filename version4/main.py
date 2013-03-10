@@ -284,10 +284,13 @@ if __name__ == '__main__':
         registry.setDefaultClass(window.uiCreationClass.currentText())
         for item in window.mapView().scene().selectedItems():
             item.getModel().setProperty(model.Room.PROP_CLASS, window.uiCreationClass.currentText())
+            pass
 
 
     window.uiCreationClass.currentIndexChanged.connect(applyCreationClass)
     window.uiCreationClassApply.clicked.connect(reapplyCreationClass)
+
+    window.centerOnMove.toggled.connect(registry.setCenterAt)
 
     if not noServer:
         if not spawnRemoteConnection:

@@ -333,19 +333,6 @@
          </property>
         </spacer>
        </item>
-       <item row="1" column="0">
-        <spacer name="compassSpacerLeft">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="1" column="2">
         <widget class="QToolButton" name="compassPlace">
          <property name="enabled">
@@ -419,6 +406,16 @@
         <widget class="QCheckBox" name="autoPlacement">
          <property name="text">
           <string>Auto</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="centerOnMove">
+         <property name="text">
+          <string>Center</string>
          </property>
          <property name="checked">
           <bool>true</bool>

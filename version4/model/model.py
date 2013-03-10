@@ -196,7 +196,7 @@ class RoomFactory:
     def createAt(self, QPoint, QGraphicsScene, Id=None, properties=None):
         if properties is None:
             properties={}
-            properties[Room.PROP_COLOR] = str(self.__registry.defColor)
+            properties[Room.PROP_COLOR] = self.__registry.defColor
             properties[Room.PROP_CLASS] = str(self.__registry.defClass)
         room = self.spawnRoom(Id, properties)
         QGraphicsScene.addItem(room.getView())
@@ -267,8 +267,12 @@ class Registry:
     roomShadow=None
     defColor=None
     defClass=None
+    centerAt=True
     def __init__(self):
         self.__rooms=[]
+
+    def setCenterAt(self, Center=True):
+        self.centerAt = Center
 
     def setDefaultClass(self, roomClass):
         self.defClass = roomClass
@@ -566,11 +570,20 @@ class Navigator(QtCore.QObject):
         roomModel.getView().clearFocus()
 
         if len(roomModel.getView().scene().views()):
-            #workaround to a bug with centerAt
-            roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
-            roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
-            roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
-            pass
+            if self.__registry.centerAt:
+                #workaround to a bug with centerAt
+                roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
+                roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
+                roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
+                pass
+            else:
+                roomPositionWithinScene = roomModel.getView().pos()
+                roomPositionWithinView = roomModel.getView().scene().views()[0].mapFromScene(roomPositionWithinScene)
+                if roomPositionWithinView.x() < 10 or roomPositionWithinView.y() < 10:
+                    roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
+                    roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
+                    roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
+
 
         for item in roomModel.getView().scene().selectedItems():
             item.setSelected(False)

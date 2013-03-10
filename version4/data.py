@@ -27,7 +27,11 @@ class Serializer:
         rooms = []
         #print 'Gathering rooms'
         for index, room in mapObject.rooms().items():
-            rooms.append([room.getId(), room.getLevel().getId(), room.getView().pos().x(), room.getView().pos().y(), room.getSettings()])
+            newSettings = {}
+            for key, value in room.getSettings().items():
+                if value == 'None': value=None
+                newSettings[key] = value
+            rooms.append([room.getId(), room.getLevel().getId(), room.getView().pos().x(), room.getView().pos().y(), newSettings])
         #print 'Serializing rooms'
         #roomsData = base64.standard_b64encode(json.dumps(rooms))
         roomsData = rooms

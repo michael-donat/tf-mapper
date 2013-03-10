@@ -298,7 +298,9 @@ class Room(QtGui.QGraphicsItem):
         className = self.getModel().getProperty(model.Room.PROP_CLASS)
 
         if className in dir(roomClasses):
+            print className
             function = roomClasses.__dict__.get(className)
+            print function
             function(self)
 
         objectSize = self.__config.getSize()

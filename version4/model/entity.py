@@ -147,7 +147,7 @@ class Room:
         return self.__properties[property]
 
     def setProperty(self, property, value):
-        self.__properties[property] = str(value)
+        self.__properties[property] = str(value) if value is not None else ''
 
     def position(self):
         return self.__position

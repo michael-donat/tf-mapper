@@ -110,7 +110,7 @@ class RoomProperties(QtCore.QObject):
 
     def pickColor(self):
         color = self.__room.getProperty(model.Room.PROP_COLOR)
-        if len(color):
+        if color is not None and len(color):
             QColor = QtGui.QColorDialog.getColor(QtGui.QColor(color))
         else:
             QColor = QtGui.QColorDialog.getColor()
@@ -123,16 +123,17 @@ class RoomProperties(QtCore.QObject):
         self.__room = roomModel
 
         self.__uiRoomId.setText(roomModel.getId())
-        self.__uiRoomName.setText(roomModel.getProperty('name'))
+        self.__uiRoomName.setText(roomModel.getProperty('name') if roomModel.getProperty('name') is not None else '')
         self.__uiCommands.blockSignals(True)
-        self.__uiCommands.setPlainText(roomModel.getProperty('commands'))
+        self.__uiCommands.setPlainText(roomModel.getProperty('commands') if roomModel.getProperty('commands') is not None else '')
         self.__uiCommands.blockSignals(False)
-        self.__uiColor.setText(str(roomModel.getProperty('color')))
-        self.__uiLabel.setText(str(roomModel.getProperty('label')))
+        self.__uiColor.setText(str(roomModel.getProperty('color')) if roomModel.getProperty('color') is not None else '')
+        self.__uiLabel.setText(str(roomModel.getProperty('label')) if roomModel.getProperty('label') is not None else '')
         label = roomModel.getProperty('class')
         index = self.__uiClass.findText(str(label))
+        self.__uiClass.blockSignals(True)
         if index != -1: self.__uiClass.setCurrentIndex(index)
-
+        self.__uiClass.blockSignals(False)
 
         model = PropertiesExitsTableModel(roomModel)
         self.__uiExitsTable.setModel(model)
@@ -147,9 +148,9 @@ class RoomProperties(QtCore.QObject):
 
 
     def updateRoomFromProperties(self):
-        self.__room.setProperty(entity.Room.PROP_NAME, str(self.__uiRoomName.text() if len(self.__uiRoomName.text()) else None))
-        self.__room.setProperty(entity.Room.PROP_COMMANDS, str(self.__uiCommands.toPlainText() if len(self.__uiCommands.toPlainText()) else None))
-        self.__room.setProperty(entity.Room.PROP_COLOR, str(self.__uiColor.text() if len(self.__uiColor.text()) else None))
-        self.__room.setProperty(entity.Room.PROP_LABEL, str(self.__uiLabel.text() if len(self.__uiLabel.text()) else None))
-        self.__room.setProperty(entity.Room.PROP_CLASS, str(self.__uiClass.currentText() if len(self.__uiClass.currentText()) else None))
+        self.__room.setProperty(entity.Room.PROP_NAME, str(self.__uiRoomName.text()) if len(self.__uiRoomName.text()) else None)
+        self.__room.setProperty(entity.Room.PROP_COMMANDS, str(self.__uiCommands.toPlainText()) if len(self.__uiCommands.toPlainText()) else None)
+        self.__room.setProperty(entity.Room.PROP_COLOR, str(self.__uiColor.text()) if len(self.__uiColor.text()) else None)
+        self.__room.setProperty(entity.Room.PROP_LABEL, str(self.__uiLabel.text()) if len(self.__uiLabel.text()) else None)
+        self.__room.setProperty(entity.Room.PROP_CLASS, str(self.__uiClass.currentText()) if len(self.__uiClass.currentText()) else None)
         self.__room.getView().update()
