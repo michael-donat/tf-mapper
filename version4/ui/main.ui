@@ -73,6 +73,8 @@
     <addaction name="menuActionShowToolsPanel"/>
     <addaction name="menuActionShowPropertiesPanel"/>
     <addaction name="menuActionKepOnTop"/>
+    <addaction name="separator"/>
+    <addaction name="menuActionEnableAntialiasing"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -943,6 +945,20 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="menuActionEnableAntialiasing">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Antialiasing</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+]</string>
    </property>
   </action>
  </widget>

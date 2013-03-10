@@ -61,7 +61,7 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
                 items = self.getItems()
                 item = items[QModelIndex.row()]
                 sourceSide = item.getSourceSideFor(self.__room)
-                item.replaceSourceSideFor(self.__room, sourceSide[1], data.toString())
+                item.replaceSourceSideFor(self.__room, sourceSide[1], data.toString() if len(data.toString()) else None)
                 return True
 
     def flags(self, QModelIndex):
@@ -147,9 +147,9 @@ class RoomProperties(QtCore.QObject):
 
 
     def updateRoomFromProperties(self):
-        self.__room.setProperty(entity.Room.PROP_NAME, str(self.__uiRoomName.text()))
-        self.__room.setProperty(entity.Room.PROP_COMMANDS, str(self.__uiCommands.toPlainText()))
-        self.__room.setProperty(entity.Room.PROP_COLOR, str(self.__uiColor.text()))
-        self.__room.setProperty(entity.Room.PROP_LABEL, str(self.__uiLabel.text()))
-        self.__room.setProperty(entity.Room.PROP_CLASS, str(self.__uiClass.currentText()))
+        self.__room.setProperty(entity.Room.PROP_NAME, str(self.__uiRoomName.text() if len(self.__uiRoomName.text()) else None))
+        self.__room.setProperty(entity.Room.PROP_COMMANDS, str(self.__uiCommands.toPlainText() if len(self.__uiCommands.toPlainText()) else None))
+        self.__room.setProperty(entity.Room.PROP_COLOR, str(self.__uiColor.text() if len(self.__uiColor.text()) else None))
+        self.__room.setProperty(entity.Room.PROP_LABEL, str(self.__uiLabel.text() if len(self.__uiLabel.text()) else None))
+        self.__room.setProperty(entity.Room.PROP_CLASS, str(self.__uiClass.currentText() if len(self.__uiClass.currentText()) else None))
         self.__room.getView().update()

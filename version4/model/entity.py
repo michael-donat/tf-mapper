@@ -88,9 +88,9 @@ class Link:
 
     def replaceSourceSideFor(self, room, exit_, label):
         if room.getId() == self.__left[0].getId():
-            self.__left = (room, exit_, str(label))
+            self.__left = (room, exit_, str(label) if not label==None else label)
         if room.getId() == self.__right[0].getId():
-            self.__right = (room, exit_, str(label))
+            self.__right = (room, exit_, str(label) if not label==None else label)
 
 
     def isCustom(self): return False
@@ -126,14 +126,18 @@ class Room:
 
     def hasMaskedExits(self):
         for index, link in self.__links.items():
-            if link.getSourceSideFor(self)[2] is not None: return True
+            sourceSide=link.getSourceSideFor(self)
+            if sourceSide[2] is not None and len(sourceSide[2]): return True
 
     def getMaskedExitsString(self):
         returnString=""
         for index, link in self.__links.items():
             sourceSide=link.getSourceSideFor(self)
-            if sourceSide[2] is not None:
-                returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[2])
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                if sourceSide[1] == model.Direction.OTHER:
+                    returnString += "exit:custom:%s\n" % sourceSide[2]
+                else:
+                    returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[2])
         return returnString
 
     def properties(self):

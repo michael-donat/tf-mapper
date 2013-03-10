@@ -23,6 +23,9 @@ class uiMainWindow(window, base):
         self.uiMapViewFrame.layout().addWidget(self.__mapView)
         self.__mapView.show()
 
+        self.menuActionEnableAntialiasing.toggled.connect(self.__mapView.enableAntialiasing)
+
+
     def hidePanels(self):
         self.uiComponentToolsPanel.hide()
         self.uiComponentPropertiesPanel.hide()
@@ -101,6 +104,15 @@ class uiMapView(QtGui.QGraphicsView):
     __registry=di.ComponentRequest('Registry')
     __map=di.ComponentRequest('Map')
 
+    def enableAntialiasing(self, Enable=True):
+        if Enable:
+            self.setRenderHints(QtGui.QPainter.RenderHints() | QtGui.QPainter.Antialiasing)
+            self.update()
+        else:
+            self.setRenderHints(QtGui.QPainter.RenderHints())
+            self.update()
+        print self.renderHints()
+
     def setScene(self, scene):
 
         x1 = x2 = y1 = y2 = 0
@@ -134,7 +146,6 @@ class uiMapView(QtGui.QGraphicsView):
         super(uiMapView, self).__init__()
         self.setDragMode(QtGui.QGraphicsView.RubberBandDrag)
         self.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
-
 
     def contextMenuEvent(self, event):
         eventPos = event.pos()
@@ -315,34 +326,99 @@ class Room(QtGui.QGraphicsItem):
         painter.drawRect(exitSize, exitSize, edgeSize, edgeSize)
 
         if self.__model.hasExit(model.Direction.N):
+            pen = painter.pen()
+            link = self.__model.linkAt(model.Direction.N)
+            sourceSide = link.getSourceSideFor(self.__model)
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                newpen = QtGui.QPen(pen)
+                newpen.setColor(QtGui.QColor(9,171,235))
+                painter.setPen(newpen)
             painter.drawLine(midPoint, 0, midPoint, exitSize)
+            painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.NE):
+            pen = painter.pen()
+            link = self.__model.linkAt(model.Direction.NE)
+            sourceSide = link.getSourceSideFor(self.__model)
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                newpen = QtGui.QPen(pen)
+                newpen.setColor(QtGui.QColor(9,171,235))
+                painter.setPen(newpen)
             painter.drawLine(exitSize + edgeSize, exitSize, objectSize, 0)
+            painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.E):
+            pen = painter.pen()
+            link = self.__model.linkAt(model.Direction.E)
+            sourceSide = link.getSourceSideFor(self.__model)
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                newpen = QtGui.QPen(pen)
+                newpen.setColor(QtGui.QColor(9,171,235))
+                painter.setPen(newpen)
             painter.drawLine(exitSize + edgeSize, midPoint, objectSize, midPoint)
+            painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.SE):
+            pen = painter.pen()
+            link = self.__model.linkAt(model.Direction.SE)
+            sourceSide = link.getSourceSideFor(self.__model)
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                newpen = QtGui.QPen(pen)
+                newpen.setColor(QtGui.QColor(9,171,235))
+                painter.setPen(newpen)
             painter.drawLine(exitSize + edgeSize, exitSize + edgeSize, objectSize, objectSize)
+            painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.S):
+            pen = painter.pen()
+            link = self.__model.linkAt(model.Direction.S)
+            sourceSide = link.getSourceSideFor(self.__model)
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                newpen = QtGui.QPen(pen)
+                newpen.setColor(QtGui.QColor(9,171,235))
+                painter.setPen(newpen)
             painter.drawLine(midPoint, exitSize + edgeSize, midPoint, objectSize)
+            painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.SW):
-            painter.drawLine(0, objectSize, exitSize, exitSize + edgeSize)
+            pen = painter.pen()
+            link = self.__model.linkAt(model.Direction.SW)
+            sourceSide = link.getSourceSideFor(self.__model)
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                newpen = QtGui.QPen(pen)
+                newpen.setColor(QtGui.QColor(9,171,235))
+                painter.setPen(newpen)
+            painter.drawLine(0, 0, exitSize, exitSize)
+            painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.W):
+            pen = painter.pen()
+            link = self.__model.linkAt(model.Direction.W)
+            sourceSide = link.getSourceSideFor(self.__model)
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                newpen = QtGui.QPen(pen)
+                newpen.setColor(QtGui.QColor(9,171,235))
+                painter.setPen(newpen)
             painter.drawLine(0, midPoint, exitSize, midPoint)
+            painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.NW):
+            pen = painter.pen()
+            link = self.__model.linkAt(model.Direction.NW)
+            sourceSide = link.getSourceSideFor(self.__model)
+            if sourceSide[2] is not None and len(sourceSide[2]):
+                newpen = QtGui.QPen(pen)
+                newpen.setColor(QtGui.QColor(9,171,235))
+                painter.setPen(newpen)
             painter.drawLine(0, 0, exitSize, exitSize)
+            painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.U):
             #if self.__model.isCurrentlyVisited(): painter.setBrush(QtGui.QColor(100,100,100))
             #else: painter.setBrush(QtGui.QColor(255,255,255))
             painter.setBrush(QtGui.QColor(255,255,255))
             painter.setPen(QtCore.Qt.NoPen)
+
             QRect = QtCore.QRectF(exitSize, exitSize, edgeSize, edgeSize/2)
             QRect.adjust(edgeSize/float(5),edgeSize/10,-1*edgeSize/5,-1*edgeSize/10)
             painter.drawRect(QRect)

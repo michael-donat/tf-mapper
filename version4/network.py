@@ -41,6 +41,7 @@ class Broadcaster(QtCore.QObject):
         self.dataReceived.emit(data.trimmed().data())
 
     def send(self, data):
+        print 'SENDING: %s' % data
         if self.__clientSocket is not None:
             self.__clientSocket.write(data)
 
