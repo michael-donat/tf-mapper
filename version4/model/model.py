@@ -33,7 +33,8 @@ class Map:
         self.__links[link.getId()] = link
 
     def removeLink(self, link):
-        del self.__links[link.getId()]
+        if link.getId() in self.__links:
+            del self.__links[link.getId()]
 
 
 class Direction:
@@ -168,6 +169,7 @@ class RoomFactory:
     def createInDirection(self, direction, QPoint, QGraphicsScene):
         return self.createAt(self.__helper.movePointInDirection(QPoint, direction), QGraphicsScene)
 
+
     def pasteAt(self, QPoint, QGraphicsScene, data):
 
         for room in data['rooms']:
@@ -230,10 +232,10 @@ class RoomFactory:
 
     def linkRooms(self, leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene=None, leftLinkCustomLabel=None, rightLinkCustomLabel=None):
         #need to validate first
-        if(Direction.OTHER != leftExit and leftRoom.hasLinkAt(leftExit) and not leftRoom.linkAt(leftExit).pointsAt(rightRoom)):
+        if(Direction.OTHER != leftExit and leftRoom.hasLinkAt(leftExit)): # and not leftRoom.linkAt(leftExit).pointsAt(rightRoom)):
             raise Exception('Left room already links somewhere through given exit')
 
-        if(Direction.OTHER != rightExit and rightRoom.hasLinkAt(rightExit) and not rightRoom.linkAt(rightExit).pointsAt(leftRoom)):
+        if(Direction.OTHER != rightExit and rightRoom.hasLinkAt(rightExit)): # and not rightRoom.linkAt(rightExit).pointsAt(leftRoom)):
             raise Exception('Right room already links somewhere through given exit')
 
         #good to link
@@ -404,6 +406,9 @@ class Navigator(QtCore.QObject):
 
         #let's check for masked exists first
         for exit_, link in currentRoom.getLinks().items():
+            sourceSide = link.getSourceSideFor(currentRoom)
+            if sourceSide[2] is not None and sourceSide[2] == direction:
+                return self.markVisitedRoom(link.getDestinationFor(currentRoom))
             #print link.getSourceSideFor(currentRoom)[2]
             pass
 
@@ -427,6 +432,9 @@ class Navigator(QtCore.QObject):
             """
 
             exitLink = currentRoom.linkAt(fromExit)
+
+            if exitLink.getSourceSideFor(currentRoom)[2] is not None: return
+
             #print exitLink
             destinationRoom = exitLink.getDestinationFor(currentRoom)
             self.markVisitedRoom(destinationRoom)
@@ -571,6 +579,14 @@ class Navigator(QtCore.QObject):
         if len(roomModel.getProperty(Room.PROP_COMMANDS)):
             if  hasattr(self.__registry, 'connection'):
                 self.__registry.connection.send(roomModel.getProperty(Room.PROP_COMMANDS)+'\n')
+
+        if  hasattr(self.__registry, 'connection'):
+            if roomModel.hasMaskedExits():
+                self.__registry.connection.send(roomModel.getMaskedExitsString())
+            else:
+                self.__registry.connection.send('exit:reset')
+
+
 
 
 

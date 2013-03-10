@@ -54,10 +54,10 @@ class Link:
         return self.__view
 
     def setLeft(self, room, exit_, label):
-        self.__left = (room, exit_, str(label))
+        self.__left = (room, exit_, str(label) if not label==None else label)
 
     def setRight(self, room, exit_, label):
-        self.__right = (room, exit_, str(label))
+        self.__right = (room, exit_, str(label) if not label==None else label)
 
     def getLeft(self):
         return self.__left
@@ -85,6 +85,12 @@ class Link:
             return self.__left
         if room.getId() == self.__right[0].getId():
             return self.__right
+
+    def replaceSourceSideFor(self, room, exit_, label):
+        if room.getId() == self.__left[0].getId():
+            self.__left = (room, exit_, str(label))
+        if room.getId() == self.__right[0].getId():
+            self.__right = (room, exit_, str(label))
 
 
     def isCustom(self): return False
@@ -114,6 +120,18 @@ class Room:
         if self.PROP_COMMANDS not in properties: properties[ self.PROP_COMMANDS]=''
         self.__properties=properties
 
+    def hasMaskedExits(self):
+        for index, link in self.__links.items():
+            if link.getSourceSideFor(self)[2] is not None: return True
+
+    def getMaskedExitsString(self):
+        returnString=""
+        for index, link in self.__links.items():
+            sourceSide=link.getSourceSideFor(self)
+            if sourceSide[2] is not None:
+                returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[2])
+        return returnString
+
     def properties(self):
         return self.__properties
 
@@ -126,35 +144,31 @@ class Room:
     def position(self):
         return self.__position
 
+    def deleteLink(self, link, iteration=False):
+        v = link.getView()
+        s = link.getView().scene()
+        if link.getView() and link.getView().scene(): link.getView().scene().removeItem(link.getView())
+        leftRoom = link.getLeft()
+        if not iteration or leftRoom[0].getId() is not self.getId():
+            leftRoom[0].removeExit(leftRoom[1], leftRoom[2])
+        rightRoom = link.getRight()
+        if not iteration or rightRoom[0].getId() is not self.getId():
+            rightRoom[0].removeExit(rightRoom[1], leftRoom[2])
+        leftRoom[0].getView().update()
+        rightRoom[0].getView().update()
+        self.__map.removeLink(link)
+
     def delete(self):
         for linkPointer in self.__links:
             link = self.__links[linkPointer]
             if link.isCustom(): continue
-            v = link.getView()
-            s = link.getView().scene()
-            if link.getView() and link.getView().scene(): link.getView().scene().removeItem(link.getView())
-            leftRoom = link.getLeft()
-            if leftRoom[0].getId() is not self.getId(): leftRoom[0].removeExit(leftRoom[1])
-            rightRoom = link.getRight()
-            if rightRoom[0].getId() is not self.getId(): rightRoom[0].removeExit(rightRoom[1])
-            leftRoom[0].getView().update()
-            rightRoom[0].getView().update()
-            self.__map.removeLink(link)
+            self.deleteLink(link, True)
 
         for link in self.__customLinks:
-            v = link.getView()
-            s = link.getView().scene()
-            if link.getView() and link.getView().scene(): link.getView().scene().removeItem(link.getView())
-            leftRoom = link.getLeft()
-            if leftRoom[0].getId() is not self.getId(): leftRoom[0].removeExit(leftRoom[1], leftRoom[2])
-            rightRoom = link.getRight()
-            if rightRoom[0].getId() is not self.getId(): rightRoom[0].removeExit(rightRoom[1], rightRoom[2])
-            leftRoom[0].getView().update()
-            rightRoom[0].getView().update()
-            self.__map.removeLink(link)
+            self.deleteLink(link, True)
 
-        del self.__links
-        del self.__exits
+        self.__links={}
+        self.__exits=0
         self.getView().scene().removeItem(self.getView())
         self.__map.removeRoom(self)
 
@@ -176,7 +190,8 @@ class Room:
     def removeExit(self, exit_, label=None):
         if exit_ == model.Direction.OTHER: return self.removeCustomLink(label)
         self.__exits = self.__exits ^ exit_
-        del self.__links[exit_]
+        if exit_ in self.__links:
+            del self.__links[exit_]
 
     def removeCustomLink(self, label):
         for index, link in enumerate(self.__customLinks):
