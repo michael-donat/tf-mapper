@@ -584,7 +584,7 @@ class Navigator(QtCore.QObject):
             if roomModel.hasMaskedExits():
                 self.__registry.connection.send(roomModel.getMaskedExitsString())
             else:
-                self.__registry.connection.send('exit:reset')
+                self.__registry.connection.send('exit:reset\n')
 
 
 
