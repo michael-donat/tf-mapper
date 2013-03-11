@@ -30,7 +30,7 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
         return len(items)
     def columnCount(self, QModelIndex):
         #1-exit, 2-label, 3-destination
-        return 5
+        return 6
     def data(self, QModelIndex, role):
         if role == QtCore.Qt.DisplayRole:
             items = set(self.__room.getLinks().values()+self.__room.getCustomLinks())
