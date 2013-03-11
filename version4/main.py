@@ -140,7 +140,7 @@ if __name__ == '__main__':
         if command == 'navigate:s': navigator.goSouth()
         if command == 'navigate:poludnie': navigator.goSouth()
         if command == 'navigate:sw': navigator.goSouthWest()
-        if command == 'navigate:poludnie-zachod': navigator.goSouthWest()
+        if command == 'navigate:poludniowy-zachod': navigator.goSouthWest()
         if command == 'navigate:w': navigator.goWest()
         if command == 'navigate:zachod': navigator.goWest()
         if command == 'navigate:nw': navigator.goNorthWest()
