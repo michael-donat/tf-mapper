@@ -35,3 +35,9 @@ nosetests.xml
 .pydevproject
 
 .idea
+
+version4/logdict2.7.3.final.0-1.log
+
+*.spec
+
+*.db

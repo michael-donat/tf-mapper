@@ -58,6 +58,7 @@ if __name__ == '__main__':
     window.buildClasses(roomClasses)
     registry.mainWindow = window
 
+    window.raise_()
     window.show()
 
     roomProperties = modelui.RoomProperties(window)

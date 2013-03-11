@@ -9,8 +9,9 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
     COLUMN_GO_BUTTON=0
     COLUMN_DIRECTION=1
     COLUMN_LABEL=2
-    COLUMN_DESTINATION=3
-    COLUMN_REMOVE_BUTTON=4
+    COLUMN_REBIND=3
+    COLUMN_DESTINATION=4
+    COLUMN_REMOVE_BUTTON=5
     __map=di.ComponentRequest('Map')
     __navigator=di.ComponentRequest('Navigator')
     __room=None
@@ -42,6 +43,8 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
                 return model.Direction.mapToLabel(sourceSide[1])
             if QModelIndex.column() == self.COLUMN_LABEL:
                 return sourceSide[2]
+            if QModelIndex.column() == self.COLUMN_REBIND:
+                return sourceSide[3]
             if QModelIndex.column() == self.COLUMN_DESTINATION:
                 return link.getDestinationFor(self.__room).getId()
             if QModelIndex.column() == self.COLUMN_REMOVE_BUTTON:
@@ -52,6 +55,7 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
                 if section == self.COLUMN_GO_BUTTON: return ''
                 if section == self.COLUMN_DIRECTION: return 'dir'
                 if section == self.COLUMN_LABEL: return 'label'
+                if section == self.COLUMN_REBIND: return 'rebind'
                 if section == self.COLUMN_DESTINATION: return 'dest'
                 if section == self.COLUMN_REMOVE_BUTTON: return 'rm'
 
@@ -61,12 +65,19 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
                 items = self.getItems()
                 item = items[QModelIndex.row()]
                 sourceSide = item.getSourceSideFor(self.__room)
-                item.replaceSourceSideFor(self.__room, sourceSide[1], data.toString() if len(data.toString()) else None)
+                item.replaceSourceSideFor(self.__room, sourceSide[1], data.toString() if len(data.toString()) else None, sourceSide[3])
+                return True
+            if QModelIndex.column() == self.COLUMN_REBIND:
+                items = self.getItems()
+                item = items[QModelIndex.row()]
+                sourceSide = item.getSourceSideFor(self.__room)
+                item.replaceSourceSideFor(self.__room, sourceSide[1], sourceSide[2], data.toString() if len(data.toString()) else None)
                 return True
 
     def flags(self, QModelIndex):
         flags =  QtCore.Qt.ItemIsEnabled
         if QModelIndex.column() == self.COLUMN_LABEL: flags = flags | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable
+        if QModelIndex.column() == self.COLUMN_REBIND: flags = flags | QtCore.Qt.ItemIsEditable | QtCore.Qt.ItemIsSelectable
         return flags
 
     def doubleClicked(self, QModelIndex):

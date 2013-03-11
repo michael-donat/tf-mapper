@@ -304,9 +304,7 @@ class Room(QtGui.QGraphicsItem):
         className = self.getModel().getProperty(model.Room.PROP_CLASS)
 
         if className in dir(roomClasses):
-            print className
             function = roomClasses.__dict__.get(className)
-            print function
             function(self)
 
         objectSize = self.__config.getSize()
@@ -337,7 +335,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.N)
             sourceSide = link.getSourceSideFor(self.__model)
-            if sourceSide[2] is not None and len(sourceSide[2]):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)
@@ -348,7 +346,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.NE)
             sourceSide = link.getSourceSideFor(self.__model)
-            if sourceSide[2] is not None and len(sourceSide[2]):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)
@@ -359,7 +357,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.E)
             sourceSide = link.getSourceSideFor(self.__model)
-            if sourceSide[2] is not None and len(sourceSide[2]):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)
@@ -370,7 +368,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.SE)
             sourceSide = link.getSourceSideFor(self.__model)
-            if sourceSide[2] is not None and len(sourceSide[2]):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)
@@ -381,7 +379,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.S)
             sourceSide = link.getSourceSideFor(self.__model)
-            if sourceSide[2] is not None and len(sourceSide[2]):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)
@@ -392,7 +390,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.SW)
             sourceSide = link.getSourceSideFor(self.__model)
-            if sourceSide[2] is not None and len(sourceSide[2]):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)
@@ -403,7 +401,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.W)
             sourceSide = link.getSourceSideFor(self.__model)
-            if sourceSide[2] is not None and len(sourceSide[2]):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)
@@ -414,7 +412,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.NW)
             sourceSide = link.getSourceSideFor(self.__model)
-            if sourceSide[2] is not None and len(sourceSide[2]):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 newpen = QtGui.QPen(pen)
                 newpen.setColor(QtGui.QColor(9,171,235))
                 painter.setPen(newpen)

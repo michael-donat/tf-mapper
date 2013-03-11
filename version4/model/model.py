@@ -67,7 +67,7 @@ class Direction:
         if exit == Direction.NW: return 'NW'
         if exit == Direction.U: return 'Up'
         if exit == Direction.D: return 'Down'
-        if exit == Direction.OTHER: return 'Other/Custom'
+        if exit == Direction.OTHER: return 'X'
 
 
 class CoordinatesHelper:
@@ -101,7 +101,7 @@ class CoordinatesHelper:
         return newPosition
 
     def getExitPoint(self, exitDescription):
-        room, direction, label = exitDescription
+        room, direction, label, rebind = exitDescription
 
         return self.getExitPointFromPoint(room.getView().pos(), direction)
 
@@ -231,7 +231,7 @@ class RoomFactory:
         return self.linkRooms(leftRoom, leftExit, rightRoom, rightExit)
 
 
-    def linkRooms(self, leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene=None, leftLinkCustomLabel=None, rightLinkCustomLabel=None):
+    def linkRooms(self, leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene=None, leftLinkCustomLabel=None, rightLinkCustomLabel=None, leftLinkRebind=None, rightLinkRebind=None):
         #need to validate first
         if(Direction.OTHER != leftExit and leftRoom.hasLinkAt(leftExit)): # and not leftRoom.linkAt(leftExit).pointsAt(rightRoom)):
             raise Exception('Left room already links somewhere through given exit')
@@ -241,8 +241,8 @@ class RoomFactory:
 
         #good to link
         link = self.spawnLink(QGraphicsScene is None, None, Direction.OTHER in [leftExit, rightExit])
-        link.setLeft(leftRoom, leftExit, leftLinkCustomLabel)
-        link.setRight(rightRoom, rightExit, rightLinkCustomLabel)
+        link.setLeft(leftRoom, leftExit, leftLinkCustomLabel, leftLinkRebind)
+        link.setRight(rightRoom, rightExit, rightLinkCustomLabel, rightLinkRebind)
         leftRoom.addLink(leftExit, link)
         rightRoom.addLink(rightExit, link)
 
@@ -416,7 +416,7 @@ class Navigator(QtCore.QObject):
         #let's check for masked exists first
         for exit_, link in currentRoom.getLinks().items():
             sourceSide = link.getSourceSideFor(currentRoom)
-            if sourceSide[2] is not None and sourceSide[2] == direction:
+            if (sourceSide[2] is not None and sourceSide[2] == direction) or (sourceSide[3] is not None and len(sourceSide[3])):
                 return self.markVisitedRoom(link.getDestinationFor(currentRoom))
             #print link.getSourceSideFor(currentRoom)[2]
             pass
@@ -424,7 +424,7 @@ class Navigator(QtCore.QObject):
         #still here? then maybe a custom link?
         for link in currentRoom.getCustomLinks():
             sourceSide = link.getSourceSideFor(currentRoom)
-            if sourceSide[2] is not None and sourceSide[2] == direction:
+            if (sourceSide[2] is not None and sourceSide[2] == direction) or (sourceSide[3] is not None and len(sourceSide[3])):
                 return self.markVisitedRoom(link.getDestinationFor(currentRoom))
 
 

@@ -36,9 +36,9 @@ class Link:
 
     def replaceRoomPointer(self, oldRoom, newRoom):
         if oldRoom.getId() == self.__left[0].getId():
-            self.setLeft(newRoom, self.__left[1], self.__left[2])
+            self.setLeft(newRoom, self.__left[1], self.__left[2], self.__left[3])
         if oldRoom.getId() == self.__right[0].getId():
-            self.setRight(newRoom, self.__right[1], self.__right[2])
+            self.setRight(newRoom, self.__right[1], self.__right[2], self.__right[3])
 
     def setId(self, id_):
         self.__id = str(id_)
@@ -53,11 +53,11 @@ class Link:
     def getView(self):
         return self.__view
 
-    def setLeft(self, room, exit_, label):
-        self.__left = (room, exit_, str(label) if not label==None else label)
+    def setLeft(self, room, exit_, label, rebind):
+        self.__left = (room, exit_, str(label) if not label==None else label, str(rebind) if not rebind==None else rebind)
 
-    def setRight(self, room, exit_, label):
-        self.__right = (room, exit_, str(label) if not label==None else label)
+    def setRight(self, room, exit_, label, rebind):
+        self.__right = (room, exit_, str(label) if not label==None else label, str(rebind) if not rebind==None else rebind)
 
     def getLeft(self):
         return self.__left
@@ -86,11 +86,11 @@ class Link:
         if room.getId() == self.__right[0].getId():
             return self.__right
 
-    def replaceSourceSideFor(self, room, exit_, label):
+    def replaceSourceSideFor(self, room, exit_, label, rebind):
         if room.getId() == self.__left[0].getId():
-            self.__left = (room, exit_, str(label) if not label==None else label)
+            self.__left = (room, exit_, str(label) if not label==None else label, str(rebind) if not rebind==None else rebind)
         if room.getId() == self.__right[0].getId():
-            self.__right = (room, exit_, str(label) if not label==None else label)
+            self.__right = (room, exit_, str(label) if not label==None else label, str(rebind) if not rebind==None else rebind)
 
 
     def isCustom(self): return False
@@ -127,17 +127,17 @@ class Room:
     def hasMaskedExits(self):
         for index, link in self.__links.items():
             sourceSide=link.getSourceSideFor(self)
-            if sourceSide[2] is not None and len(sourceSide[2]): return True
+            if sourceSide[3] is not None and len(sourceSide[3]): return True
 
     def getMaskedExitsString(self):
         returnString=""
         for index, link in self.__links.items():
             sourceSide=link.getSourceSideFor(self)
-            if sourceSide[2] is not None and len(sourceSide[2]):
-                if sourceSide[1] == model.Direction.OTHER:
-                    returnString += "exit:custom:%s\n" % sourceSide[2]
+            if sourceSide[3] is not None and len(sourceSide[3]):
+                if sourceSide[3] == model.Direction.OTHER:
+                    returnString += "exit:custom:%s\n" % sourceSide[3]
                 else:
-                    returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[2])
+                    returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[3])
         return returnString
 
     def properties(self):

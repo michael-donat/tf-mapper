@@ -45,7 +45,7 @@ class Serializer:
             if link.isCustom():
                 customLinksSource.append(link)
                 continue
-            links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2]])
+            links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getLeft()[3], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2], link.getRight()[3]])
         #print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
         linksData = links
@@ -54,7 +54,7 @@ class Serializer:
         customLinks = []
         #print 'Gathering custom links'
         for link in customLinksSource:
-            customLinks.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2]])
+            customLinks.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getLeft()[3], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2], link.getRight()[3]])
         #print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
         customLinksData = customLinks
@@ -176,9 +176,14 @@ class Serializer:
                 leftRoom, leftExit = link[:2]
                 rightRoom, rightExit = link[2:]
                 leftExitLabel = rightExitLabel = None
-            else:
+                leftExitRebind = rightExitRebind = None
+            elif len(link) == 6:
                 leftRoom, leftExit, leftExitLabel = link[:3]
                 rightRoom, rightExit, rightExitLabel = link[3:]
+                leftExitRebind = rightExitRebind = None
+            else:
+                leftRoom, leftExit, leftExitLabel, leftExitRebind = link[:4]
+                rightRoom, rightExit, rightExitLabel, rightExitRebind = link[4:]
 
             if leftRoom not in rooms or rightRoom not in rooms: continue
             leftRoom = rooms[str(leftRoom)]
@@ -194,9 +199,9 @@ class Serializer:
 
             try:
                 if leftRoom.getLevel().getId() == rightRoom.getLevel().getId():
-                    factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, levelsById[rightRoom.getLevel().getId()].getView(), leftExitLabel, rightExitLabel)
+                    factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, levelsById[rightRoom.getLevel().getId()].getView(), leftExitLabel, rightExitLabel, leftExitRebind, rightExitRebind)
                 else:
-                    factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit)
+                    factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit, leftExitRebind, rightExitRebind)
             except: pass
 
         return True
