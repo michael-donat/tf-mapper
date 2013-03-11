@@ -32,7 +32,7 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
         #1-exit, 2-label, 3-destination
         return 6
     def data(self, QModelIndex, role):
-        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
+        if role == QtCore.Qt.DisplayRole or role == QtCore.Qtbo jest .EditRole:
             items = set(self.__room.getLinks().values()+self.__room.getCustomLinks())
             items = list(items)
             link = items[QModelIndex.row()]
@@ -54,7 +54,7 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
             if orientation == QtCore.Qt.Horizontal:
                 if section == self.COLUMN_GO_BUTTON: return ''
                 if section == self.COLUMN_DIRECTION: return 'dir'
-                if section == self.COLUMN_LABEL: return 'label'
+                if section == self.COLUMN_LABEL: return 'follow'
                 if section == self.COLUMN_REBIND: return 'rebind'
                 if section == self.COLUMN_DESTINATION: return 'dest'
                 if section == self.COLUMN_REMOVE_BUTTON: return 'rm'
