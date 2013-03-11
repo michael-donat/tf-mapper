@@ -32,7 +32,7 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
         #1-exit, 2-label, 3-destination
         return 6
     def data(self, QModelIndex, role):
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
             items = set(self.__room.getLinks().values()+self.__room.getCustomLinks())
             items = list(items)
             link = items[QModelIndex.row()]
