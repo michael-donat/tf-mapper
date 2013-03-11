@@ -81,6 +81,9 @@ if __name__ == '__main__':
         window.mapView().scale(0.8, 0.8)
         #print window.mapView().transform()
 
+    registry.zoonInFunction = zoomIn
+    registry.zoonOutFunction = zoomOut
+
     def deb(str):
         print str
 

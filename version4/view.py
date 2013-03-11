@@ -81,6 +81,13 @@ class uiMainWindow(window, base):
                 QRectF = QRectF.united(item.sceneBoundingRect())
             self.__clipboard.copyRooms(self.mapView().scene(), QRectF)
 
+        if QKeyEvent.matches(QtGui.QKeySequence.ZoomIn):
+            print ''
+            self.__registry.zoonInFunction()
+
+        if QKeyEvent.matches(QtGui.QKeySequence.ZoomOut):
+            self.__registry.zoonOutFunction()
+
     def keyReleaseEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Shift:
             self.__mapView.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
