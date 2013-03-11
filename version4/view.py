@@ -82,7 +82,6 @@ class uiMainWindow(window, base):
             self.__clipboard.copyRooms(self.mapView().scene(), QRectF)
 
         if QKeyEvent.matches(QtGui.QKeySequence.ZoomIn):
-            print ''
             self.__registry.zoonInFunction()
 
         if QKeyEvent.matches(QtGui.QKeySequence.ZoomOut):
