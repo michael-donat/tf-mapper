@@ -227,8 +227,8 @@ class RoomFactory:
         link.setView(viewLink)
         return link
 
-    def linkRoomsBetweenLevels(self, leftRoom, leftExit, rightRoom, rightExit):
-        return self.linkRooms(leftRoom, leftExit, rightRoom, rightExit)
+    def linkRoomsBetweenLevels(self, leftRoom, leftExit, rightRoom, rightExit,leftExitRebind=None, rightExitRebind=None):
+        return self.linkRooms(leftRoom, leftExit, rightRoom, rightExit, None, leftExitRebind, rightExitRebind)
 
 
     def linkRooms(self, leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene=None, leftLinkCustomLabel=None, rightLinkCustomLabel=None, leftLinkRebind=None, rightLinkRebind=None):
