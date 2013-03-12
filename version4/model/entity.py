@@ -156,10 +156,10 @@ class Room:
         if link.getView() and link.getView().scene(): link.getView().scene().removeItem(link.getView())
         leftRoom = link.getLeft()
         if not iteration or leftRoom[0].getId() is not self.getId():
-            leftRoom[0].removeExit(leftRoom[1], leftRoom[2])
+            leftRoom[0].removeExit(leftRoom[1], leftRoom[2], leftRoom[3])
         rightRoom = link.getRight()
         if not iteration or rightRoom[0].getId() is not self.getId():
-            rightRoom[0].removeExit(rightRoom[1], leftRoom[2])
+            rightRoom[0].removeExit(rightRoom[1], rightRoom[2], rightRoom[3])
         leftRoom[0].getView().update()
         rightRoom[0].getView().update()
         self.__map.removeLink(link)
@@ -193,22 +193,23 @@ class Room:
     def addExit(self, exit_):
         self.__exits = self.__exits | exit_
 
-    def removeExit(self, exit_, label=None):
-        if exit_ == model.Direction.OTHER: return self.removeCustomLink(label)
+    def removeExit(self, exit_, label=None, rebind=None):
+        if exit_ == model.Direction.OTHER: return self.removeCustomLink(label, rebind)
         self.__exits = self.__exits ^ exit_
         if exit_ in self.__links:
             del self.__links[exit_]
 
-    def removeCustomLink(self, label):
+    def removeCustomLink(self, label, rebind):
         for index, link in enumerate(self.__customLinks):
             thisRoomsLink = link.getSourceSideFor(self)
-            if thisRoomsLink[2] == label:
+            if thisRoomsLink[2] == label and thisRoomsLink[3] == rebind:
                 del self.__customLinks[index]
                 break;
         if not len(self.__customLinks):
             self.__exits = self.__exits ^ model.Direction.OTHER
-        if hasattr(self, '__links'):
+        try:
             del self.__links[model.Direction.OTHER]
+        except: return
 
 
     def setCurrentlyVisited(self, bVisited):

@@ -87,7 +87,7 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
         if QModelIndex.column() == self.COLUMN_REMOVE_BUTTON:
             items = self.getItems()
             item = items[QModelIndex.row()]
-            sourceSide = item.getSourceSideFor(self.__room)[0].deleteLink(item)
+            self.__room.deleteLink(item)
 
 
 class RoomProperties(QtCore.QObject):
