@@ -11,12 +11,15 @@ from PyQt4 import QtGui, QtCore
 
 if __name__ == '__main__':
 
-    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "no-panels"])
+    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "no-panels", "key-up", "key-down"])
 
     spawnRemoteConnection = False
     noServer = False
     mapFile='map.db'
     noPanels=False
+
+    keyUp = '.'
+    keyDown = '0'
 
     for opt, arg in opts:
         if opt in ("-m", "--map"):
@@ -27,6 +30,10 @@ if __name__ == '__main__':
             noServer = True
         if opt == "--no-panels":
             noPanels = True
+        if opt == '--key-down':
+            keyDown = arg
+        if opt == '--key-up':
+            keyUp = arg
 
     Serializer.mapFile = mapFile
 
@@ -57,6 +64,9 @@ if __name__ == '__main__':
     import roomClasses
     window.buildClasses(roomClasses)
     registry.mainWindow = window
+
+    window.compassU.setShortcut(QtGui.QApplication.translate("MainWindow", keyUp, None, QtGui.QApplication.UnicodeUTF8))
+    window.compassD.setShortcut(QtGui.QApplication.translate("MainWindow", keyDown, None, QtGui.QApplication.UnicodeUTF8))
 
     window.raise_()
     window.show()
