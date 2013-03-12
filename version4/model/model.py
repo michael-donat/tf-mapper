@@ -407,6 +407,26 @@ class Navigator(QtCore.QObject):
 
         self.__registry.mainWindow.autoPlacement.setCheckState(QtCore.Qt.Checked)
 
+    def goFollow(self, direction):
+        if self.__registry.currentlyVisitedRoom is None:
+            return QtGui.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtGui.QMessageBox.Ok)
+
+        currentRoom = self.__registry.currentlyVisitedRoom
+
+        #let's check for masked exists first
+        for exit_, link in currentRoom.getLinks().items():
+            sourceSide = link.getSourceSideFor(currentRoom)
+            if sourceSide[2] is not None and sourceSide[2] == direction:
+                return self.markVisitedRoom(link.getDestinationFor(currentRoom))
+                #print link.getSourceSideFor(currentRoom)[2]
+            pass
+
+        #still here? then maybe a custom link?
+        for link in currentRoom.getCustomLinks():
+            sourceSide = link.getSourceSideFor(currentRoom)
+            if sourceSide[2] is not None and sourceSide[2] == direction:
+                return self.markVisitedRoom(link.getDestinationFor(currentRoom))
+
     def goCustom(self, direction):
         if self.__registry.currentlyVisitedRoom is None:
             return QtGui.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtGui.QMessageBox.Ok)
@@ -416,7 +436,7 @@ class Navigator(QtCore.QObject):
         #let's check for masked exists first
         for exit_, link in currentRoom.getLinks().items():
             sourceSide = link.getSourceSideFor(currentRoom)
-            if (sourceSide[2] is not None and sourceSide[2] == direction) or (sourceSide[3] is not None and len(sourceSide[3])):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 return self.markVisitedRoom(link.getDestinationFor(currentRoom))
             #print link.getSourceSideFor(currentRoom)[2]
             pass
@@ -424,7 +444,7 @@ class Navigator(QtCore.QObject):
         #still here? then maybe a custom link?
         for link in currentRoom.getCustomLinks():
             sourceSide = link.getSourceSideFor(currentRoom)
-            if (sourceSide[2] is not None and sourceSide[2] == direction) or (sourceSide[3] is not None and len(sourceSide[3])):
+            if sourceSide[3] is not None and len(sourceSide[3]):
                 return self.markVisitedRoom(link.getDestinationFor(currentRoom))
 
 
