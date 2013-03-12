@@ -12,7 +12,6 @@ def mountains(roomView):
     color.setNamedColor('#8b580c')
     roomView.color = color
 
-
 def path(roomView):
     color = QtGui.QColor()
     color.setNamedColor('#ffaa00')

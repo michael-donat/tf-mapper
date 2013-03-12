@@ -37,6 +37,14 @@ class Broadcaster(QtCore.QObject):
         self.__clientSocket.close()
 
     def readClient(self, clientSocket):
+
+        while clientSocket.canReadLine():
+            data = clientSocket.readLine()
+            self.dataReceived.emit(data.trimmed().data())
+            print 'RECEIVED: %s' % data
+
+        return
+
         data = clientSocket.readAll()
         self.dataReceived.emit(data.trimmed().data())
         print 'RECEIVED: %s' % data

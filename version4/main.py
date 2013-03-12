@@ -142,6 +142,7 @@ if __name__ == '__main__':
     window.commandTrigger.clicked.connect(fireCommand)
 
     def dispatchServerCommand(command):
+        print 'Dispatching %s' % command
         if command == 'navigate:exit:n': navigator.goNorth()
         if command == 'navigate:exit:polnoc': navigator.goNorth()
         if command == 'navigate:exit:ne': navigator.goNorthEast()
@@ -195,8 +196,8 @@ if __name__ == '__main__':
         rightRebind = leftRebind = rightLinkMask = leftLinkMask = None
 
         if model.Direction.OTHER in [leftExit, rightExit]:
-            leftRebind = window.manualLinkCustomLinkLeft.text()
-            rightRebind = window.manualLinkCustomLinkRight.text()
+            leftRebind = window.manualLinkCustomLinkLeft.text() if len(window.manualLinkCustomLinkLeft.text()) else None
+            rightRebind = window.manualLinkCustomLinkRight.text() if len(window.manualLinkCustomLinkRight.text()) else None
 
         factory.linkRooms(\
             leftRoom, leftExit, rightRoom, rightExit, \

@@ -106,6 +106,15 @@ class Serializer:
 
     @staticmethod
     def loadMap(mapView):
+
+        import time
+        def millis():
+            return time.time() * 1000
+
+        base = millis()
+
+        print 'Start %s' % base
+
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
         baseDir = baseDir+'/.tf-mapper/'
         mapFile = baseDir+Serializer.mapFile
@@ -117,7 +126,13 @@ class Serializer:
             f = open(mapFile, 'rb')
         except: return False
 
+        overall = (millis() - base)
+        print 'File opened %s (%s)' % (overall, millis() - base)
+
         mapData = f.read()
+
+        overall = (millis() - base)
+        print 'File read %s (%s)' % (overall, millis() - overall)
 
         f.close()
 
@@ -125,9 +140,15 @@ class Serializer:
             mapData = zlib.decompress(mapData)
         except: pass
 
+        overall = (millis() - base)
+        print 'File decompressed read %s (%s)' % (overall, millis() - overall)
+
         try:
             mapData = json.loads(base64.standard_b64decode(mapData))
         except: return False
+
+        overall = (millis() - base)
+        print 'File decoded %s (%s)' % (overall, millis() - overall)
 
         if isinstance(mapData['levels'], basestring):
             levels = json.loads(base64.standard_b64decode(mapData['levels']))
@@ -157,12 +178,16 @@ class Serializer:
             levelModel.getView().setSceneRect(QtCore.QRectF(level[2], level[3], level[4], level[5]))
             levelsById[levelModel.getId()] = levelModel
 
+        overall = (millis() - base)
+        print 'Levels created %s (%s)' % (overall, millis() - overall)
+
         if not len(Serializer.registry.levels()): return False
 
         for room in rooms:
             roomModel = factory.createAt(QtCore.QPointF(room[2], room[3]), levelsById[room[1]].getView(), room[0], room[4])
 
-        mapView.setScene(Serializer.registry.levels()[0].getView())
+        overall = (millis() - base)
+        print 'Rooms created %s (%s)' % (overall, millis() - overall)
 
         rooms = Serializer.registry.rooms()
 
@@ -203,6 +228,14 @@ class Serializer:
                 else:
                     factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit, leftExitRebind, rightExitRebind)
             except: pass
+
+        overall = (millis() - base)
+        print 'Links created %s (%s)' % (overall, millis() - overall)
+
+        mapView.setScene(Serializer.registry.levels()[0].getView())
+
+        overall = (millis() - base)
+        print 'Completed created %s (%s)' % (overall, millis() - overall)
 
         return True
 
