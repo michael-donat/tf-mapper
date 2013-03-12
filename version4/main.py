@@ -132,7 +132,6 @@ if __name__ == '__main__':
     window.commandTrigger.clicked.connect(fireCommand)
 
     def dispatchServerCommand(command):
-        print 'received command %s' % command
         if command == 'navigate:exit:n': navigator.goNorth()
         if command == 'navigate:exit:polnoc': navigator.goNorth()
         if command == 'navigate:exit:ne': navigator.goNorthEast()
@@ -157,11 +156,11 @@ if __name__ == '__main__':
 
         match =  re.match(r'navigate:custom:(.*)', command)
         if match is not None:
-            navigator.goFollow(match.group(1))
+            navigator.goCustom(match.group(1))
 
         match =  re.match(r'navigate:follow:(.*)', command)
         if match is not None:
-            navigator.goCustom(match.group(1))
+            navigator.goFollow(match.group(1))
 
         match =  re.match(r'lookup:([a-z0-9\-]*)', command)
         if match is not None:
