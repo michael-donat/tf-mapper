@@ -183,17 +183,19 @@ if __name__ == '__main__':
         leftExit = model.Direction.mapFromLabel(leftExit)
         rightExit = model.Direction.mapFromLabel(rightExit)
 
-        rightLinkMask = leftLinkMask = None
+        rightRebind = leftRebind = rightLinkMask = leftLinkMask = None
 
         if model.Direction.OTHER in [leftExit, rightExit]:
-            leftLinkMask = window.manualLinkCustomLinkLeft.text()
-            rightLinkMask = window.manualLinkCustomLinkRight.text()
+            leftRebind = window.manualLinkCustomLinkLeft.text()
+            rightRebind = window.manualLinkCustomLinkRight.text()
 
         factory.linkRooms(\
             leftRoom, leftExit, rightRoom, rightExit, \
             rightRoom.getLevel().getView() if leftExit not in [model.Direction.U, model.Direction.D] and rightExit not in [model.Direction.U, model.Direction.D] and rightRoom.getLevel().getId() == leftRoom.getLevel().getId() else None,\
-            leftLinkMask, \
-            rightLinkMask \
+            None, \
+            None, \
+            leftRebind, \
+            rightRebind
         )
 
         leftRoom.addExit(leftExit)

@@ -134,7 +134,7 @@ class Room:
         for index, link in self.__links.items():
             sourceSide=link.getSourceSideFor(self)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                if sourceSide[3] == model.Direction.OTHER:
+                if sourceSide[1] == model.Direction.OTHER:
                     returnString += "exit:custom:%s\n" % sourceSide[3]
                 else:
                     returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[3])
