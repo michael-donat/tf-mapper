@@ -462,7 +462,7 @@ class Navigator(QtCore.QObject):
 
             exitLink = currentRoom.linkAt(fromExit)
 
-            if exitLink.getSourceSideFor(currentRoom)[2] is not None: return
+            if exitLink.getSourceSideFor(currentRoom)[3] is not None: return
 
             #print exitLink
             destinationRoom = exitLink.getDestinationFor(currentRoom)
