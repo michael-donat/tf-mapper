@@ -135,9 +135,15 @@ class Room:
             sourceSide=link.getSourceSideFor(self)
             if sourceSide[3] is not None and len(sourceSide[3]):
                 if sourceSide[1] == model.Direction.OTHER:
-                    returnString += "exit:custom:%s\n" % sourceSide[3]
+                    continue
                 else:
                     returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[3])
+        for link in self.__customLinks:
+            sourceSide=link.getSourceSideFor(self)
+            if sourceSide[3] is not None and len(sourceSide[3]):
+                returnString += "exit:custom:%s\n" % sourceSide[3]
+
+        print 'Will reply with %s' % returnString
         return returnString
 
     def properties(self):
