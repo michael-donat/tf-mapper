@@ -436,7 +436,7 @@ class Navigator(QtCore.QObject):
         #let's check for masked exists first
         for exit_, link in currentRoom.getLinks().items():
             sourceSide = link.getSourceSideFor(currentRoom)
-            if sourceSide[3] is not None and len(sourceSide[3]):
+            if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] == direction:
                 return self.markVisitedRoom(link.getDestinationFor(currentRoom))
             #print link.getSourceSideFor(currentRoom)[2]
             pass
@@ -444,7 +444,7 @@ class Navigator(QtCore.QObject):
         #still here? then maybe a custom link?
         for link in currentRoom.getCustomLinks():
             sourceSide = link.getSourceSideFor(currentRoom)
-            if sourceSide[3] is not None and len(sourceSide[3]):
+            if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] == direction:
                 return self.markVisitedRoom(link.getDestinationFor(currentRoom))
 
 
