@@ -65,8 +65,8 @@ class Direction:
         if exit == Direction.SW: return 'SW'
         if exit == Direction.W: return 'W'
         if exit == Direction.NW: return 'NW'
-        if exit == Direction.U: return 'Up'
-        if exit == Direction.D: return 'Down'
+        if exit == Direction.U: return 'UP'
+        if exit == Direction.D: return 'DN'
         if exit == Direction.OTHER: return 'X'
 
 
