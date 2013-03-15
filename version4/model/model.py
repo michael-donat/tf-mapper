@@ -176,8 +176,8 @@ class RoomFactory:
             self.createAt(QtCore.QPointF(QPoint.x()+room[0],QPoint.y()+room[1]), QGraphicsScene, room[2], room[3])
         rooms = self.__map.rooms()
         for link in data['links']:
-            leftRoom, leftExit = link[:2]
-            rightRoom, rightExit = link[2:]
+            leftRoom, leftExit, leftLabel, leftRebind = link[:4]
+            rightRoom, rightExit, rightLabel, rightRebind = link[4:]
             if leftRoom not in rooms or rightRoom not in rooms: continue
             leftRoom = rooms[str(leftRoom)]
             rightRoom = rooms[str(rightRoom)]
@@ -185,7 +185,7 @@ class RoomFactory:
             leftRoom.addExit(leftExit)
             rightRoom.addExit(rightExit)
 
-            self.linkRooms(leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene)
+            self.linkRooms(leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene, leftLabel, rightLabel, leftRebind, rightRebind)
 
     def createLabelAt(self, QPoint, QGraphicsScene, labeltext='LABEL'):
         text = view.Label(labeltext)
@@ -650,7 +650,8 @@ class Clipboard:
                 if link.getId() in linkIdMap: continue
                 linkIdMap.append(link.getId())
                 #we now know the link is within selection
-                links.append([idMap[link.getLeft()[0].getId()],link.getLeft()[1],idMap[link.getRight()[0].getId()],link.getRight()[1]])
+                leftLink = link.getLeft()
+                links.append([idMap[link.getLeft()[0].getId()],link.getLeft()[1],link.getLeft()[2],link.getLeft()[3],idMap[link.getRight()[0].getId()],link.getRight()[1],link.getRight()[2],link.getRight()[3]])
 
 
         data = {'rooms':items, 'links':links}
