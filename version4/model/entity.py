@@ -127,13 +127,13 @@ class Room:
     def hasMaskedExits(self):
         for index, link in self.__links.items():
             sourceSide=link.getSourceSideFor(self)
-            if sourceSide[3] is not None and len(sourceSide[3]): return True
+            if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] != 'N/A': return True
 
     def getMaskedExitsString(self):
         returnString=""
         for index, link in self.__links.items():
             sourceSide=link.getSourceSideFor(self)
-            if sourceSide[3] is not None and len(sourceSide[3]):
+            if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] != 'N/A':
                 if sourceSide[1] == model.Direction.OTHER:
                     continue
                 else:
