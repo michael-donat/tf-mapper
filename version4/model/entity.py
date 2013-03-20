@@ -112,6 +112,7 @@ class Room:
     PROP_COLOR='color'
     PROP_CLASS='class'
     PROP_LABEL='label'
+    PROP_DISABLED='disabled'
     def __init__(self, exits=0, properties=None):
         self.__exits = exits
         self.__links={}
@@ -122,6 +123,7 @@ class Room:
         if self.PROP_COMMANDS not in properties: properties[ self.PROP_COMMANDS]=''
         if self.PROP_CLASS not in properties: properties[ self.PROP_CLASS]=''
         if self.PROP_LABEL not in properties: properties[ self.PROP_LABEL]=''
+        if self.PROP_DISABLED not in properties: properties[ self.PROP_DISABLED]=False
         self.__properties=properties
 
     def hasMaskedExits(self):
@@ -156,6 +158,9 @@ class Room:
         return self.__properties[property]
 
     def setProperty(self, property, value):
+        if value in [False,True]:
+            self.__properties[property] = value
+            return
         self.__properties[property] = str(value) if value is not None else ''
 
     def position(self):

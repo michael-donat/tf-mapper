@@ -328,7 +328,12 @@ class Room(QtGui.QGraphicsItem):
         currentColor = self.color
         painter.setBrush(self.color)
 
-        painter.setPen(QtCore.Qt.SolidLine)
+
+        if self.getModel().getProperty('disabled'):
+            currentColor = QtGui.QColor(255,255,255, 50)
+            painter.setBrush(currentColor)
+        else:
+            painter.setPen(QtCore.Qt.SolidLine)
         painter.drawRect(exitSize, exitSize, edgeSize, edgeSize)
 
         if self.__model.hasExit(model.Direction.N):

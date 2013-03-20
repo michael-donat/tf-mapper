@@ -97,6 +97,7 @@ class RoomProperties(QtCore.QObject):
     __uiColor=None
     __uiClass=None
     __uiLabel=None
+    __uiDisabled=None
     __room=None
     __uiExitsTable=None
     def __init__(self, mainWindow):
@@ -107,6 +108,7 @@ class RoomProperties(QtCore.QObject):
         self.__uiColor = mainWindow.uiPropertiesColor
         self.__uiClass = mainWindow.uiPropertiesClass
         self.__uiLabel = mainWindow.uiPropertiesLabel
+        self.__uiDisabled = mainWindow.uiPropertiesDisabled
         self.__uiExitsTable = mainWindow.uiPropertiesExits
         self.__uiExitsTable.verticalHeader().hide()
         self.__uiExitsTable.horizontalHeader().setResizeMode(QtGui.QHeaderView.ResizeToContents)
@@ -118,6 +120,7 @@ class RoomProperties(QtCore.QObject):
         self.__uiColor.textEdited.connect(self.updateRoomFromProperties)
         self.__uiLabel.textEdited.connect(self.updateRoomFromProperties)
         self.__uiClass.currentIndexChanged.connect(self.updateRoomFromProperties)
+        self.__uiDisabled.toggled.connect(self.updateRoomFromProperties)
 
     def pickColor(self):
         color = self.__room.getProperty(model.Room.PROP_COLOR)
@@ -139,7 +142,10 @@ class RoomProperties(QtCore.QObject):
         self.__uiCommands.setPlainText(roomModel.getProperty('commands') if roomModel.getProperty('commands') is not None else '')
         self.__uiCommands.blockSignals(False)
         self.__uiColor.setText(str(roomModel.getProperty('color')) if roomModel.getProperty('color') is not None else '')
+        self.__uiDisabled.setCheckState(QtCore.Qt.Checked if roomModel.getProperty('disabled') is True else QtCore.Qt.Unchecked)
+
         self.__uiLabel.setText(str(roomModel.getProperty('label')) if roomModel.getProperty('label') is not None else '')
+
         label = roomModel.getProperty('class')
         index = self.__uiClass.findText(str(label))
         self.__uiClass.blockSignals(True)
@@ -164,4 +170,5 @@ class RoomProperties(QtCore.QObject):
         self.__room.setProperty(entity.Room.PROP_COLOR, str(self.__uiColor.text()) if len(self.__uiColor.text()) else None)
         self.__room.setProperty(entity.Room.PROP_LABEL, str(self.__uiLabel.text()) if len(self.__uiLabel.text()) else None)
         self.__room.setProperty(entity.Room.PROP_CLASS, str(self.__uiClass.currentText()) if len(self.__uiClass.currentText()) else None)
+        self.__room.setProperty(entity.Room.PROP_DISABLED, True if self.__uiDisabled.checkState() == QtCore.Qt.Checked else False)
         self.__room.getView().update()

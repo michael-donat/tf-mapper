@@ -30,6 +30,8 @@ class Serializer:
             newSettings = {}
             for key, value in room.getSettings().items():
                 if value == 'None': value=None
+                if value == 'False': value=False
+                if value == 'True': value=True
                 newSettings[key] = value
             rooms.append([room.getId(), room.getLevel().getId(), room.getView().pos().x(), room.getView().pos().y(), newSettings])
         #print 'Serializing rooms'
