@@ -128,6 +128,10 @@ class Room:
         for index, link in self.__links.items():
             sourceSide=link.getSourceSideFor(self)
             if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] != 'N/A': return True
+        for link in self.__customLinks:
+            sourceSide=link.getSourceSideFor(self)
+            if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] != 'N/A': return True
+
 
     def getMaskedExitsString(self):
         returnString=""
@@ -140,10 +144,9 @@ class Room:
                     returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[3])
         for link in self.__customLinks:
             sourceSide=link.getSourceSideFor(self)
-            if sourceSide[3] is not None and len(sourceSide[3]):
+            if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] != 'N/A':
                 returnString += "exit:custom:%s\n" % sourceSide[3]
 
-        print 'Will reply with %s' % returnString
         return returnString
 
     def properties(self):
