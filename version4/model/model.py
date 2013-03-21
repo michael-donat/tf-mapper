@@ -615,7 +615,8 @@ class Navigator(QtCore.QObject):
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
         self.__properties.updatePropertiesFromRoom(roomModel)
 
-        self.__registry.connection.send('exit:reset\n')
+        if  hasattr(self.__registry, 'connection'):
+            self.__registry.connection.send('exit:reset\n')
 
         if len(roomModel.getProperty(Room.PROP_COMMANDS)):
             if  hasattr(self.__registry, 'connection'):
