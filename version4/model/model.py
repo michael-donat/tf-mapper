@@ -614,6 +614,9 @@ class Navigator(QtCore.QObject):
         self.switchLevel(roomModel.getLevel().getMapIndex())
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
         self.__properties.updatePropertiesFromRoom(roomModel)
+
+        self.__registry.connection.send('exit:reset\n')
+
         if len(roomModel.getProperty(Room.PROP_COMMANDS)):
             if  hasattr(self.__registry, 'connection'):
                 self.__registry.connection.send(roomModel.getProperty(Room.PROP_COMMANDS)+'\n')
@@ -621,8 +624,7 @@ class Navigator(QtCore.QObject):
         if  hasattr(self.__registry, 'connection'):
             if roomModel.hasMaskedExits():
                 self.__registry.connection.send(roomModel.getMaskedExitsString())
-            else:
-                self.__registry.connection.send('exit:reset\n')
+
 
 
 
