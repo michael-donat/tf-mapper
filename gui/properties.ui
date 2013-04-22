@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>300</height>
+    <height>200</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -46,24 +46,8 @@
      <property name="spacing">
       <number>10</number>
      </property>
-     <item row="2" column="3">
-      <widget class="QPlainTextEdit" name="plainTextEdit_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>100</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item row="2" column="1">
-      <widget class="QPlainTextEdit" name="plainTextEdit">
+      <widget class="QPlainTextEdit" name="inputDescription">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
          <horstretch>0</horstretch>
@@ -79,7 +63,7 @@
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="lblDescription">
        <property name="text">
         <string>Description</string>
        </property>
@@ -87,154 +71,28 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
-     </item>
-     <item row="4" column="0" colspan="4">
-      <layout class="QGridLayout" name="gridLayout_3">
-       <property name="sizeConstraint">
-        <enum>QLayout::SetMinimumSize</enum>
-       </property>
-       <property name="spacing">
-        <number>2</number>
-       </property>
-       <item row="3" column="1">
-        <widget class="QLineEdit" name="lineEdit_3"/>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_6"/>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="lineEdit_10"/>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLineEdit" name="lineEdit_9"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QComboBox" name="comboBox_2"/>
-       </item>
-       <item row="3" column="3">
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="text">
-          <string>REMOVE</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="lineEdit_7"/>
-       </item>
-       <item row="4" column="3">
-        <widget class="QPushButton" name="pushButton_3">
-         <property name="text">
-          <string>REMOVE</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QPushButton" name="pushButton_4">
-         <property name="text">
-          <string>NW</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="4">
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QLineEdit" name="lineEdit_11"/>
-       </item>
-       <item row="1" column="3">
-        <widget class="QPushButton" name="pushButton">
-         <property name="text">
-          <string>ADD</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLineEdit" name="lineEdit_8"/>
-       </item>
-       <item row="5" column="0">
-        <widget class="QPushButton" name="pushButton_6">
-         <property name="text">
-          <string>OTHER</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3">
-        <widget class="QPushButton" name="pushButton_7">
-         <property name="text">
-          <string>REMOVE</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QPushButton" name="pushButton_5">
-         <property name="text">
-          <string>E</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLineEdit" name="lineEdit_5"/>
-       </item>
-      </layout>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>Description</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="lineEdit_2"/>
      </item>
      <item row="0" column="2">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="lblName">
        <property name="text">
-        <string>TextLabel</string>
+        <string>Name</string>
        </property>
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="lblId">
        <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="comboBox"/>
-     </item>
-     <item row="0" column="3">
-      <widget class="QLineEdit" name="lineEdit"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>TextLabel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>TextLabel</string>
+        <string>Id</string>
        </property>
       </widget>
      </item>
      <item row="1" column="3">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLineEdit" name="lineEdit_4"/>
+        <widget class="QLineEdit" name="inputColor"/>
        </item>
        <item>
-        <widget class="QToolButton" name="toolButton_2">
+        <widget class="QToolButton" name="btnColor">
          <property name="text">
           <string>...</string>
          </property>
@@ -242,10 +100,52 @@
        </item>
       </layout>
      </item>
-     <item row="3" column="0" colspan="4">
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="inputId"/>
+     </item>
+     <item row="2" column="3">
+      <widget class="QPlainTextEdit" name="inputSend">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="inputType"/>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="inputName"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblType">
+       <property name="text">
+        <string>Type</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="lblSend">
+       <property name="text">
+        <string>Send</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="lblColor">
+       <property name="text">
+        <string>Color</string>
        </property>
       </widget>
      </item>

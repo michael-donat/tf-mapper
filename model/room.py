@@ -2,6 +2,7 @@ __author__ = 'donatm'
 
 from PyQt4 import QtCore
 from model.tools import enum
+from uuid import uuid1
 
 Directions = enum('N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'U', 'D')
 
@@ -60,11 +61,76 @@ class Properties(object):
 
 
 class Exits(object):
-    pass
+    __exits=None
+    __byDirectionHash=None
+    __byLabelHash=None
+
+    def __init__(self):
+        self.__exits={}
+        self.__byDirectionHash={}
+        self.__byLabelHash={}
+
+    def addExit(self, exit_):
+        if not isinstance(exit_, Exit):
+            raise RuntimeError('Instance of %s required instance of %s given' % (Exit, exit_))
+
+        self.__exits[exit_.id()] = exit_
+        if exit_.direction() is not None:
+            self.__byDirectionHash[exit_.direction()] = exit_.id()
+
+    def hasExit(self, exitId):
+        return self.__exits.has_key(exitId)
+
+    def getExit(self, exitId):
+        if not self.hasExit(exitId):
+            raise RuntimeError('There is no exit with given id, possibly a hash sync error')
+
+        return self.__exits[exitId]
+
+    def hasExitInDirection(self, direction):
+        return self.__byDirectionHash.has_key(direction)
+
+    def getExitByDirection(self, direction):
+        if not self.hasExitInDirection(direction):
+            raise RuntimeError('Requested non existing exit by direction')
+
+        return self.getExit(self.__byDirectionHash[direction])
+
+    def hasExitByLabel(self, label):
+        return self.__byLabelHash.has_key(label)
+
+    def getExitByLabel(self, label):
+        if not self.hasExitByLabel(label):
+            raise RuntimeError('Requested non existing exit by label')
+
+        return self.getExit(self.__byLabelHash[label])
+
 
 
 class Exit(object):
-    pass
+    __id=None
+    __direction=None
+    __label=None
+    __masks=None
+    __destination=None
+    __blocked=False
+
+    def __init__(self, **kwargs):
+        self.__masks={}
+        self.__id=uuid1()
+        if kwargs.has_key('direction'):
+            self.__direction = kwargs['direction']
+        if kwargs.has_key('label'):
+            self.__label = kwargs['label']
+
+    def id(self):
+        return self.__id
+
+    def direction(self):
+        return self.__direction
+
+    def label(self):
+        returb
 
 
 class Geometry(object):
@@ -85,7 +151,7 @@ class Geometry(object):
         x1 = QGraphicsItem.x()
         y1 = QGraphicsItem.y()
         x2 = x1 + QGraphicsItem.rect().width()
-        y2 = y1 + /QGraphicsItem.rect().height()
+        y2 = y1 + QGraphicsItem.rect().height()
 
         return self.update(x1, y1, x2, y2)
 

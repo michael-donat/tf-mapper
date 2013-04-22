@@ -51,3 +51,36 @@ class TestClassGeometry:
 
         assert QtCore.QRectF(QtCore.QPointF(-35,15),QtCore.QPointF(-25,25)) == Geometry().updateFromView(QGraphicsItem).getRect()
         assert QtCore.QPointF(-35,15) == Geometry().updateFromView(QGraphicsItem).getPoint()
+
+@pytest.fixture
+def exits():
+    return Exits()
+
+class TestExits:
+    def test_hasExitInDirectionMethod(self, exits):
+        exits.addExit(Exit(direction=Directions.N))
+
+        assert True == exits.hasExitInDirection(Directions.N)
+        assert False == exits.hasExitInDirection(Directions.S)
+
+    def test_getExitByDirectionMethod(self, exits):
+
+        exit_ = Exit(direction=Directions.N)
+
+        exits.addExit(exit_)
+
+        assert exit_ is exits.getExitByDirection(Directions.N)
+
+        with pytest.raises(RuntimeError):
+            exits.getExitByDirection(Directions.S)
+
+    def test_getExitbyLabelMethod(self, exits):
+
+        exit_ = Exit(label='wyjscie')
+
+        exits.addExit(exit_)
+
+        assert exit_ is exits.getExitByLabel('wyjscie')
+
+        with pytest.raises(RuntimeError):
+            exits.getExitByDirection(Directions.S)
