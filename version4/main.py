@@ -11,12 +11,15 @@ from PyQt4 import QtGui, QtCore
 
 if __name__ == '__main__':
 
-    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "no-panels", "key-up", "key-down"])
+    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "no-panels", "key-up=", "key-down=", "width=", "height=", "room="])
 
     spawnRemoteConnection = False
     noServer = False
     mapFile='map.db'
     noPanels=False
+    width=0
+    height=0
+    room=None
 
     keyUp = '.'
     keyDown = '0'
@@ -34,6 +37,12 @@ if __name__ == '__main__':
             keyDown = arg
         if opt == '--key-up':
             keyUp = arg
+        if opt == '--width':
+            width = arg
+        if opt == '--height':
+            height = arg
+        if opt == '--room':
+            room = arg
 
     Serializer.mapFile = mapFile
 
@@ -64,6 +73,8 @@ if __name__ == '__main__':
     import roomClasses
     window.buildClasses(roomClasses)
     registry.mainWindow = window
+
+    if width and height: window.resize(int(width), int(height))
 
     window.compassU.setShortcut(QtGui.QApplication.translate("MainWindow", keyUp, None, QtGui.QApplication.UnicodeUTF8))
     window.compassD.setShortcut(QtGui.QApplication.translate("MainWindow", keyDown, None, QtGui.QApplication.UnicodeUTF8))
@@ -311,6 +322,8 @@ if __name__ == '__main__':
     window.uiCreationClassApply.clicked.connect(reapplyCreationClass)
 
     window.centerOnMove.toggled.connect(registry.setCenterAt)
+
+    if room: lookupRoom(room)
 
     if not noServer:
         if not spawnRemoteConnection:
