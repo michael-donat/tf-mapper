@@ -268,6 +268,8 @@ class Registry:
     defColor=None
     defClass=None
     centerAt=True
+    applyColors=True
+    applyClasses=True
     def __init__(self):
         self.__rooms=[]
 

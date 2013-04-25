@@ -287,6 +287,14 @@ if __name__ == '__main__':
     window.manualLinkLinkLeft.currentIndexChanged.connect(lambda: toggleCustomLinkInput())
     window.manualLinkLinkRight.currentIndexChanged.connect(lambda: toggleCustomLinkInput(True))
 
+    def switchClassesShowing(show):
+        registry.applyClasses = show
+
+    def switchColorsShowing(show):
+        registry.applyColors = show
+
+    window.menuActionShowClasses.toggled.connect(switchClassesShowing)
+    window.menuActionShowColors.toggled.connect(switchColorsShowing)
 
     def showCreationColorPicker():
         if registry.defColor:

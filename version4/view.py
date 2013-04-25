@@ -295,7 +295,7 @@ class Room(QtGui.QGraphicsItem):
 
     def paint(self, painter, option, widget):
         self.color = self.defColor
-        if self.getModel().getProperty(model.Room.PROP_COLOR) is not None:
+        if self.__registry.applyColors and self.getModel().getProperty(model.Room.PROP_COLOR) is not None:
             color = QtGui.QColor()
             color.setNamedColor(self.getModel().getProperty(model.Room.PROP_COLOR))
             if color.isValid():
@@ -303,7 +303,7 @@ class Room(QtGui.QGraphicsItem):
 
         className = self.getModel().getProperty(model.Room.PROP_CLASS)
 
-        if className in dir(roomClasses):
+        if self.__registry.applyClasses and className in dir(roomClasses):
             function = roomClasses.__dict__.get(className)
             function(self)
 

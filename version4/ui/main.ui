@@ -75,6 +75,9 @@
     <addaction name="menuActionKepOnTop"/>
     <addaction name="separator"/>
     <addaction name="menuActionEnableAntialiasing"/>
+    <addaction name="separator"/>
+    <addaction name="menuActionShowColors"/>
+    <addaction name="menuActionShowClasses"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -963,6 +966,28 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+]</string>
+   </property>
+  </action>
+  <action name="menuActionShowColors">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show colors</string>
+   </property>
+  </action>
+  <action name="menuActionShowClasses">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show classes</string>
    </property>
   </action>
  </widget>
