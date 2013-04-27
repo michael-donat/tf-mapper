@@ -201,9 +201,11 @@ class RoomFactory:
         room = self.spawnRoom(Id, properties)
         QGraphicsScene.addItem(room.getView())
         room.setPosition(QPoint)
-        boundingRect = QGraphicsScene.itemsBoundingRect()
-        boundingRect.adjust(-50,-50,50,50)
-        QGraphicsScene.setSceneRect(boundingRect)
+        boundingRect = QGraphicsScene.sceneRect();
+        """boundingRect = QGraphicsScene.itemsBoundingRect()"""
+        if((QPoint.x() - 50) < boundingRect.left() or (QPoint.x() + 50) > boundingRect.right() or (QPoint.y() - 50) < boundingRect.top() or (QPoint.y() + 50) > boundingRect.bottom()):
+            boundingRect.adjust(-100,-100,100,100)
+            QGraphicsScene.setSceneRect(boundingRect)
         room.setLevel(QGraphicsScene.getModel())
         return room
 
