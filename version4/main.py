@@ -11,6 +11,24 @@ if __name__ == '__main__':
 
     application = QtGui.QApplication(sys.argv)
 
+    QPixmap = QtGui.QPixmap("ui/icons/hychsohn_256x256x32_transparent.png")
+    QSplashScreen = QtGui.QSplashScreen(QPixmap)
+    QSplashScreen.show()
+
+    QProgressBar = QtGui.QProgressBar(QSplashScreen)
+    QProgressBar.setMinimum(0)
+    QProgressBar.setMaximum(100)
+    QProgressBar.setTextVisible(False)
+    QProgressBar.setAlignment(QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter)
+    QProgressBar.setFixedWidth(250)
+    QProgressBar.move(0, 220)
+
+    QProgressBar.show()
+
+    QSplashScreen.raise_()
+
+    application.processEvents()
+
     opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "no-panels", "key-up=", "key-down=", "width=", "height=", "room="])
 
     spawnRemoteConnection = False
@@ -68,10 +86,8 @@ if __name__ == '__main__':
 
     application.setStyle('plastique')
     window = view.uiMainWindow()
-
-    window.show()
-    window.raise_()
-
+    QProgressBar.setValue(20)
+    application.processEvents()
     if noPanels: window.hidePanels()
     import roomClasses
     window.buildClasses(roomClasses)
@@ -91,12 +107,14 @@ if __name__ == '__main__':
     navigator = model.Navigator()
 
     window.mapView().scale(0.5,0.5)
-
-    if not Serializer.loadMap(window.mapView()):
+    QProgressBar.setValue(35)
+    application.processEvents()
+    if not Serializer.loadMap(window.mapView(), QProgressBar, application):
         scene = factory.spawnLevel(0).getView()
         window.mapView().setScene(scene)
         navigator.enableCreation(False)
-
+    QProgressBar.setValue(70)
+    application.processEvents()
     def zoomIn():
         window.mapView().scale(1.2, 1.2)
 
@@ -152,7 +170,8 @@ if __name__ == '__main__':
         dispatchServerCommand(str(window.commandInput.text()))
 
     window.commandTrigger.clicked.connect(fireCommand)
-
+    QProgressBar.setValue(80)
+    application.processEvents()
     def dispatchServerCommand(command):
         print 'Dispatching %s' % command
         if command == 'navigate:exit:n': navigator.goNorth()
@@ -331,7 +350,8 @@ if __name__ == '__main__':
     window.uiCreationClassApply.clicked.connect(reapplyCreationClass)
 
     window.centerOnMove.toggled.connect(registry.setCenterAt)
-
+    QProgressBar.setValue(90)
+    application.processEvents()
     if room: lookupRoom(room)
 
     if not noServer:
@@ -342,6 +362,16 @@ if __name__ == '__main__':
             registry.connection = clientServer = network.Listener('localhost', 9999)
             clientServer.dataReceived.connect(dispatchServerCommand)
 
+
+    window.show()
+    window.raise_()
+
+    QProgressBar.setValue(100)
+    application.processEvents()
+    QSplashScreen.finish(window)
+
     sys.exit(application.exec_())
+
+
 
 

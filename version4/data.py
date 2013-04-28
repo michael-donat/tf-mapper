@@ -107,7 +107,7 @@ class Serializer:
         #print ' ------ SAVE COMPLETE -------'
 
     @staticmethod
-    def loadMap(mapView):
+    def loadMap(mapView, QProgressBar, application):
 
         import time
         def millis():
@@ -183,6 +183,9 @@ class Serializer:
         overall = (millis() - base)
         print 'Levels created %s (%s)' % (overall, millis() - overall)
 
+        QProgressBar.setValue(45)
+        application.processEvents()
+
         if not len(Serializer.registry.levels()): return False
 
         for room in rooms:
@@ -190,6 +193,9 @@ class Serializer:
 
         overall = (millis() - base)
         print 'Rooms created %s (%s)' % (overall, millis() - overall)
+
+        QProgressBar.setValue(55)
+        application.processEvents()
 
         rooms = Serializer.registry.rooms()
 
@@ -233,6 +239,9 @@ class Serializer:
 
         overall = (millis() - base)
         print 'Links created %s (%s)' % (overall, millis() - overall)
+
+        QProgressBar.setValue(65)
+        application.processEvents()
 
         mapView.setScene(Serializer.registry.levels()[0].getView())
 

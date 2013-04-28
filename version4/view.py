@@ -22,6 +22,7 @@ class uiMainWindow(window, base):
         super(base, self).__init__(parent)
         self.setupUi(self)
         self.__mapView = uiMapView()
+        self.__mapView.enableAntialiasing(True)
         self.uiMapViewFrame.setLayout(QtGui.QVBoxLayout())
         self.uiMapViewFrame.layout().addWidget(self.__mapView)
         self.__mapView.show()

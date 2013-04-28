@@ -65,6 +65,9 @@
     <addaction name="menuActionSaveAs"/>
     <addaction name="separator"/>
     <addaction name="menuActionQuit"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
+    <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -914,6 +917,9 @@
    <property name="text">
     <string>Quit</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
   </action>
   <action name="menuActionShowToolsPanel">
    <property name="checkable">
@@ -959,7 +965,7 @@
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>Antialiasing</string>
@@ -988,6 +994,22 @@
    </property>
    <property name="text">
     <string>Show classes</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>Preferences</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
    </property>
   </action>
  </widget>
