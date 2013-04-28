@@ -1,6 +1,6 @@
 from distutils.core import setup
 import py2exe
-
+    
 setup(name="MudMapper",
       version="1.0",
       author="Michael 'thornag' Donat",
