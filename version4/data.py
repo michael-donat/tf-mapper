@@ -107,7 +107,16 @@ class Serializer:
         #print ' ------ SAVE COMPLETE -------'
 
     @staticmethod
+    def getHomeDir():
+        baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
+        baseDir = baseDir+'/.tf-mapper/'
+        return baseDir
+
+    @staticmethod
     def loadMap(mapView, QProgressBar, application):
+
+        if Serializer.mapFile is None:
+            return
 
         import time
         def millis():

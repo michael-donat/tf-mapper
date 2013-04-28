@@ -42,6 +42,17 @@ if __name__ == '__main__':
     keyUp = '.'
     keyDown = '0'
 
+    settings = QtCore.QSettings('MudMapper', 'net.michaeldonat')
+
+
+    width = settings.value('width', 0).toInt()[0]
+    height = settings.value('height', 0).toInt()[0]
+    noServer = settings.value('server', False).toBool()
+    noPanels = settings.value('panels', False).toBool()
+    room = str(settings.value('room', '').toString()) if str(settings.value('room', '').toString()) is not '' else None
+    mapFile = str(settings.value('map', '').toString()) if str(settings.value('map', '').toString()) is not '' else None
+
+
     for opt, arg in opts:
         if opt in ("-m", "--map"):
             mapFile=arg
@@ -155,16 +166,11 @@ if __name__ == '__main__':
     def reportServerStatus():
         print registry.broadcasterServer.tcpServer().isListening()
 
-    def dumpMap():
-        Serializer.saveMap('123', mapModel)
-
     def dumpRoom():
         room = registry.currentlyVisitedRoom
         print registry.currentlyVisitedRoom
 
     window.debugButton.clicked.connect(dumpRoom)
-
-    window.pushButton.clicked.connect(dumpMap)
 
     def fireCommand():
         dispatchServerCommand(str(window.commandInput.text()))
@@ -369,6 +375,87 @@ if __name__ == '__main__':
     QProgressBar.setValue(100)
     application.processEvents()
     QSplashScreen.finish(window)
+
+    from formlayout import fedit
+
+    settings = QtCore.QSettings('MudMapper', 'net.michaeldonat')
+
+    def showPreferences():
+        width = settings.value('width', 400).toInt()[0]
+        height = settings.value('height', 200).toInt()[0]
+        server = settings.value('server', False).toBool()
+        panels = settings.value('panels', False).toBool()
+        room = str(settings.value('room', '').toString())
+        map = str(settings.value('map', '').toString())
+
+        datalist = [('Width', width), ('Height', height), ('Disable socket server', server),('Show panels', panels),('Start room', room), ('Map file', map)]
+
+        result = fedit(datalist, title="Preferences")
+
+        if result is not None:
+            settings.setValue('width', result[0])
+            settings.setValue('height', result[1])
+            settings.setValue('server', result[2])
+            settings.setValue('panels', result[3])
+            settings.setValue('room', result[4])
+            settings.setValue('map', result[5])
+
+    window.actionPreferences.triggered.connect(showPreferences)
+
+
+    def openMap():
+
+        fileName = QtGui.QFileDialog.getOpenFileName(None, 'Open map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
+        if fileName is None or str(fileName[0]) is "":
+                return
+        QProgressBar = QtGui.QProgressBar(window)
+        QProgressBar.setMinimum(0)
+        QProgressBar.setMaximum(100)
+        QProgressBar.setTextVisible(False)
+        QProgressBar.setAlignment(QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter)
+        QProgressBar.setFixedWidth(250)
+
+        QProgressBar.show()
+        clearMap()
+        Serializer.mapFile = fileName
+        Serializer.loadMap(window.mapView(), QProgressBar, application)
+        updateTitle()
+        QProgressBar.setValue(100)
+        QProgressBar.hide()
+        QProgressBar.destroy()
+        QProgressBar = None
+
+    def clearMap():
+        Serializer.mapFile = None
+        mapModel.clear()
+        updateTitle()
+
+    def dumpMap():
+        if Serializer.mapFile is None:
+            fileName = QtGui.QFileDialog.getSaveFileNameAndFilter(None, 'Save map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
+
+            if str(fileName[0]) is "":
+                return
+            Serializer.mapFile = str(fileName[0])
+        Serializer.saveMap('123', mapModel)
+
+    def dumpNewMap():
+        Serializer.mapFile = None
+        dumpMap()
+
+    window.menuActionOpen.triggered.connect(openMap)
+    window.menuActionNew.triggered.connect(clearMap)
+    window.menuActionSave.triggered.connect(dumpMap)
+    window.menuActionSaveAs.triggered.connect(dumpNewMap)
+    window.pushButton.clicked.connect(dumpMap)
+
+    def updateTitle():
+        if Serializer.mapFile is not None:
+            window.setWindowTitle('MudMapper by thornag - %s' % Serializer.mapFile)
+        else:
+            window.setWindowTitle('MudMapper by thornag')
+
+    updateTitle()
 
     sys.exit(application.exec_())
 

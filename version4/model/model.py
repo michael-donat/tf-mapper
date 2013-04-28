@@ -11,6 +11,13 @@ class Map:
     __rooms={}
     __levels={}
     __links={}
+    def clear(self):
+        for evel in self.__levels:
+            self.__levels[evel].getView().clear()
+        self.__rooms={}
+        self.__levels={}
+        self.__links={}
+
     def levels(self):
         return self.__levels
 

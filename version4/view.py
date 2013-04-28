@@ -8,6 +8,7 @@ import os, sys
 
 import icons_rc
 
+
 uipath = os.path.abspath('ui/main.ui')
 
 window, base = uic.loadUiType(uipath)

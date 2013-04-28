@@ -902,15 +902,24 @@
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="menuActionSave">
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="menuActionSaveAs">
    <property name="text">
     <string>Save As</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="menuActionQuit">
@@ -1056,12 +1065,12 @@
    <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>124</x>
-     <y>86</y>
+     <x>78</x>
+     <y>226</y>
     </hint>
     <hint type="destinationlabel">
-     <x>124</x>
-     <y>152</y>
+     <x>149</x>
+     <y>271</y>
     </hint>
    </hints>
   </connection>
@@ -1092,8 +1101,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1264</x>
-     <y>436</y>
+     <x>894</x>
+     <y>458</y>
     </hint>
    </hints>
   </connection>
