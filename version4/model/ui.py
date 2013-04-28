@@ -147,7 +147,8 @@ class RoomProperties(QtCore.QObject):
         self.__uiLabel.setText(str(roomModel.getProperty('label')) if roomModel.getProperty('label') is not None else '')
 
         label = roomModel.getProperty('class')
-        index = self.__uiClass.findText(str(label))
+        label = str(label) if label is not None else ''
+        index = self.__uiClass.findText(label)
         self.__uiClass.blockSignals(True)
         if index != -1: self.__uiClass.setCurrentIndex(index)
         self.__uiClass.blockSignals(False)
