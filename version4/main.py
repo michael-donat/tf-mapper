@@ -393,9 +393,9 @@ if __name__ == '__main__':
 
     def openMap(fileName=None):
 
-        if fileName is None:
+        if not fileName or fileName is None:
             fileName = QtGui.QFileDialog.getOpenFileName(None, 'Open map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
-            if fileName is None or str(fileName[0]) is "":
+            if not fileName or fileName is None or str(fileName[0]) is "":
                     return
 
         QProgressBar = QtGui.QProgressBar(window)
@@ -438,7 +438,7 @@ if __name__ == '__main__':
     window.menuActionNew.triggered.connect(clearMap)
     window.menuActionSave.triggered.connect(dumpMap)
     window.menuActionSaveAs.triggered.connect(dumpNewMap)
-    
+
 
     def updateTitle():
         if Serializer.mapFile is not None:
@@ -455,12 +455,17 @@ if __name__ == '__main__':
     application.processEvents()
     QSplashScreen.finish(window)
 
+    createLevel = True
+
     if Serializer.mapFile is not None:
-        if not openMap(Serializer.mapFile):
-            scene = factory.spawnLevel(0).getView()
-            window.mapView().setScene(scene)
-            navigator.enableCreation(False)
-        if room: lookupRoom(room)
+        if openMap(Serializer.mapFile) is not False:
+            createLevel = False
+            if room: lookupRoom(room)
+
+    if createLevel:
+        scene = factory.spawnLevel(0).getView()
+        window.mapView().setScene(scene)
+        navigator.enableCreation(False)
 
     sys.exit(application.exec_())
 
