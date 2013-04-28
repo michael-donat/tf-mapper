@@ -4,10 +4,13 @@ import di, model.model as model
 import json, base64
 import types
 import roomClasses
+import os, sys
 
 import icons_rc
 
-window, base = uic.loadUiType("ui/main.ui")
+uipath = os.path.abspath('ui/main.ui')
+
+window, base = uic.loadUiType(uipath)
 
 class uiMainWindow(window, base):
     __mapView=None
@@ -24,7 +27,6 @@ class uiMainWindow(window, base):
         self.__mapView.show()
 
         self.menuActionEnableAntialiasing.toggled.connect(self.__mapView.enableAntialiasing)
-
 
     def hidePanels(self):
         self.uiComponentToolsPanel.hide()

@@ -7,9 +7,9 @@ import re
 
 from PyQt4 import QtCore, QtGui
 
-from PyQt4 import QtGui, QtCore
-
 if __name__ == '__main__':
+
+    application = QtGui.QApplication(sys.argv)
 
     opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "no-panels", "key-up=", "key-down=", "width=", "height=", "room="])
 
@@ -66,9 +66,12 @@ if __name__ == '__main__':
     registry.shadowLink = view.ShadowLink()
     registry.shadowLink.hide()
 
-    application = QtGui.QApplication(sys.argv)
     application.setStyle('plastique')
     window = view.uiMainWindow()
+
+    window.show()
+    window.raise_()
+
     if noPanels: window.hidePanels()
     import roomClasses
     window.buildClasses(roomClasses)
@@ -79,8 +82,6 @@ if __name__ == '__main__':
     window.compassU.setShortcut(QtGui.QApplication.translate("MainWindow", keyUp, None, QtGui.QApplication.UnicodeUTF8))
     window.compassD.setShortcut(QtGui.QApplication.translate("MainWindow", keyDown, None, QtGui.QApplication.UnicodeUTF8))
 
-    window.raise_()
-    window.show()
 
     roomProperties = modelui.RoomProperties(window)
     #navigator.roomSelectedSignal.connect(roomProperties.updatePropertiesFromRoom)
