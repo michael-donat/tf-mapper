@@ -46,3 +46,43 @@ def danger(roomView):
     color = QtGui.QColor()
     color.setNamedColor('#ff0000')
     roomView.color = color
+
+def desert(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#E3DD8F')
+    roomView.color = color
+
+def sea(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#83A6DE')
+    roomView.color = color
+
+def swamp(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#0E8C80')
+    roomView.color = color
+
+def exp(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#C8F7C6')
+    roomView.color = color
+
+def ship(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#966B6B')
+    roomView.color = color
+
+def temple(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#C26232')
+    roomView.color = color
+
+def meadow(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#B9FF5E')
+    roomView.color = color
+
+def fortress(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#C79767')
+    roomView.color = color
