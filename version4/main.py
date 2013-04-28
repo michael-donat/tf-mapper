@@ -120,10 +120,7 @@ if __name__ == '__main__':
     window.mapView().scale(0.5,0.5)
     QProgressBar.setValue(35)
     application.processEvents()
-    if not Serializer.loadMap(window.mapView(), QProgressBar, application):
-        scene = factory.spawnLevel(0).getView()
-        window.mapView().setScene(scene)
-        navigator.enableCreation(False)
+
     QProgressBar.setValue(70)
     application.processEvents()
     def zoomIn():
@@ -170,7 +167,6 @@ if __name__ == '__main__':
         room = registry.currentlyVisitedRoom
         print registry.currentlyVisitedRoom
 
-    window.debugButton.clicked.connect(dumpRoom)
 
     def fireCommand():
         dispatchServerCommand(str(window.commandInput.text()))
@@ -358,7 +354,6 @@ if __name__ == '__main__':
     window.centerOnMove.toggled.connect(registry.setCenterAt)
     QProgressBar.setValue(90)
     application.processEvents()
-    if room: lookupRoom(room)
 
     if not noServer:
         if not spawnRemoteConnection:
@@ -368,13 +363,6 @@ if __name__ == '__main__':
             registry.connection = clientServer = network.Listener('localhost', 9999)
             clientServer.dataReceived.connect(dispatchServerCommand)
 
-
-    window.show()
-    window.raise_()
-
-    QProgressBar.setValue(100)
-    application.processEvents()
-    QSplashScreen.finish(window)
 
     from formlayout import fedit
 
@@ -403,11 +391,13 @@ if __name__ == '__main__':
     window.actionPreferences.triggered.connect(showPreferences)
 
 
-    def openMap():
+    def openMap(fileName=None):
 
-        fileName = QtGui.QFileDialog.getOpenFileName(None, 'Open map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
-        if fileName is None or str(fileName[0]) is "":
-                return
+        if fileName is None:
+            fileName = QtGui.QFileDialog.getOpenFileName(None, 'Open map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
+            if fileName is None or str(fileName[0]) is "":
+                    return
+
         QProgressBar = QtGui.QProgressBar(window)
         QProgressBar.setMinimum(0)
         QProgressBar.setMaximum(100)
@@ -418,12 +408,13 @@ if __name__ == '__main__':
         QProgressBar.show()
         clearMap()
         Serializer.mapFile = fileName
-        Serializer.loadMap(window.mapView(), QProgressBar, application)
+        result = Serializer.loadMap(window.mapView(), QProgressBar, application)
         updateTitle()
         QProgressBar.setValue(100)
         QProgressBar.hide()
         QProgressBar.destroy()
         QProgressBar = None
+        return result
 
     def clearMap():
         Serializer.mapFile = None
@@ -447,7 +438,7 @@ if __name__ == '__main__':
     window.menuActionNew.triggered.connect(clearMap)
     window.menuActionSave.triggered.connect(dumpMap)
     window.menuActionSaveAs.triggered.connect(dumpNewMap)
-    window.pushButton.clicked.connect(dumpMap)
+    
 
     def updateTitle():
         if Serializer.mapFile is not None:
@@ -456,6 +447,20 @@ if __name__ == '__main__':
             window.setWindowTitle('MudMapper by thornag')
 
     updateTitle()
+
+    window.show()
+    window.raise_()
+
+    QProgressBar.setValue(100)
+    application.processEvents()
+    QSplashScreen.finish(window)
+
+    if Serializer.mapFile is not None:
+        if not openMap(Serializer.mapFile):
+            scene = factory.spawnLevel(0).getView()
+            window.mapView().setScene(scene)
+            navigator.enableCreation(False)
+        if room: lookupRoom(room)
 
     sys.exit(application.exec_())
 
