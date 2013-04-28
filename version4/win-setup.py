@@ -5,7 +5,7 @@ NAME = 'MudMapper'
 VERSION = '1.7.8'
 ID = 'tf-mapper'
 COPYRIGHT = 'Copyright Michael Donat'
-DATA_FILES = ['ui', 'build/qt.conf']
+
 
 setup(name=VERSION,
       version=VERSION,
