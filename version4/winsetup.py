@@ -7,4 +7,5 @@ setup(name="MudMapper",
       author_email="thornag@gmail.com",
       url="http://mapper.mahakam.pl",
       license="GNU General Public License (GPL)",
+      windows=[{'script':'main.py'}],
       options={"py2exe": {"skip_archive": True, "includes": ["sip", 'PyQt4._qt']}})
