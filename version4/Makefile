@@ -6,4 +6,4 @@ package:
 	cd dist/win && zip -r MudMapper.zip MudMapper/ && cd -
 	mv dist/osx/MudMapper.dmg dist/
 	mv dist/win/MudMapper.zip dist/
-	cd dist && mahcopy MudMapper.* && cd -
+	cd dist && mahcopy MudMapper.dmg && mahcopy MudMapper.zip && cd -
