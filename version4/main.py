@@ -398,14 +398,14 @@ if __name__ == '__main__':
             if not fileName or fileName is None or str(fileName[0]) is "":
                     return
 
-        QProgressBar = QtGui.QProgressBar(window)
+        QProgressBar = QtGui.QProgressDialog(window)
         QProgressBar.setMinimum(0)
         QProgressBar.setMaximum(100)
-        QProgressBar.setTextVisible(False)
-        QProgressBar.setAlignment(QtCore.Qt.AlignBottom | QtCore.Qt.AlignHCenter)
+        QProgressBar.setLabelText('Loading %s' % fileName)
         QProgressBar.setFixedWidth(250)
 
         QProgressBar.show()
+
         clearMap()
         Serializer.mapFile = fileName
         result = Serializer.loadMap(window.mapView(), QProgressBar, application)
