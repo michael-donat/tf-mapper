@@ -6,4 +6,7 @@ package:
 	cd dist/win && zip -r MudMapper.zip MudMapper/ && cd -
 	mv dist/osx/MudMapper.dmg dist/
 	mv dist/win/MudMapper.zip dist/
-	cd dist && mahcopy MudMapper.dmg && mahcopy MudMapper.zip && cd -
+
+upload:
+	scp dist/MudMapper.dmg thornag@mahakam.pl:/home/thornag/public_html
+	scp dist/MudMapper.zip thornag@mahakam.pl:/home/thornag/public_html
