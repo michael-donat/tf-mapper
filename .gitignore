@@ -7,7 +7,6 @@
 *.egg
 *.egg-info
 dist
-build
 eggs
 parts
 bin
@@ -41,3 +40,6 @@ version4/logdict2.7.3.final.0-1.log
 *.spec
 
 *.db
+
+build/osx
+build/bdist.win32
