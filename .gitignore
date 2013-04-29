@@ -42,7 +42,3 @@ version4/logdict2.7.3.final.0-1.log
 *.db
 
 build
-
-!build/build-windows.bat
-!build/osx-setup.py
-!build/qt.conf

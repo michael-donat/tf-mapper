@@ -59,10 +59,17 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuImport">
+     <property name="title">
+      <string>Import...</string>
+     </property>
+     <addaction name="actionImportCMUD"/>
+    </widget>
     <addaction name="menuActionNew"/>
     <addaction name="menuActionOpen"/>
     <addaction name="menuActionSave"/>
     <addaction name="menuActionSaveAs"/>
+    <addaction name="menuImport"/>
     <addaction name="separator"/>
     <addaction name="menuActionQuit"/>
     <addaction name="separator"/>
@@ -95,7 +102,7 @@
    <property name="minimumSize">
     <size>
      <width>250</width>
-     <height>500</height>
+     <height>670</height>
     </size>
    </property>
    <property name="maximumSize">
@@ -1002,6 +1009,11 @@
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionImportCMUD">
+   <property name="text">
+    <string>CMUD.dbm</string>
    </property>
   </action>
  </widget>

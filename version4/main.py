@@ -3,6 +3,7 @@ import sys, getopt
 import di, view, model.entity as entity, model.model as model, model.ui as modelui
 import network
 from data import Serializer
+from data import Importer
 import re
 
 from PyQt4 import QtCore, QtGui
@@ -466,6 +467,9 @@ if __name__ == '__main__':
         scene = factory.spawnLevel(0).getView()
         window.mapView().setScene(scene)
         navigator.enableCreation(False)
+
+
+    window.actionImportCMUD.triggered.connect(Importer.importCmud)
 
     sys.exit(application.exec_())
 

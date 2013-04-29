@@ -6,12 +6,14 @@ import textwrap, string
 import os, shutil, sys
 import model.model as model
 import view
-
+from PyQt4 import QtGui
 import di
 
 class Serializer:
     factory = di.ComponentRequest('RoomFactory')
     registry = di.ComponentRequest('Map')
+    config = di.ComponentRequest('Config')
+    coordinates=di.ComponentRequest('CoordinatesHelper')
     mapFile=None
     @staticmethod
     def saveMap(fileLocation, mapObject):
@@ -275,3 +277,117 @@ class Serializer:
             if bytes >= factor:
                 break
         return '%.*f %s' % (precision, bytes / factor, suffix)
+
+class Importer():
+    @staticmethod
+    def importCmud(fileName=None):
+        if fileName is None:
+            fileName = QtGui.QFileDialog.getOpenFileName(None, 'Open CMUD map for import...', Serializer.getHomeDir(), 'Map (*.dbm)')
+            if not fileName or fileName is None or str(fileName[0]) is "":
+                return
+            fileName = str(fileName[0])
+
+        import sqlite3
+        conn = sqlite3.connect(fileName)
+        cur = conn.cursor()
+
+        cur.execute('SELECT * FROM ZoneTbl')
+
+        rows = cur.fetchall()
+
+        zoneMove={}
+
+        zones=[]
+
+        for row in rows:
+            zones.append((row[0],row[1]))
+            zoneMove[row[0]] = (row[21], row[22])
+
+        zones.insert(0, zones[0][0])
+
+        datalist = [('Zone', zones)]
+
+        from formlayout import fedit
+
+        result = fedit(datalist, title="Zone to import")
+
+        if result is None:
+            return
+
+        zoneid = zones[result[0]+1][0]
+
+        cur.execute('SELECT * FROM `ObjectTbl` where Z = 0 AND ZoneId = %d' % zoneid)
+
+        rows = cur.fetchall()
+
+        factory = Serializer.factory
+
+        from PyQt4 import QtCore
+
+        levels = Serializer.registry.levels()
+
+        factor = 120 / Serializer.config.getSize() * 2
+
+        importedRooms={}
+
+        for row in rows:
+
+            width = (row[9] - zoneMove[zoneid][0]) / factor
+            height = (row[10] - zoneMove[zoneid][1])  / factor
+
+            QPoint = QtCore.QPointF(width, height)
+
+            room = factory.createAt(QPoint, levels[0].getView(), row[0])
+
+            importedRooms[row[0]] = room
+
+        """def linkRooms(self, leftRoom, leftExit, rightRoom, rightExit, QGraphicsScene=None, leftLinkCustomLabel=None, rightLinkCustomLabel=None, leftLinkRebind=None, rightLinkRebind=None):"""
+
+        cur.execute('SELECT * FROM `ExitTbl`')
+
+        rows = cur.fetchall()
+
+        directories = {
+            1: model.Direction.N,
+            2: model.Direction.NE,
+            3: model.Direction.E,
+            4: model.Direction.SE,
+            5: model.Direction.S,
+            6: model.Direction.SW,
+            7: model.Direction.W,
+            8: model.Direction.NW,
+            9: model.Direction.U,
+            10: model.Direction.D
+        }
+
+        alreadyLinked=[]
+
+        for row in rows:
+
+            if row[0] in alreadyLinked or row[1] in alreadyLinked: continue
+
+            leftRoom = row[2]
+            rightRoom = row[3]
+            leftExit = row[19]+1
+            rightExit = row[20]+1
+
+            alreadyLinked.append(row[0])
+            alreadyLinked.append(row[1])
+
+            if leftExit not in range(1,10) or rightExit not in range(1,10): continue
+
+            if leftRoom not in importedRooms or rightRoom not in importedRooms: continue
+
+            leftRoom = importedRooms[leftRoom]
+            rightRoom = importedRooms[rightRoom]
+
+            leftExit = directories[leftExit]
+            rightExit = directories[rightExit]
+
+            try:
+                leftRoom.addExit(leftExit)
+                rightRoom.addExit(rightExit)
+
+                factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, levels[0].getView())
+            except: pass
+
