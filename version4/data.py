@@ -8,6 +8,7 @@ import model.model as model
 import view
 from PyQt4 import QtGui
 import di
+import sys
 
 class Serializer:
     factory = di.ComponentRequest('RoomFactory')
@@ -281,16 +282,19 @@ class Serializer:
 class Importer():
     @staticmethod
     def importCmud(fileName=None):
-        if fileName is None:
+
+        if fileName is False or fileName is None:
             fileName = QtGui.QFileDialog.getOpenFileName(None, 'Open CMUD map for import...', Serializer.getHomeDir(), 'Map (*.dbm)')
             if not fileName or fileName is None or str(fileName[0]) is "":
                 return
-            fileName = str(fileName[0])
+            fileName = str(fileName)
 
         import sqlite3
         conn = sqlite3.connect(fileName)
-        cur = conn.cursor()
+        conn.text_factory = str
 
+        cur = conn.cursor()
+        cur.execute("PRAGMA encoding = \"UTF-8\";");
         cur.execute('SELECT * FROM ZoneTbl')
 
         rows = cur.fetchall()
