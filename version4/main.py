@@ -316,8 +316,14 @@ if __name__ == '__main__':
     def switchColorsShowing(show):
         registry.applyColors = show
 
+    registry.blockCreation = True
+
+    def switchCreationBlock(show):
+        registry.blockCreation = not show
+
     window.menuActionShowClasses.toggled.connect(switchClassesShowing)
     window.menuActionShowColors.toggled.connect(switchColorsShowing)
+    window.actionEnableCreation.toggled.connect(switchCreationBlock)
 
     def showCreationColorPicker():
         if registry.defColor:

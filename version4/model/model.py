@@ -483,7 +483,7 @@ class Navigator(QtCore.QObject):
             #    if fromExit == Direction.U: self.goLevelUp()
             #    elif fromExit == Direction.D: self.goLevelDown()
 
-        elif (self.__enableCreation):
+        elif (self.__enableCreation and not self.__registry.blockCreation):
 
             if fromExit in [Direction.U, Direction.D] or toExit in [Direction.D, Direction.U]:
                 #print 'creating multilevel room'
