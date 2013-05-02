@@ -461,19 +461,20 @@ if __name__ == '__main__':
     QProgressBar.setValue(100)
     application.processEvents()
     QSplashScreen.finish(window)
-
+    application.processEvents()
     createLevel = True
 
     if Serializer.mapFile is not None:
         if openMap(Serializer.mapFile) is not False:
             createLevel = False
             if room: lookupRoom(room)
+    application.processEvents()
 
     if createLevel:
         scene = factory.spawnLevel(0).getView()
         window.mapView().setScene(scene)
         navigator.enableCreation(False)
-
+    application.processEvents()
 
     window.actionImportCMUD.triggered.connect(Importer.importCmud)
 
