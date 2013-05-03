@@ -35,6 +35,17 @@ class uiMainWindow(window, base):
         self.uiComponentToolsPanel.hide()
         self.uiComponentPropertiesPanel.hide()
 
+    def buildShortcuts(self, shortcuts):
+        menubar = self.menuBar
+        fileMenu = menubar.addMenu('Shortcuts')
+        shorts = shortcuts.shortcuts()
+        for room in shorts:
+            exitAction = QtGui.QAction(QtCore.QString(room['name']), fileMenu)
+            exitAction.setToolTip(room['room'])
+            exitAction.triggered.connect(lambda dummy, roomId=room['room']: self.__navigator.viewRoom(roomId))
+            fileMenu.addAction(exitAction)
+
+
     def buildClasses(self, classes):
         self.uiCreationClass.addItem('')
         self.uiPropertiesClass.addItem('')

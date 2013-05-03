@@ -455,6 +455,18 @@ if __name__ == '__main__':
 
     updateTitle()
 
+
+    #exitAction = QtGui.QAction(QtGui.QIcon('exit.png'), '&Exit', self)
+    #exitAction.setShortcut('Ctrl+Q')
+    #exitAction.setStatusTip('Exit application')
+    #exitAction.triggered.connect(QtGui.qApp.quit)
+
+    import shortcuts
+    window.buildShortcuts(shortcuts)
+
+
+
+
     window.show()
     window.raise_()
 
@@ -463,6 +475,7 @@ if __name__ == '__main__':
     QSplashScreen.finish(window)
     application.processEvents()
     createLevel = True
+
 
     if Serializer.mapFile is not None:
         if openMap(Serializer.mapFile) is not False:

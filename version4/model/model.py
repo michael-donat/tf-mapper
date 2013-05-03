@@ -589,6 +589,18 @@ class Navigator(QtCore.QObject):
 
         existingRoom.delete()
 
+    def viewRoom(self, roomId):
+        roomId = str(roomId)
+        if roomId not in self.__map.rooms().keys(): return False
+        roomModel = self.__map.rooms()[roomId]
+
+        self.switchLevel(roomModel.getLevel().getMapIndex())
+
+        roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
+        roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
+        roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
+
+
     def markVisitedRoom(self, roomModel):
         if self.__registry.currentlyVisitedRoom is not None:
             self.__registry.previouslyVisitedRoom = self.__registry.currentlyVisitedRoom
