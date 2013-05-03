@@ -5,6 +5,7 @@ import json, base64
 import types
 import roomClasses
 import os, sys
+import math
 
 import icons_rc
 
@@ -297,6 +298,37 @@ class Room(QtGui.QGraphicsItem):
     def boundingRect(self):
         return self.__boundingRect
 
+    def drawArrowHead(self, line, painter):
+        d = self.__config.getExitLength()
+        theta = math.pi / 8
+
+        lineAngle = math.atan2(line.dy(), line.dx())
+        h = math.fabs(d/math.cos(lineAngle))
+
+        angle1 = lineAngle + theta
+        angle2 = lineAngle - theta
+
+        print '-------------'
+        print lineAngle
+        print line.p1()
+        print line.p2()
+        print line.dx()
+        print line.dy()
+
+
+
+        angle1 = math.pi + lineAngle + theta
+        angle2 = math.pi + lineAngle - theta
+
+        P1 = QtCore.QPointF(line.x2()+math.cos(angle1)*h,line.y2()+math.sin(angle1)*h)
+        P2 = QtCore.QPointF(line.x2()+math.cos(angle2)*h,line.y2()+math.sin(angle2)*h)
+
+        print line.p2()
+        print P1
+        print P2
+
+        painter.drawPolygon(line.p2(), P1, P2)
+
     def paint(self, painter, option, widget):
         self.color = self.defColor
         if self.__registry.applyColors and self.getModel().getProperty(model.Room.PROP_COLOR) is not None:
@@ -344,10 +376,14 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.N)
             sourceSide = link.getSourceSideFor(self.__model)
+            line = QtCore.QLineF(midPoint, 0, midPoint, exitSize)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                newpen = QtGui.QPen(pen)
-                newpen.setColor(QtGui.QColor(9,171,235))
-                painter.setPen(newpen)
+                 if sourceSide[3] == 'N/A':
+                    self.drawArrowHead(line, painter)
+                 else:
+                    newpen = QtGui.QPen(pen)
+                    newpen.setColor(QtGui.QColor(9,171,235))
+                    painter.setPen(newpen)
             painter.drawLine(midPoint, 0, midPoint, exitSize)
             painter.setPen(pen)
 
@@ -355,10 +391,14 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.NE)
             sourceSide = link.getSourceSideFor(self.__model)
+            line = QtCore.QLineF(exitSize + edgeSize, exitSize, objectSize, 0)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                newpen = QtGui.QPen(pen)
-                newpen.setColor(QtGui.QColor(9,171,235))
-                painter.setPen(newpen)
+                if sourceSide[3] == 'N/A':
+                    self.drawArrowHead(line, painter)
+                else:
+                    newpen = QtGui.QPen(pen)
+                    newpen.setColor(QtGui.QColor(9,171,235))
+                    painter.setPen(newpen)
             painter.drawLine(exitSize + edgeSize, exitSize, objectSize, 0)
             painter.setPen(pen)
 
@@ -366,10 +406,14 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.E)
             sourceSide = link.getSourceSideFor(self.__model)
+            line = QtCore.QLineF(exitSize + edgeSize, midPoint, objectSize, midPoint)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                newpen = QtGui.QPen(pen)
-                newpen.setColor(QtGui.QColor(9,171,235))
-                painter.setPen(newpen)
+                if sourceSide[3] == 'N/A':
+                    self.drawArrowHead(line, painter)
+                else:
+                    newpen = QtGui.QPen(pen)
+                    newpen.setColor(QtGui.QColor(9,171,235))
+                    painter.setPen(newpen)
             painter.drawLine(exitSize + edgeSize, midPoint, objectSize, midPoint)
             painter.setPen(pen)
 
@@ -377,10 +421,14 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.SE)
             sourceSide = link.getSourceSideFor(self.__model)
+            line = QtCore.QLineF(exitSize + edgeSize, exitSize + edgeSize, objectSize, objectSize)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                newpen = QtGui.QPen(pen)
-                newpen.setColor(QtGui.QColor(9,171,235))
-                painter.setPen(newpen)
+                if sourceSide[3] == 'N/A':
+                    self.drawArrowHead(line, painter)
+                else:
+                    newpen = QtGui.QPen(pen)
+                    newpen.setColor(QtGui.QColor(9,171,235))
+                    painter.setPen(newpen)
             painter.drawLine(exitSize + edgeSize, exitSize + edgeSize, objectSize, objectSize)
             painter.setPen(pen)
 
@@ -388,21 +436,29 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.S)
             sourceSide = link.getSourceSideFor(self.__model)
+            line=QtCore.QLineF(midPoint, exitSize + edgeSize, midPoint, objectSize)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                newpen = QtGui.QPen(pen)
-                newpen.setColor(QtGui.QColor(9,171,235))
-                painter.setPen(newpen)
-            painter.drawLine(midPoint, exitSize + edgeSize, midPoint, objectSize)
+                if sourceSide[3] == 'N/A':
+                    self.drawArrowHead(line, painter)
+                else:
+                    newpen = QtGui.QPen(pen)
+                    newpen.setColor(QtGui.QColor(9,171,235))
+                    painter.setPen(newpen)
+            painter.drawLine(line)
             painter.setPen(pen)
 
         if self.__model.hasExit(model.Direction.SW):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.SW)
             sourceSide = link.getSourceSideFor(self.__model)
+            line = QtCore.QLineF(0, objectSize, exitSize, exitSize + edgeSize)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                newpen = QtGui.QPen(pen)
-                newpen.setColor(QtGui.QColor(9,171,235))
-                painter.setPen(newpen)
+                if sourceSide[3] == 'N/A':
+                    self.drawArrowHead(line, painter)
+                else:
+                    newpen = QtGui.QPen(pen)
+                    newpen.setColor(QtGui.QColor(9,171,235))
+                    painter.setPen(newpen)
             painter.drawLine(0, objectSize, exitSize, exitSize + edgeSize)
             painter.setPen(pen)
 
@@ -410,10 +466,14 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.W)
             sourceSide = link.getSourceSideFor(self.__model)
+            line = QtCore.QLineF(0, midPoint, exitSize, midPoint)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                newpen = QtGui.QPen(pen)
-                newpen.setColor(QtGui.QColor(9,171,235))
-                painter.setPen(newpen)
+                if sourceSide[3] == 'N/A':
+                    self.drawArrowHead(line, painter)
+                else:
+                    newpen = QtGui.QPen(pen)
+                    newpen.setColor(QtGui.QColor(9,171,235))
+                    painter.setPen(newpen)
             painter.drawLine(0, midPoint, exitSize, midPoint)
             painter.setPen(pen)
 
@@ -421,10 +481,14 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.NW)
             sourceSide = link.getSourceSideFor(self.__model)
+            line = QtCore.QLineF(0, 0, exitSize, exitSize)
             if sourceSide[3] is not None and len(sourceSide[3]):
-                newpen = QtGui.QPen(pen)
-                newpen.setColor(QtGui.QColor(9,171,235))
-                painter.setPen(newpen)
+                if sourceSide[3] == 'N/A':
+                    self.drawArrowHead(line, painter)
+                else:
+                    newpen = QtGui.QPen(pen)
+                    newpen.setColor(QtGui.QColor(9,171,235))
+                    painter.setPen(newpen)
             painter.drawLine(0, 0, exitSize, exitSize)
             painter.setPen(pen)
 
