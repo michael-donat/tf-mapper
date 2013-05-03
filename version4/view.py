@@ -299,23 +299,16 @@ class Room(QtGui.QGraphicsItem):
         return self.__boundingRect
 
     def drawArrowHead(self, line, painter):
+
+        brush = painter.brush()
         d = self.__config.getExitLength()
-        theta = math.pi / 8
+        theta = math.pi / 7
 
         lineAngle = math.atan2(line.dy(), line.dx())
-        h = math.fabs(d/math.cos(lineAngle))
+        h = math.fabs(d/math.cos(theta))
 
         angle1 = lineAngle + theta
         angle2 = lineAngle - theta
-
-        print '-------------'
-        print lineAngle
-        print line.p1()
-        print line.p2()
-        print line.dx()
-        print line.dy()
-
-
 
         angle1 = math.pi + lineAngle + theta
         angle2 = math.pi + lineAngle - theta
@@ -323,11 +316,9 @@ class Room(QtGui.QGraphicsItem):
         P1 = QtCore.QPointF(line.x2()+math.cos(angle1)*h,line.y2()+math.sin(angle1)*h)
         P2 = QtCore.QPointF(line.x2()+math.cos(angle2)*h,line.y2()+math.sin(angle2)*h)
 
-        print line.p2()
-        print P1
-        print P2
-
+        painter.setBrush(QtGui.QColor(0,0,0))
         painter.drawPolygon(line.p2(), P1, P2)
+        painter.setBrush(brush)
 
     def paint(self, painter, option, widget):
         self.color = self.defColor
@@ -391,7 +382,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.NE)
             sourceSide = link.getSourceSideFor(self.__model)
-            line = QtCore.QLineF(exitSize + edgeSize, exitSize, objectSize, 0)
+            line = QtCore.QLineF(objectSize, 0, exitSize + edgeSize, exitSize)
             if sourceSide[3] is not None and len(sourceSide[3]):
                 if sourceSide[3] == 'N/A':
                     self.drawArrowHead(line, painter)
@@ -406,7 +397,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.E)
             sourceSide = link.getSourceSideFor(self.__model)
-            line = QtCore.QLineF(exitSize + edgeSize, midPoint, objectSize, midPoint)
+            line = QtCore.QLineF(objectSize, midPoint, exitSize + edgeSize, midPoint)
             if sourceSide[3] is not None and len(sourceSide[3]):
                 if sourceSide[3] == 'N/A':
                     self.drawArrowHead(line, painter)
@@ -421,7 +412,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.SE)
             sourceSide = link.getSourceSideFor(self.__model)
-            line = QtCore.QLineF(exitSize + edgeSize, exitSize + edgeSize, objectSize, objectSize)
+            line = QtCore.QLineF(objectSize, objectSize, exitSize + edgeSize, exitSize + edgeSize)
             if sourceSide[3] is not None and len(sourceSide[3]):
                 if sourceSide[3] == 'N/A':
                     self.drawArrowHead(line, painter)
@@ -436,7 +427,7 @@ class Room(QtGui.QGraphicsItem):
             pen = painter.pen()
             link = self.__model.linkAt(model.Direction.S)
             sourceSide = link.getSourceSideFor(self.__model)
-            line=QtCore.QLineF(midPoint, exitSize + edgeSize, midPoint, objectSize)
+            line=QtCore.QLineF(midPoint, objectSize, midPoint, exitSize + edgeSize)
             if sourceSide[3] is not None and len(sourceSide[3]):
                 if sourceSide[3] == 'N/A':
                     self.drawArrowHead(line, painter)
