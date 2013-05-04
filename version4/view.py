@@ -168,6 +168,9 @@ class uiMapView(QtGui.QGraphicsView):
         super(uiMapView, self).__init__()
         self.setDragMode(QtGui.QGraphicsView.RubberBandDrag)
         self.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
+        self.setRenderHints(QtGui.QPainter.Antialiasing | QtGui.QPainter.TextAntialiasing | QtGui.QPainter.SmoothPixmapTransform | QtGui.QPainter.HighQualityAntialiasing | QtGui.QPainter.NonCosmeticDefaultPen)
+        self.setResizeAnchor(QtGui.QGraphicsView.AnchorViewCenter)
+        self.setViewportUpdateMode(QtGui.QGraphicsView.SmartViewportUpdate)
 
     def contextMenuEvent(self, event):
         eventPos = event.pos()
