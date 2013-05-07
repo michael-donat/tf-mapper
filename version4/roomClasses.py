@@ -86,3 +86,13 @@ def fortress(roomView):
     color = QtGui.QColor()
     color.setNamedColor('#C79767')
     roomView.color = color
+    
+def tomb(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#7B2DA8')
+    roomView.color = color
+    
+def cementery(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#A8C227')
+    roomView.color = color
