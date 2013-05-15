@@ -7,4 +7,6 @@ def shortcuts():
         dict(name='Arond',              room='51b5c2cc-8cb7-11e2-a793-9c4e368dac0c'),
         dict(name='Blaviken',           room='27f4367e-89df-11e2-9919-9c4e368dac0c'),
         dict(name='Deavon',             room='b658625a-89b2-11e2-878b-2af7728612b4'),
+        dict(name='Ard Skellige',       room='e3b14fe6-ac71-11e2-98c7-9c4e368dac0c'),
+        dict(name='Baccala',            room='d991e846-9e24-11e2-852c-36be4148278d'),
     ]
