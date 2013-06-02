@@ -148,6 +148,7 @@ class Room:
             sourceSide=link.getSourceSideFor(self)
             if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] != 'N/A':
                 returnString += "exit:custom:%s\n" % sourceSide[3]
+                returnString += "exit:custom[]:%s\n" % sourceSide[3]
 
         return returnString
 
