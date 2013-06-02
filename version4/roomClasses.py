@@ -49,7 +49,7 @@ def danger(roomView):
 
 def desert(roomView):
     color = QtGui.QColor()
-    color.setNamedColor('#E3DD8F')
+    color.setNamedColor('#FFFA6E')
     roomView.color = color
 
 def sea(roomView):
@@ -95,4 +95,14 @@ def tomb(roomView):
 def cementery(roomView):
     color = QtGui.QColor()
     color.setNamedColor('#A8C227')
+    roomView.color = color
+
+def sewer(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#40341b')
+    roomView.color = color
+
+def dungeon(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#315169')
     roomView.color = color
