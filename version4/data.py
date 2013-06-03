@@ -20,8 +20,15 @@ class Serializer:
     def saveMap(fileLocation, mapObject):
         levels = []
         #print 'Gathering levels'
+        levelsUnsorted = []
         for index, level in mapObject.levels().items():
+            levelsUnsorted.append(level)
+
+        levelsSorted = sorted(levelsUnsorted, key=lambda level: level.getMapIndex())
+
+        for level in levelsSorted:
             levels.append([level.getId(), level.getMapIndex(), level.getView().sceneRect().x(),level.getView().sceneRect().y(), level.getView().sceneRect().width(), level.getView().sceneRect().height()])
+
         #print 'Serializing levels'
         #levelsData = base64.standard_b64encode(json.dumps(levels))
         levelsData = levels
@@ -39,7 +46,7 @@ class Serializer:
             rooms.append([room.getId(), room.getLevel().getId(), room.getView().pos().x(), room.getView().pos().y(), newSettings])
         #print 'Serializing rooms'
         #roomsData = base64.standard_b64encode(json.dumps(rooms))
-        roomsData = rooms
+        roomsData = sorted(rooms, key=lambda room: room[0])
         #print 'Done -----'
 
         customLinksSource = []
@@ -53,7 +60,7 @@ class Serializer:
             links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getLeft()[3], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2], link.getRight()[3]])
         #print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
-        linksData = links
+        linksData = sorted(links, key=lambda link: link[0])
         #print 'Done -----'
 
         customLinks = []
@@ -62,7 +69,7 @@ class Serializer:
             customLinks.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getLeft()[3], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2], link.getRight()[3]])
         #print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
-        customLinksData = customLinks
+        customLinksData = sorted(customLinks, key=lambda link: link[0])
         #print 'Done -----'
 
         labels = []
@@ -71,6 +78,7 @@ class Serializer:
                 if isinstance(item, view.Label):
                     labels.append([item.x(), item.y(), level.getId(), str(item.toPlainText())])
 
+        labels = sorted(labels, key=lambda label: label[0])
 
         #print 'Creating data dictionary'
         mapData = fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData), ('labels', labels)])
