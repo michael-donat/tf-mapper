@@ -60,7 +60,7 @@ class Serializer:
             links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getLeft()[3], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2], link.getRight()[3]])
         #print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
-        linksData = sorted(links, key=lambda link: link[0]+link[4])
+        linksData = sorted(links, key=lambda link: link[0]+str(link[1])+link[4]+str(link[5]))
         #print 'Done -----'
 
         customLinks = []
@@ -69,7 +69,7 @@ class Serializer:
             customLinks.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getLeft()[3], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2], link.getRight()[3]])
         #print 'Serializing links'
         #linksData = base64.standard_b64encode(json.dumps(links))
-        customLinksData = sorted(customLinks, key=lambda link: link[0]+link[4])
+        customLinksData = sorted(customLinks, key=lambda link: link[0]+str(link[1])+link[4]+str(link[5]))
         #print 'Done -----'
 
         labels = []
