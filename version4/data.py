@@ -155,7 +155,7 @@ class Serializer:
         f.close()
 
         try:
-            if not mapData[:2] == '{':
+            if not mapData[:1] == '{':
                 mapData = zlib.decompress(mapData)
         except: pass
 
@@ -163,7 +163,7 @@ class Serializer:
         print 'File decompressed read %s (%s)' % (overall, millis() - overall)
 
         try:
-            if not mapData[:2] == '{':
+            if not mapData[:1] == '{':
                 mapData = base64.standard_b64decode(mapData)
         except: pass
 
