@@ -143,7 +143,7 @@ class Room:
                 if sourceSide[1] == model.Direction.OTHER:
                     continue
                 else:
-                    returnString += "exit:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[3])
+                    returnString += "exit:rebind:%s:%s\n" % (model.Direction.mapToLabel(sourceSide[1]), sourceSide[3])
         for link in self.__customLinks:
             sourceSide=link.getSourceSideFor(self)
             if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] != 'N/A':
