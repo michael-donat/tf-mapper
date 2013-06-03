@@ -1,4 +1,3 @@
-
 import di, view
 import math, uuid
 from entity import *
@@ -639,8 +638,8 @@ class Navigator(QtCore.QObject):
         self.__properties.updatePropertiesFromRoom(roomModel)
 
         if  hasattr(self.__registry, 'connection'):
+            self.__registry.connection.send('room:enter\n')
             self.__registry.connection.send('room:id:%s\n' % roomModel.getId())
-            self.__registry.connection.send('exit:reset\n')
 
         if len(roomModel.getProperty(Room.PROP_COMMANDS)):
             if  hasattr(self.__registry, 'connection'):
