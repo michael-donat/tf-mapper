@@ -145,7 +145,7 @@ class Serializer:
         except: return False
 
         overall = (millis() - base)
-        print 'File opened %s (%s)' % (overall, millis() - base)
+        print 'File opened %s (%s) - %s' % (overall, millis() - base, mapFile)
 
         mapData = f.read()
 
@@ -155,7 +155,7 @@ class Serializer:
         f.close()
 
         try:
-            if not mapData[:2] == '{"':
+            if not mapData[:2] == '{':
                 mapData = zlib.decompress(mapData)
         except: pass
 
@@ -163,7 +163,7 @@ class Serializer:
         print 'File decompressed read %s (%s)' % (overall, millis() - overall)
 
         try:
-            if not mapData[:2] == '{"':
+            if not mapData[:2] == '{':
                 mapData = base64.standard_b64decode(mapData)
         except: pass
 
