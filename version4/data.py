@@ -76,7 +76,7 @@ class Serializer:
         mapData = fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData), ('labels', labels)])
 
         #print 'Serializing it'
-        fileData = base64.standard_b64encode(json.dumps(fileData))
+        fileData = json.dumps(fileData, indent=4)
 
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
         baseDir = baseDir+'/.tf-mapper/'
@@ -94,7 +94,7 @@ class Serializer:
         if os.path.exists(mapFile):
             shutil.move(mapFile, mapFile+'.bak')
 
-        fileData = zlib.compress(fileData)
+        fileData = fileData
 
         #print 'Writing data dictionary'
         f = open(mapFile, 'wb')
@@ -137,7 +137,11 @@ class Serializer:
             mapFile = Serializer.mapFile
 
         try:
+            f = open(mapFile+'.txt', 'rb')
+            decodeFile=False
+        except IOError as e:
             f = open(mapFile, 'rb')
+            decodeFile=True
         except: return False
 
         overall = (millis() - base)
@@ -151,14 +155,20 @@ class Serializer:
         f.close()
 
         try:
-            mapData = zlib.decompress(mapData)
+            if not mapData[:2] == '{"':
+                mapData = zlib.decompress(mapData)
         except: pass
 
         overall = (millis() - base)
         print 'File decompressed read %s (%s)' % (overall, millis() - overall)
 
         try:
-            mapData = json.loads(base64.standard_b64decode(mapData))
+            if not mapData[:2] == '{"':
+                mapData = base64.standard_b64decode(mapData)
+        except: pass
+
+        try:
+            mapData = json.loads(mapData)
         except: return False
 
         overall = (millis() - base)
