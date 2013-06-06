@@ -106,3 +106,38 @@ def dungeon(roomView):
     color = QtGui.QColor()
     color.setNamedColor('#315169')
     roomView.color = color
+
+def beach(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#FFFECC')
+    roomView.color = color
+
+def trap(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#211818')
+    roomView.color = color
+
+def building(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#A8A8A8')
+    roomView.color = color
+
+def deepForest(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#24631E')
+    roomView.color = color
+
+def plains(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#D4D3B0')
+    roomView.color = color
+
+def plateau(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#E8CA89')
+    roomView.color = color
+
+def camp(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#FCAD00')
+    roomView.color = color

@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     application.processEvents()
 
-    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "no-panels", "key-up=", "key-down=", "width=", "height=", "room="])
+    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "panels", "no-panels", "key-up=", "key-down=", "width=", "height=", "room="])
 
     spawnRemoteConnection = False
     noServer = False
@@ -73,6 +73,8 @@ if __name__ == '__main__':
             height = arg
         if opt == '--room':
             room = arg
+        if opt == "--panels":
+            noPanels = False
 
     Serializer.mapFile = mapFile
 
