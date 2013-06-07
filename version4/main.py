@@ -11,6 +11,7 @@ from PyQt4 import QtCore, QtGui
 if __name__ == '__main__':
 
     application = QtGui.QApplication(sys.argv)
+    application.setStyle('plastique')
 
     QPixmap = QtGui.QPixmap("ui/icons/hychsohn_256x256x32_transparent.png")
     QSplashScreen = QtGui.QSplashScreen(QPixmap)
@@ -98,7 +99,6 @@ if __name__ == '__main__':
     registry.shadowLink = view.ShadowLink()
     registry.shadowLink.hide()
 
-    application.setStyle('plastique')
     window = view.uiMainWindow()
     QProgressBar.setValue(20)
     application.processEvents()

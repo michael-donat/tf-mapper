@@ -1,5 +1,5 @@
 
-from PyQt4 import uic, QtGui, QtCore
+from PyQt4 import uic, QtGui, QtCore, QtOpenGL
 import di, model.model as model
 import json, base64
 import types
@@ -20,16 +20,32 @@ class uiMainWindow(window, base):
     __navigator=di.ComponentRequest('Navigator')
     __factory=di.ComponentRequest('RoomFactory')
     __clipboard=di.ComponentRequest('Clipboard')
+    __displayHelper=2
     def __init__(self, parent=None):
         super(base, self).__init__(parent)
         self.setupUi(self)
         self.__mapView = uiMapView()
         self.__mapView.enableAntialiasing(True)
+
         self.uiMapViewFrame.setLayout(QtGui.QVBoxLayout())
         self.uiMapViewFrame.layout().addWidget(self.__mapView)
+        self.__mapView.setViewport(QtOpenGL.QGLWidget(QtOpenGL.QGLFormat()))
         self.__mapView.show()
-
         self.menuActionEnableAntialiasing.toggled.connect(self.__mapView.enableAntialiasing)
+        self.pushButtonDebug.clicked.connect(self.switchDisplaying)
+
+    def switchDisplaying(self):
+        self.__displayHelper += 1
+        if self.__displayHelper == 1:
+            print 'setting oGL SampleBuffers'
+            self.__mapView.setViewport(QtOpenGL.QGLWidget(QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)))
+        if self.__displayHelper == 2:
+            print 'setting oGL'
+            self.__mapView.setViewport(QtOpenGL.QGLWidget(QtOpenGL.QGLFormat()))
+        if self.__displayHelper == 3:
+            print 'setting QWidget'
+            self.__mapView.setViewport(QtGui.QWidget())
+            self.__displayHelper = 0
 
     def hidePanels(self):
         self.uiComponentToolsPanel.hide()
@@ -217,7 +233,7 @@ class Link(QtGui.QGraphicsLineItem):
         self.setLine(startPoint.x(), startPoint.y(), endPoint.x(), endPoint.y())
         isUpDown = self.getModel().getLeft()[1] in [model.Direction.U, model.Direction.D] or self.getModel().getRight()[1] in [model.Direction.U, model.Direction.D]
         if self.getModel().isCustom() or isUpDown:
-            pen = QtGui.QPen(QtCore.Qt.DashDotDotLine)
+            pen = QtGui.QPen(QtCore.Qt.DotLine)
             self.setPen(pen)
         else:
             self.setPen(QtGui.QPen(QtCore.Qt.SolidLine))
@@ -559,8 +575,9 @@ class Room(QtGui.QGraphicsItem):
 class Label(QtGui.QGraphicsTextItem):
     def __init__(self, text):
         super(Label, self).__init__(text)
-        font = QtGui.QFont(QtGui.QApplication.font())
-        font.setPointSize(font.pointSize()*1.4)
+        font = QtGui.QFont()
+        font.setHintingPreference(QtGui.QFont.PreferFullHinting | QtGui.QFont.PreferQuality)
+        font.setPixelSize(20)
         self.setFont(font)
 
     def mouseDoubleClickEvent(self, QGraphicsSceneMouseEvent):
