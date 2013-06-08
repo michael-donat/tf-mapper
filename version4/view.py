@@ -29,21 +29,18 @@ class uiMainWindow(window, base):
 
         self.uiMapViewFrame.setLayout(QtGui.QVBoxLayout())
         self.uiMapViewFrame.layout().addWidget(self.__mapView)
-        self.__mapView.setViewport(QtOpenGL.QGLWidget(QtOpenGL.QGLFormat()))
+        self.switchDisplaying()
         self.__mapView.show()
         self.menuActionEnableAntialiasing.toggled.connect(self.__mapView.enableAntialiasing)
-        self.pushButtonDebug.clicked.connect(self.switchDisplaying)
+        #self.pushButtonDebug.clicked.connect(self.switchDisplaying)
 
     def switchDisplaying(self):
         self.__displayHelper += 1
         if self.__displayHelper == 1:
-            print 'setting oGL SampleBuffers'
             self.__mapView.setViewport(QtOpenGL.QGLWidget(QtOpenGL.QGLFormat(QtOpenGL.QGL.SampleBuffers)))
         if self.__displayHelper == 2:
-            print 'setting oGL'
             self.__mapView.setViewport(QtOpenGL.QGLWidget(QtOpenGL.QGLFormat()))
         if self.__displayHelper == 3:
-            print 'setting QWidget'
             self.__mapView.setViewport(QtGui.QWidget())
             self.__displayHelper = 0
 

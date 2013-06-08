@@ -323,9 +323,23 @@ if __name__ == '__main__':
     def switchCreationBlock(show):
         registry.blockCreation = not show
 
+    def renameCurrentZone():
+        currentZone = mapModel.currentZone()
+        zoneName = QtGui.QInputDialog.getText(window, 'Rename zone', 'Name', QtGui.QLineEdit.Normal, currentZone.name())
+        zoneName, ok = zoneName
+
+        if not ok:
+            return
+
+        currentZone.setName(zoneName)
+        window.selectZone.setItemText(window.selectZone.currentIndex(), zoneName)
+
+
     window.menuActionShowClasses.toggled.connect(switchClassesShowing)
     window.menuActionShowColors.toggled.connect(switchColorsShowing)
     window.actionEnableCreation.toggled.connect(switchCreationBlock)
+    window.actionRenameZone.triggered.connect(renameCurrentZone)
+
 
     def showCreationColorPicker():
         if registry.defColor:
@@ -356,6 +370,13 @@ if __name__ == '__main__':
             item.getModel().setProperty(model.Room.PROP_CLASS, window.uiCreationClass.currentText())
             pass
 
+    def processZoneSelect(zoneindex):
+        if zoneindex == -1: return
+        zoneId = window.selectZone.itemData(zoneindex).toString()
+        navigator.changeZone(zoneId)
+        navigator.switchLevel(0)
+
+    window.selectZone.currentIndexChanged.connect(processZoneSelect)
 
     window.uiCreationClass.currentIndexChanged.connect(applyCreationClass)
     window.uiCreationClassApply.clicked.connect(reapplyCreationClass)
@@ -417,7 +438,7 @@ if __name__ == '__main__':
 
         clearMap()
         Serializer.mapFile = fileName
-        result = Serializer.loadMap(window.mapView(), QProgressBar, application)
+        result = Serializer.loadMap(window, window.mapView(), QProgressBar, application)
         updateTitle()
         QProgressBar.setValue(100)
         QProgressBar.hide()
@@ -466,8 +487,24 @@ if __name__ == '__main__':
     import shortcuts
     window.buildShortcuts(shortcuts)
 
+    def createNewZone():
+        zoneName = QtGui.QInputDialog.getText(window, 'New zone', 'Name', QtGui.QLineEdit.Normal, '')
+        zoneName, ok = zoneName
+
+        if not ok:
+            return
+
+        zone = factory.spawnZone(zoneName)
+        window.selectZone.addItem(zone.name(), str(zone.id()))
+
+        window.selectZone.setCurrentIndex(window.selectZone.count()-1)
+
+        scene = factory.spawnLevel(0).getView()
+        window.mapView().setScene(scene)
 
 
+
+    window.addZoneButton.clicked.connect(createNewZone)
 
     window.show()
     window.raise_()

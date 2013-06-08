@@ -18,6 +18,20 @@ class Serializer:
     mapFile=None
     @staticmethod
     def saveMap(fileLocation, mapObject):
+
+        zones = []
+        zonesUnsorted = []
+
+        for zone in mapObject.zones().itervalues():
+            zonesUnsorted.append(zone)
+
+        zonesSorted = sorted(zonesUnsorted, key=lambda zone: zone.id())
+
+        for zone in zonesSorted:
+            zones.append([str(zone.id()), str(zone.name())])
+
+        zonesData = zones
+
         levels = []
         #print 'Gathering levels'
         levelsUnsorted = []
@@ -27,7 +41,7 @@ class Serializer:
         levelsSorted = sorted(levelsUnsorted, key=lambda level: level.getMapIndex())
 
         for level in levelsSorted:
-            levels.append([level.getId(), level.getMapIndex(), level.getView().sceneRect().x(),level.getView().sceneRect().y(), level.getView().sceneRect().width(), level.getView().sceneRect().height()])
+            levels.append([level.getId(), level.getMapIndex(), level.getView().sceneRect().x(),level.getView().sceneRect().y(), level.getView().sceneRect().width(), level.getView().sceneRect().height(), level.zone()])
 
         #print 'Serializing levels'
         #levelsData = base64.standard_b64encode(json.dumps(levels))
@@ -81,10 +95,10 @@ class Serializer:
         labels = sorted(labels, key=lambda label: label[0])
 
         #print 'Creating data dictionary'
-        mapData = fileData = dict([('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData), ('labels', labels)])
+        mapData = fileData = dict([('zones', zonesData),('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData), ('labels', labels)])
 
         #print 'Serializing it'
-        fileData = json.dumps(fileData, indent=4)
+        fileData = json.dumps(fileData, indent=1)
 
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
         baseDir = baseDir+'/.tf-mapper/'
@@ -109,6 +123,7 @@ class Serializer:
         f.write(fileData)
         f.close()
 
+        print 'Zones: %s' % len(mapData['zones'])
         print 'Levels: %s' % len(mapData['levels'])
         print 'Rooms: %s' % len(mapData['rooms'])
         print 'Links: %s' % len(mapData['links'])
@@ -124,7 +139,7 @@ class Serializer:
         return baseDir
 
     @staticmethod
-    def loadMap(mapView, QProgressBar, application):
+    def loadMap(window, mapView, QProgressBar, application):
 
         if Serializer.mapFile is None:
             return
@@ -199,14 +214,45 @@ class Serializer:
                 labels = mapData['labels']
             except: labels = []
 
+        try:
+            zonesRaw = mapData['zones']
+        except: zonesRaw = []
+
         factory = Serializer.factory
 
         from PyQt4 import QtCore
 
         levelsById = {}
 
+        zones = []
+
+        window.selectZone.blockSignals(True)
+        if len(zonesRaw) == 0: #its an old style map, lets adapt
+            zone = factory.spawnZone('Untitled')
+            zones.append(zone)
+        else:
+            for zoneTuple in zonesRaw:
+                zone = factory.spawnZone(zoneTuple[1], zoneTuple[0])
+                zones.append(zone)
+
+
+        for zone in zones:
+            window.selectZone.insertItem(0, zone.name(), str(zone.id()))
+
+        window.selectZone.blockSignals(False)
+        window.selectZone.setCurrentIndex(-1)
+        window.selectZone.setCurrentIndex(0)
+        Serializer.registry.setCurrentZone(window.selectZone.itemData(0).toString())
+
+        mapModelRegistry = Serializer.registry
+
         for level in levels:
-            levelModel = factory.spawnLevel(level[1], level[0])
+            try:
+                level[6]
+            except:
+                level.append(str(zone.id()))
+
+            levelModel = factory.spawnLevel(level[1], level[0], level[6])
             levelModel.getView().setSceneRect(QtCore.QRectF(level[2], level[3], level[4], level[5]))
             levelsById[levelModel.getId()] = levelModel
 
@@ -273,7 +319,9 @@ class Serializer:
         QProgressBar.setValue(65)
         application.processEvents()
 
-        mapView.setScene(Serializer.registry.levels()[0].getView())
+        mapView.setScene(Serializer.registry.getZeroLevel().getView())
+
+        aaa = Serializer.registry
 
         overall = (millis() - base)
         print 'Completed created %s (%s)' % (overall, millis() - overall)

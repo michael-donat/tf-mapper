@@ -6,10 +6,35 @@ import json, base64
 
 __author__ = 'thornag'
 
+class Zone:
+    __name=None
+    __levels=None
+    __id=None
+    def __init__(self, name, id=None):
+        self.__name=name
+        self.__levels={}
+        self.__id = str(id)
+    def registerLevel(self, levelObject):
+        self.__levels[levelObject.getMapIndex()] = levelObject
+    def getLevelByIndex(self, levelIndex):
+        return self.__levels[levelIndex]
+    def levelByIndexExists(self, levelIndex):
+        return levelIndex in self.__levels.iterkeys()
+    def id(self):
+        return self.__id
+    def name(self):
+        return self.__name
+    def setName(self, name):
+        self.__name = name
+
 class Map:
     __rooms={}
     __levels={}
     __links={}
+    __zones={}
+
+    __currentZone=None
+
     def clear(self):
         for evel in self.__levels:
             self.__levels[evel].getView().clear()
@@ -17,8 +42,26 @@ class Map:
         self.__levels={}
         self.__links={}
 
+    def currentZone(self):
+        return self.__currentZone
+
+    def setCurrentZone(self, zoneId):
+        self.__currentZone = self.__zones[str(zoneId)]
+
     def levels(self):
         return self.__levels
+
+    def getLevelByIndex(self, levelIndex):
+        return self.currentZone().getLevelByIndex(levelIndex)
+
+    def levelExists(self, levelIndex):
+        return self.currentZone().levelByIndexExists(levelIndex)
+
+    def getZeroLevel(self):
+        return self.getLevelByIndex(0)
+
+    def getZoneById(self, zoneId):
+        return self.__zones[zoneId]
 
     def rooms(self):
         return self.__rooms
@@ -26,11 +69,17 @@ class Map:
     def links(self):
         return self.__links
 
+    def zones(self):
+        return self.__zones
+
+    def registerZone(self, zone):
+        self.__zones[zone.id()] = zone
+
     def registerRoom(self, room):
         self.__rooms[room.getId()] = room
 
     def registerLevel(self, level):
-        self.__levels[level.getMapIndex()] = level
+        self.__levels[level.getId()] = level
 
     def removeRoom(self, room):
         del self.__rooms[room.getId()]
@@ -259,14 +308,25 @@ class RoomFactory:
         link.getView().redraw()
         QGraphicsScene.addItem(link.getView())
 
-    def spawnLevel(self, mapIndex, id=None):
+    def spawnZone(self, name, id=None):
+        id_ = uuid.uuid1() if id==None else id
+        zone = Zone(name, id_)
+        self.__map.registerZone(zone)
+        return zone
+
+    def spawnLevel(self, mapIndex, id=None, zone=None):
+        if zone is None:
+            zone = self.__map.currentZone().id()
+
         level = Level(mapIndex)
         id_ = uuid.uuid1() if id==None else id
         level.setId(id_)
+        level.setZone(zone)
         viewLevel = view.uiMapLevel()
         viewLevel.setBackgroundBrush(QtGui.QColor(217, 217, 217))
         level.setView(viewLevel)
         self.__map.registerLevel(level)
+        self.__map.getZoneById(zone).registerLevel(level)
         return level
 
 
@@ -307,11 +367,15 @@ class Navigator(QtCore.QObject):
     def __init__(self):
         super(Navigator, self).__init__()
 
+    def changeZone(self, zone):
+        self.__map.setCurrentZone(zone)
+
     def switchLevel(self, newLevel):
         levels = self.__map.levels()
-        if newLevel in levels:
-            view = self.__registry.currentLevel.getView().views()[0]
-            self.__registry.mainWindow.mapView().setScene(levels[newLevel].getView())
+        if self.__map.levelExists(newLevel):
+            newView = self.__map.getLevelByIndex(newLevel).getView()
+            #view = self.__registry.currentLevel.getView().views()[0]
+            self.__registry.mainWindow.mapView().setScene(self.__map.getLevelByIndex(newLevel).getView())
             scene = self.__registry.mainWindow.mapView().scene().getModel()
             #print scene
 
@@ -490,8 +554,11 @@ class Navigator(QtCore.QObject):
                 #if create mode check for collision and if no create ate the same coordinates but on different scene
                 otherLevelIndex = self.__registry.currentLevel.getMapIndex()
                 otherLevelIndex += 1 if fromExit == Direction.U else -1
-                levels = self.__map.levels()
-                otherLevel = levels[otherLevelIndex] if otherLevelIndex in levels else self.__roomFactory.spawnLevel(otherLevelIndex)
+
+                if self.__map.levelExists(otherLevelIndex):
+                    otherLevel = self.__map.getLevelByIndex(otherLevelIndex)
+                else:
+                    otherLevel = self.__roomFactory.spawnLevel(otherLevelIndex)
 
                 destinationRoom = otherLevel.getView().itemAt(currentRoom.getView().pos())
 
@@ -633,7 +700,15 @@ class Navigator(QtCore.QObject):
         roomModel.getView().setPos(roomModel.position())
         roomModel.getView().update()
 
+        self.changeZone(roomModel.getLevel().zone())
         self.switchLevel(roomModel.getLevel().getMapIndex())
+
+        for i in range(0, self.__registry.mainWindow.selectZone.count()):
+            if self.__registry.mainWindow.selectZone.itemData(i).toString() == roomModel.getLevel().zone():
+                self.__registry.mainWindow.selectZone.blockSignals(True)
+                self.__registry.mainWindow.selectZone.setCurrentIndex(i)
+                self.__registry.mainWindow.selectZone.blockSignals(False)
+
         self.__registry.mainWindow.roomIdDisplay.setText(roomModel.getId())
         self.__properties.updatePropertiesFromRoom(roomModel)
 

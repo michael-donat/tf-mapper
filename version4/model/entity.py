@@ -9,6 +9,8 @@ class Level:
     __mapIndex=0
     __view=None
     __id=None
+    __zone=None
+
     def __init__(self, mapIndex):
         self.__mapIndex=mapIndex
 
@@ -27,6 +29,12 @@ class Level:
 
     def getId(self):
         return self.__id
+
+    def setZone(self, zone):
+        self.__zone = zone
+
+    def zone(self):
+        return self.__zone
 
 class Link:
     __view=None

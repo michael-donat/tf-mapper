@@ -94,6 +94,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionEnableCreation"/>
+    <addaction name="actionRenameZone"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -129,8 +130,35 @@
    </attribute>
    <widget class="QWidget" name="uiComponentToolsPanelContentWidget">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="19" column="2">
+     <item row="21" column="2">
       <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0" rowspan="2" colspan="2">
+        <widget class="QLineEdit" name="roomIdDisplay">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="readOnly">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <widget class="QLineEdit" name="manualLinkCustomLinkLeft">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1">
+        <widget class="QLineEdit" name="manualLinkCustomLinkRight">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="1">
         <widget class="QPushButton" name="manualLinkRoomRightInsert">
          <property name="text">
@@ -297,46 +325,19 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="0" rowspan="2" colspan="2">
-        <widget class="QLineEdit" name="roomIdDisplay">
+       <item row="10" column="0" colspan="2">
+        <widget class="QPushButton" name="commandTrigger">
          <property name="text">
-          <string/>
-         </property>
-         <property name="dragEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="readOnly">
-          <bool>false</bool>
+          <string>Send Command</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
-        <widget class="QLineEdit" name="manualLinkCustomLinkLeft">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QLineEdit" name="manualLinkCustomLinkRight">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-        </widget>
+       <item row="11" column="0" colspan="2">
+        <widget class="QLineEdit" name="commandInput"/>
        </item>
       </layout>
      </item>
-     <item row="21" column="2">
-      <widget class="QLineEdit" name="commandInput"/>
-     </item>
-     <item row="20" column="2">
-      <widget class="QPushButton" name="commandTrigger">
-       <property name="text">
-        <string>Send Command</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
+     <item row="2" column="2">
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="3">
         <widget class="QToolButton" name="zoomIn">
@@ -392,7 +393,7 @@
        </item>
       </layout>
      </item>
-     <item row="13" column="2">
+     <item row="15" column="2">
       <layout class="QGridLayout" name="compassButtonsGridLayout">
        <item row="0" column="2">
         <widget class="QToolButton" name="compassN">
@@ -707,7 +708,7 @@
        </item>
       </layout>
      </item>
-     <item row="6" column="2">
+     <item row="8" column="2">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QLabel" name="label_8">
@@ -728,7 +729,7 @@
        </item>
       </layout>
      </item>
-     <item row="11" column="2">
+     <item row="13" column="2">
       <widget class="QComboBox" name="walkerModeSelector">
        <item>
         <property name="text">
@@ -742,7 +743,7 @@
        </item>
       </widget>
      </item>
-     <item row="7" column="2">
+     <item row="9" column="2">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QLabel" name="label_9">
@@ -767,12 +768,19 @@
        </item>
       </layout>
      </item>
-     <item row="22" column="2">
-      <widget class="QPushButton" name="pushButtonDebug">
-       <property name="text">
-        <string>Debug</string>
-       </property>
-      </widget>
+     <item row="1" column="2">
+      <layout class="QGridLayout" name="gridLayout_5">
+       <item row="0" column="0">
+        <widget class="QComboBox" name="selectZone"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QToolButton" name="addZoneButton">
+         <property name="text">
+          <string>+</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>
@@ -1039,6 +1047,11 @@
    </property>
    <property name="text">
     <string>Enable creation</string>
+   </property>
+  </action>
+  <action name="actionRenameZone">
+   <property name="text">
+    <string>Rename zone</string>
    </property>
   </action>
  </widget>
