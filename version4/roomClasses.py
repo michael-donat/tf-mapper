@@ -141,3 +141,8 @@ def camp(roomView):
     color = QtGui.QColor()
     color.setNamedColor('#FCAD00')
     roomView.color = color
+
+def glade(roomView):
+    color = QtGui.QColor()
+    color.setNamedColor('#5BB56B')
+    roomView.color = color

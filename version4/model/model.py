@@ -106,6 +106,10 @@ class Direction:
     OTHER=1024
 
     @staticmethod
+    def getAllAsList():
+        return [Direction.N, Direction.NE, Direction.E, Direction.SE, Direction.S, Direction.SW, Direction.W, Direction.NW, Direction.D, Direction.U, Direction.OTHER]
+
+    @staticmethod
     def mapFromLabel(label):
         if str.upper(str(label)) == 'CUSTOM': label='OTHER'
         return getattr(Direction, str.upper(str(label)))
@@ -373,10 +377,14 @@ class Navigator(QtCore.QObject):
     def switchLevel(self, newLevel):
         levels = self.__map.levels()
         if self.__map.levelExists(newLevel):
-            newView = self.__map.getLevelByIndex(newLevel).getView()
+            level = self.__map.getLevelByIndex(newLevel)
+            if self.__registry.currentLevel is level:
+                return
+            newView = level.getView()
             #view = self.__registry.currentLevel.getView().views()[0]
             self.__registry.mainWindow.mapView().setScene(self.__map.getLevelByIndex(newLevel).getView())
             scene = self.__registry.mainWindow.mapView().scene().getModel()
+
             #print scene
 
     def goLevelDown(self):
@@ -660,6 +668,7 @@ class Navigator(QtCore.QObject):
         if roomId not in self.__map.rooms().keys(): return False
         roomModel = self.__map.rooms()[roomId]
 
+        self.changeZone(roomModel.getLevel().zone())
         self.switchLevel(roomModel.getLevel().getMapIndex())
 
         roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
@@ -677,6 +686,9 @@ class Navigator(QtCore.QObject):
 
         roomModel.setCurrentlyVisited(True)
         roomModel.getView().clearFocus()
+
+        self.changeZone(roomModel.getLevel().zone())
+        self.switchLevel(roomModel.getLevel().getMapIndex())
 
         if len(roomModel.getView().scene().views()):
             if self.__registry.centerAt:
@@ -699,9 +711,6 @@ class Navigator(QtCore.QObject):
 
         roomModel.getView().setPos(roomModel.position())
         roomModel.getView().update()
-
-        self.changeZone(roomModel.getLevel().zone())
-        self.switchLevel(roomModel.getLevel().getMapIndex())
 
         for i in range(0, self.__registry.mainWindow.selectZone.count()):
             if self.__registry.mainWindow.selectZone.itemData(i).toString() == roomModel.getLevel().zone():

@@ -104,7 +104,7 @@ class Serializer:
         baseDir = baseDir+'/.tf-mapper/'
         mapFile = baseDir+Serializer.mapFile
 
-        if Serializer.mapFile[0] == '/':
+        if Serializer.mapFile[0] == '/' or (sys.platform == 'win32' and (Serializer.mapFile[1:3] == ':/' or Serializer.mapFile[1:3] == ':\\')):
             mapFile = Serializer.mapFile
 
         try:
@@ -156,7 +156,7 @@ class Serializer:
         baseDir = baseDir+'/.tf-mapper/'
         mapFile = baseDir+Serializer.mapFile
 
-        if Serializer.mapFile[0] == '/':
+        if Serializer.mapFile[0] == '/' or (sys.platform == 'win32' and (Serializer.mapFile[1:3] == ':/' or Serializer.mapFile[1:3] == ':\\')):
             mapFile = Serializer.mapFile
 
         try:

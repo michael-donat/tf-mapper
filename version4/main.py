@@ -523,6 +523,7 @@ if __name__ == '__main__':
     application.processEvents()
 
     if createLevel:
+
         scene = factory.spawnLevel(0).getView()
         window.mapView().setScene(scene)
         navigator.enableCreation(False)

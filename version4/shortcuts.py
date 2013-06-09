@@ -9,4 +9,5 @@ def shortcuts():
         dict(name='Deavon',             room='b658625a-89b2-11e2-878b-2af7728612b4'),
         dict(name='Ard Skellige',       room='e3b14fe6-ac71-11e2-98c7-9c4e368dac0c'),
         dict(name='Baccala',            room='d991e846-9e24-11e2-852c-36be4148278d'),
+        dict(name='Zone Flota',            room='7def75cc-d0df-11e2-b298-60c5470ae646'),
     ]

@@ -20,7 +20,7 @@ class uiMainWindow(window, base):
     __navigator=di.ComponentRequest('Navigator')
     __factory=di.ComponentRequest('RoomFactory')
     __clipboard=di.ComponentRequest('Clipboard')
-    __displayHelper=2
+    __displayHelper=1
     def __init__(self, parent=None):
         super(base, self).__init__(parent)
         self.setupUi(self)
@@ -29,7 +29,7 @@ class uiMainWindow(window, base):
 
         self.uiMapViewFrame.setLayout(QtGui.QVBoxLayout())
         self.uiMapViewFrame.layout().addWidget(self.__mapView)
-        self.switchDisplaying()
+        #self.switchDisplaying()
         self.__mapView.show()
         self.menuActionEnableAntialiasing.toggled.connect(self.__mapView.enableAntialiasing)
         #self.pushButtonDebug.clicked.connect(self.switchDisplaying)
@@ -179,11 +179,11 @@ class uiMapView(QtGui.QGraphicsView):
 
     def __init__(self):
         super(uiMapView, self).__init__()
-        self.setDragMode(QtGui.QGraphicsView.RubberBandDrag)
+        #self.setDragMode(QtGui.QGraphicsView.RubberBandDrag)
         self.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
-        self.setRenderHints(QtGui.QPainter.Antialiasing | QtGui.QPainter.TextAntialiasing | QtGui.QPainter.SmoothPixmapTransform | QtGui.QPainter.HighQualityAntialiasing | QtGui.QPainter.NonCosmeticDefaultPen)
+        #self.setRenderHints(QtGui.QPainter.Antialiasing | QtGui.QPainter.TextAntialiasing | QtGui.QPainter.SmoothPixmapTransform | QtGui.QPainter.HighQualityAntialiasing | QtGui.QPainter.NonCosmeticDefaultPen)
         self.setResizeAnchor(QtGui.QGraphicsView.AnchorViewCenter)
-        self.setViewportUpdateMode(QtGui.QGraphicsView.SmartViewportUpdate)
+        #self.setViewportUpdateMode(QtGui.QGraphicsView.MinimalViewportUpdate)
 
     def contextMenuEvent(self, event):
         eventPos = event.pos()
@@ -217,6 +217,7 @@ class Link(QtGui.QGraphicsLineItem):
 
     def __init__(self):
         super(Link, self).__init__()
+        self.setCacheMode(QtGui.QGraphicsItem.DeviceCoordinateCache)
 
     def setModel(self, model):
         self.__model = model
@@ -348,6 +349,44 @@ class Room(QtGui.QGraphicsItem):
         painter.setBrush(brush)
 
     def paint(self, painter, option, widget):
+
+        """cacheExitString = ""
+        cacheString = "StorageKey-color:%s-class:%s-selected:%s-visited:%s-disabled:%s-label:%s-exits:%s"
+
+        for exitDir in model.Direction.getAllAsList():
+            if self.__model.hasExit(exitDir):
+                cacheExitString += str(exitDir)
+                link = self.__model.linkAt(exitDir)
+                sourceSide = link.getSourceSideFor(self.__model)
+                if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] == 'N/A':
+                    cacheExitString += ".|"
+                else:
+                    cacheExitString += "|"
+
+        cacheString = cacheString % (   self.getModel().getProperty(model.Room.PROP_COLOR),
+                                        self.getModel().getProperty(model.Room.PROP_CLASS),
+                                        self.isSelected(),
+                                        self.__model.isCurrentlyVisited(),
+                                        self.getModel().getProperty('disabled'),
+                                        self.__model.getProperty(model.Room.PROP_LABEL),
+                                        cacheExitString)
+
+        pixmap = QtGui.QPixmapCache.find(cacheString)
+
+        if pixmap is None:
+            pixmap = self.generatePixmap(painter, option, widget)
+            QtGui.QPixmapCache.insert(cacheString, pixmap)"""
+
+        self.generatePixmap(painter, option, widget)
+
+
+    def generatePixmap(self, painter, option, widget):
+
+        #pixmap = QtGui.QPixmap(self.__config.getSize(), self.__config.getSize())
+        #painter = QtGui.QPainter(pixmap)
+
+        #painter.drawRect(0, 0, self.__config.getSize(), self.__config.getSize())
+
         self.color = self.defColor
         if self.__registry.applyColors and self.getModel().getProperty(model.Room.PROP_COLOR) is not None:
             color = QtGui.QColor()
@@ -540,6 +579,8 @@ class Room(QtGui.QGraphicsItem):
             painter.setPen(QtGui.QColor(0,0,0))
             painter.drawText(QtCore.QPointF(exitSize+1,exitSize+edgeSize-5),label)
 
+        #return pixmap
+
     #def mousePressEvent(self, QGraphicsSceneMouseEvent):
     #    print QGraphicsSceneMouseEvent.modifiers() & QtCore.Qt.ShiftModifier
     #    if not QGraphicsSceneMouseEvent.modifiers() & QtCore.Qt.ShiftModifier:
@@ -576,6 +617,7 @@ class Label(QtGui.QGraphicsTextItem):
         font.setHintingPreference(QtGui.QFont.PreferFullHinting | QtGui.QFont.PreferQuality)
         font.setPixelSize(20)
         self.setFont(font)
+
 
     def mouseDoubleClickEvent(self, QGraphicsSceneMouseEvent):
         self.setTextInteractionFlags(QtCore.Qt.TextEditorInteraction);
