@@ -594,6 +594,11 @@ class Room(QtGui.QGraphicsItem):
 
     def itemChange(self, QGraphicsItem_GraphicsItemChange, QVariant):
         if QGraphicsItem_GraphicsItemChange == QtGui.QGraphicsItem.ItemPositionChange:
+            originPoint = QVariant.toPoint()
+            if  abs(originPoint.x() - self.getModel().position().x()) > (2 * self.__config.getSize()) or \
+                abs(originPoint.y() - self.getModel().position().y()) > (2 * self.__config.getSize()):
+                return self.getModel().position()
+
             return self.__coordinatesHelper.snapToGrid(QVariant.toPoint())
 
         if QGraphicsItem_GraphicsItemChange == QtGui.QGraphicsItem.ItemPositionHasChanged:
