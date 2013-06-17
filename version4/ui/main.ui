@@ -1055,6 +1055,56 @@
    </property>
   </action>
  </widget>
+ <tabstops>
+  <tabstop>selectZone</tabstop>
+  <tabstop>addZoneButton</tabstop>
+  <tabstop>goLevelDown</tabstop>
+  <tabstop>goLevelUp</tabstop>
+  <tabstop>zoomOut</tabstop>
+  <tabstop>zoomIn</tabstop>
+  <tabstop>uiCreationColor</tabstop>
+  <tabstop>uiCreationColorPicker</tabstop>
+  <tabstop>uiCreationClass</tabstop>
+  <tabstop>uiCreationClassApply</tabstop>
+  <tabstop>walkerModeSelector</tabstop>
+  <tabstop>autoPlacement</tabstop>
+  <tabstop>centerOnMove</tabstop>
+  <tabstop>compassNW</tabstop>
+  <tabstop>compassN</tabstop>
+  <tabstop>compassNE</tabstop>
+  <tabstop>compassW</tabstop>
+  <tabstop>compassPlace</tabstop>
+  <tabstop>compassE</tabstop>
+  <tabstop>compassSW</tabstop>
+  <tabstop>compassS</tabstop>
+  <tabstop>compassSE</tabstop>
+  <tabstop>compassU</tabstop>
+  <tabstop>compassD</tabstop>
+  <tabstop>roomIdDisplay</tabstop>
+  <tabstop>manualLookupRoom</tabstop>
+  <tabstop>manualLinkInsertFromSelection</tabstop>
+  <tabstop>manualLinkRoomLeftInsert</tabstop>
+  <tabstop>manualLinkRoomLeft</tabstop>
+  <tabstop>manualLinkLinkLeft</tabstop>
+  <tabstop>manualLinkCustomLinkLeft</tabstop>
+  <tabstop>manualLinkRoomRightInsert</tabstop>
+  <tabstop>manualLinkRoomRight</tabstop>
+  <tabstop>manualLinkLinkRight</tabstop>
+  <tabstop>manualLinkCustomLinkRight</tabstop>
+  <tabstop>manualLinkExecute</tabstop>
+  <tabstop>manualMergeExecute</tabstop>
+  <tabstop>commandInput</tabstop>
+  <tabstop>commandTrigger</tabstop>
+  <tabstop>uiPropertiesRoomId</tabstop>
+  <tabstop>uiPropertiesRoomName</tabstop>
+  <tabstop>uiPropertiesCommands</tabstop>
+  <tabstop>uiPropertiesDisabled</tabstop>
+  <tabstop>uiPropertiesColor</tabstop>
+  <tabstop>uiPropertiesColorPicker</tabstop>
+  <tabstop>uiPropertiesClass</tabstop>
+  <tabstop>uiPropertiesLabel</tabstop>
+  <tabstop>uiPropertiesExits</tabstop>
+ </tabstops>
  <resources>
   <include location="icons.qrc"/>
  </resources>
