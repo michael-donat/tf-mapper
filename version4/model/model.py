@@ -380,11 +380,13 @@ class Navigator(QtCore.QObject):
             level = self.__map.getLevelByIndex(newLevel)
             if self.__registry.currentLevel is level:
                 return
+
             newView = level.getView()
-            #view = self.__registry.currentLevel.getView().views()[0]
+            view = self.__registry.currentLevel.getView().views()[0]
+            center = view.mapToScene(view.rect().center())
             self.__registry.mainWindow.mapView().setScene(self.__map.getLevelByIndex(newLevel).getView())
             scene = self.__registry.mainWindow.mapView().scene().getModel()
-
+            view.centerOn(center)
             #print scene
 
     def goLevelDown(self):
