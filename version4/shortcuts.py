@@ -51,7 +51,7 @@ def shortcuts():
         dict(name='Jaskare',            room='947a41fa-d13e-11e2-93ce-60c5470ae646'),
         dict(name='Jouinard',            room='9479f1c0-d13e-11e2-b766-60c5470ae646'),
         dict(name='Karak Kadrin',            room='74667d1e-d1ce-11e2-8a5c-a820664fd60d'),
-        dict(name='Karak Varn',            room='10d88726-d14f-11e2-84ba-60c5470ae646')
+        dict(name='Karak Varn',            room='10d88726-d14f-11e2-84ba-60c5470ae646'),
         dict(name='Kraina Zgromadzenia',            room='906a564f-d0f9-11e2-83dc-60c5470ae646'),
         dict(name='Kreutzhofen',            room='4c153326-d126-11e2-acb9-60c5470ae646'),
         dict(name='Marceaux-Descloux',            room='2e92f963-d13f-11e2-8805-60c5470ae646'),
