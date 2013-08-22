@@ -1,83 +1,180 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print"/>
 
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
     <title>tf-mapper by thornag</title>
-  </head>
+</head>
 
-  <body>
-    <header>
-      <div class="inner">
+<body>
+<header>
+    <div class="inner">
         <h1>tf-mapper</h1>
+
         <h2></h2>
-        <a href="https://github.com/thornag/tf-mapper" class="button"><small>View project on</small>GitHub</a>
-      </div>
-    </header>
+        <a href="https://github.com/thornag/tf-mapper" class="button">
+            <small>View project on</small>
+            GitHub</a>
+    </div>
+</header>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
+<div id="content-wrapper">
+    <div class="inner clearfix">
         <section id="main-content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+            <h3>
+                <a name="welcome-to-tf-mapper" class="anchor" href="#welcome-to-tf-mapper"><span
+                        class="octicon octicon-link"></span></a>Welcome to tf-mapper by thornag.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+            <p>
+                This software was created as a prototype tool to add mapper functionality to one of the best MUD clients
+                <a href='http://tinyfugue.sourceforge.net' target='_blank'>tiny-fugue</a> by Ken Keys.
+            </p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+            <p>
+                The core objectives were to provide an application that easily integrates (and not only into
+                tiny-fugue), works cross platform and is usable whether user client is local or remote.
+            </p>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+            <h3>
+                <a name="prerequisites" class="anchor" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites
+            </h3>
+            </h3>
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+            <p>On <strong>MacOs</strong> and <strong>Windows</strong> tf-mapper is available as a compiled executable,
+                all that's required is a double click. On <strong>Linux</strong> you need to take care of dependencies
+                on your own; these dependencies are: Qt4.8, PyQt4 and Python 2.7 - these should all be easily available
+                from your package manager.</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+            <h3>
+                <a name="tf-integration" class="anchor" href="#tf-integration"><span
+                        class="octicon octicon-link"></span></a>tf integration</h3>
+            </h3>
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+            <p>
+                To integrate with any MUD client you will need to take care of scripting with accordance to our little
+                'communication protocol'. We have one files prepared ready for you that has been tailored to our map for
+                one of the most popular polish MUDs <a href='http://arkadia.rpg.pl' target="_blank">Arkadia LpMUD</a>.
+            </p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+            <p>Sample integration: <a href='https://gist.github.com/thornag/6304395' target='_blank'>map.tf</a>.
+            </p>
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+            <p>
+                There are generally 2 types of command that tf-mapper supports; these are teleport/lookup and navigate.
+                While teleport/lookup is quite straight forward as it will simply activate the room by given roomId the
+                navigate set of command are a bit more complex. You can navigate in 3 different ways (the end effect is
+                the same, just how you get there differes slightly).
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+            </dl>
+            </p>
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+            <h3>
+                <a name="communication" class="anchor" href="#communication"><span class="octicon octicon-link"></span></a>Communication
+            </h3>
+            </h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+            <p>
+                Communication between your client and tf-mapper is realised over TCP socket. Mapper will automatically
+                (unless forced not to do so) bind a listening server on port 23923. You will then have to connect your
+                MUD client to localhost:23923 - in tinyFugue we've used the background world/socket support to realise
+                this communication. If your client is installed remotely (ie you are using a shell account) you should
+                simply configure a reverse tunnel back to localhost:23923.
+            </p>
+
+            <p>
+                tf-mapper also sends messages to your MUD client. It will for example notify you of what roomId you are
+                entering, whether it has custom exits (so you can bind them to keys) or send any other arbitrary
+                message.
+            </p>
+
+
+            <h3>
+                <a name="communication-protocol-send" class="anchor" href="#communication-protocol-send"><span
+                        class="octicon octicon-link"></span></a>What tf-mapper will SEND</h3>
+            </h3>
+
+            <p>
+            <dl>
+                <dt>room:enter</dt>
+                <dd>sent as soon as you switch rooms, it should set default state in your scripts (ie reset all previous
+                    custom exits)
+                </dd>
+                <dt>room:id</dt>
+                <dd>in case you have room specific scripts you can activate them by using roomId</dd>
+                <dt>exit:start</dt>
+                <dd>opening boundary for list of exists</dd>
+                <dt>exit:custom:(.*)</dt>
+                <dd>will send a line for each defined custom exit</dd>
+                <dt>exit:rebind:([A-Z]{1,2}):(.*)</dt>
+                <dd>will send a line for each custom exit that you would rather rebind as directional</dd>
+                <dt>exit:end</dt>
+                <dd>closing boundary for list of exits</dd>
+            </dl>
+            </p>
+
+            <h3>
+                <a name="communication-protocol-receive" class="anchor" href="#communication-protocol-receive"><span
+                        class="octicon octicon-link"></span></a>What tf-mapper will RECEIVE</h3>
+            </h3>
+
+            <p>
+            <dl>
+                <dt>navigate:exit:(.*)</dt>
+                <dd>will move room in given direction (if exit exists on the map)</dd>
+                <dt>navigate:custom:(.*)</dt>
+                <dd>same as above but will look for a custom exit label</dd>
+                <dt>navigate:follow:(.*)</dt>
+                <dd>same as above but using follow label</dd>
+                <dt>revert</dt>
+                <dd>reverts active room back to previous room</dd>
+                <dt>lookup:(.*)</dt>
+                <dd>marks room as active by id</dd>
+            </dl>
+            </p>
+
+            <h3>
+                <a name="demo" class="anchor" href="#demo"><span
+                        class="octicon octicon-link"></span></a>Demo</h3>
+            </h3>
+
+            <iframe width="640" height="360" src="http://www.youtube.com/embed/wzEQZyHxA8Q?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
+
         </section>
 
         <aside id="sidebar">
-          <a href="https://github.com/thornag/tf-mapper/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/thornag/tf-mapper/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+            <a href="http://mahakam.pl/~thornag/MudMapper.zip" class="button">
+                <small>Download for</small>
+                Windows
+            </a>
+            <a href="http://mahakam.pl/~thornag/MudMapper.dmg" class="button">
+                <small>Download for</small>
+                MacOS
+            </a>
+            <a href="https://github.com/thornag/tf-mapper/tarball/master" class="button">
+                <small>Download</small>
+                Source
+            </a>
 
-          <p class="repo-owner"><a href="https://github.com/thornag/tf-mapper"></a> is maintained by <a href="https://github.com/thornag">thornag</a>.</p>
+            <p class="repo-owner"><a href="https://github.com/thornag/tf-mapper">tf-mapper</a> is maintained by <a
+                    href="https://github.com/thornag">thornag</a>.</p>
 
-          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+            <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a
+                    href="https://twitter.com/jasonlong">Jason Long</a> and was further adapted by <a
+                    href="https://github.com/thornag">thornag</a>.</p>
         </aside>
-      </div>
     </div>
+</div>
 
-  
-  </body>
+
+</body>
 </html>
