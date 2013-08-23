@@ -244,7 +244,7 @@ class ShadowLink(QtGui.QGraphicsLineItem):
     def __init__(self):
         super(ShadowLink, self).__init__()
     def redraw(self):
-        startPoint = self.__coordinateshelper.getExitPoint((self.__registry.currentlyVisitedRoom, self.__registry.roomShadow.exitBy(), None))
+        startPoint = self.__coordinateshelper.getExitPoint((self.__registry.currentlyVisitedRoom, self.__registry.roomShadow.exitBy(), None, None))
         endPoint = self.__coordinateshelper.getExitPointFromPoint(self.__registry.roomShadow.pos(), self.__registry.roomShadow.entryBy())
         self.setLine(startPoint.x(), startPoint.y(), endPoint.x(), endPoint.y())
         self.update()

@@ -451,7 +451,7 @@ if __name__ == '__main__':
         mapModel.clear()
         registry.reinit()
         updateTitle()
-        createNewZone('Zone 1')
+        window.selectZone.clear()
 
     def dumpMap():
         if Serializer.mapFile is None:
@@ -466,8 +466,12 @@ if __name__ == '__main__':
         Serializer.mapFile = None
         dumpMap()
 
+    def newMap():
+        clearMap()
+        createNewZone('Zone 1')
+
     window.menuActionOpen.triggered.connect(openMap)
-    window.menuActionNew.triggered.connect(clearMap)
+    window.menuActionNew.triggered.connect(newMap)
     window.menuActionSave.triggered.connect(dumpMap)
     window.menuActionSaveAs.triggered.connect(dumpNewMap)
 
