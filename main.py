@@ -487,12 +487,16 @@ if __name__ == '__main__':
     import shortcuts
     window.buildShortcuts(shortcuts)
 
-    def createNewZone():
-        zoneName = QtGui.QInputDialog.getText(window, 'New zone', 'Name', QtGui.QLineEdit.Normal, '')
-        zoneName, ok = zoneName
+    def createNewZone(name=None):
+        if name is None:
+            zoneName = QtGui.QInputDialog.getText(window, 'New zone', 'Name', QtGui.QLineEdit.Normal, '')
+            zoneName, ok = zoneName
 
-        if not ok:
-            return
+            if not ok:
+                return
+
+        else:
+            zoneName = name
 
         zone = factory.spawnZone(zoneName)
         window.selectZone.addItem(zone.name(), str(zone.id()))
@@ -517,13 +521,14 @@ if __name__ == '__main__':
 
 
     if Serializer.mapFile is not None:
-        if openMap(Serializer.mapFile) is not False:
+        resop = openMap(Serializer.mapFile)
+        if resop is not False and resop is not None:
             createLevel = False
             if room: lookupRoom(room)
     application.processEvents()
 
     if createLevel:
-
+        zone = createNewZone('Zone 1')
         scene = factory.spawnLevel(0).getView()
         window.mapView().setScene(scene)
         navigator.enableCreation(False)

@@ -100,6 +100,9 @@ class Serializer:
         #print 'Serializing it'
         fileData = json.dumps(fileData, indent=1)
 
+        if Serializer.mapFile is None or Serializer.mapFile is '':
+            Serializer.mapFile = 'map.db'
+
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
         baseDir = baseDir+'/.tf-mapper/'
         mapFile = baseDir+Serializer.mapFile
@@ -141,7 +144,7 @@ class Serializer:
     @staticmethod
     def loadMap(window, mapView, QProgressBar, application):
 
-        if Serializer.mapFile is None:
+        if Serializer.mapFile is None or Serializer.mapFile is '':
             return
 
         import time
