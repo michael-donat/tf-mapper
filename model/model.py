@@ -41,6 +41,8 @@ class Map:
         self.__rooms={}
         self.__levels={}
         self.__links={}
+        self.__zones={}
+        self.__currentZone=None
 
     def currentZone(self):
         return self.__currentZone
@@ -344,6 +346,11 @@ class Registry:
     applyClasses=True
     def __init__(self):
         self.__rooms=[]
+
+    def reinit(self):
+        self.currentlyVisitedRoom=None
+        self.__rooms=[]
+
 
     def setCenterAt(self, Center=True):
         self.centerAt = Center

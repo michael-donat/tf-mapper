@@ -449,7 +449,9 @@ if __name__ == '__main__':
     def clearMap():
         Serializer.mapFile = None
         mapModel.clear()
+        registry.reinit()
         updateTitle()
+        createNewZone('Zone 1')
 
     def dumpMap():
         if Serializer.mapFile is None:
@@ -529,8 +531,6 @@ if __name__ == '__main__':
 
     if createLevel:
         zone = createNewZone('Zone 1')
-        scene = factory.spawnLevel(0).getView()
-        window.mapView().setScene(scene)
         navigator.enableCreation(False)
     application.processEvents()
 
