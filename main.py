@@ -61,9 +61,23 @@ if __name__ == '__main__':
     QProgressBar.setValue(20)
     application.processEvents()
     if options.noPanels: window.hidePanels()
-    import roomClasses
-    window.buildClasses(roomClasses)
+
     registry.mainWindow = window
+
+    import os
+
+    baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
+    baseDir = baseDir+'/.tf-mapper/'
+
+    sys.path.insert(0, baseDir)
+
+    import shortcuts
+    import roomClasses
+
+    window.buildShortcuts(shortcuts)
+    window.buildClasses(roomClasses)
+
+    sys.path.pop(0)
 
     #adding panel actions
     toolsPanelAction = window.uiComponentToolsPanel.toggleViewAction()
@@ -465,9 +479,6 @@ if __name__ == '__main__':
     #exitAction.setShortcut('Ctrl+Q')
     #exitAction.setStatusTip('Exit application')
     #exitAction.triggered.connect(QtGui.qApp.quit)
-
-    import shortcuts
-    window.buildShortcuts(shortcuts)
 
     def createNewZone(name=None):
         if name is None:
