@@ -171,6 +171,9 @@ if __name__ == '__main__':
         if command == 'map:undo': navigator.undoCreation()
         if command == 'map:revert': revertToLastRoom()
 
+        if command == 'map:zoom:in': zoomIn()
+        if command == 'map:zoom:out': zoomOut()
+
         match =  re.match(r'navigate:custom:(.*)', command)
         if match is not None:
             navigator.goCustom(match.group(1))
