@@ -661,14 +661,8 @@ class Navigator(QtCore.QObject):
                 """
 
     def undoCreation(self):
+
         if self._lastCreatedRoom is not None:
-            if self.__registry.currentlyVisitedRoom.getId() is self._lastCreatedRoom.getId():
-                if self.__registry.previouslyVisitedRoom is not None:
-                    roomId = self.__registry.previouslyVisitedRoom.getId()
-                    roomId = str(roomId)
-                    if roomId not in self.__map.rooms().keys(): return False
-                    room = self.__map.rooms()[roomId]
-                    self.markVisitedRoom(room)
             self._lastCreatedRoom.delete()
             self._lastCreatedRoom = None
             self._lastCreatedLink = None
