@@ -5,6 +5,8 @@ import network
 from data import Serializer
 from data import Importer
 import re
+from options import getOptions
+from callbacks import *
 
 from PyQt4 import QtCore, QtGui
 
@@ -31,53 +33,9 @@ if __name__ == '__main__':
 
     application.processEvents()
 
-    opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "panels", "no-panels", "key-up=", "key-down=", "width=", "height=", "room="])
+    options = getOptions()
 
-    spawnRemoteConnection = False
-    noServer = False
-    mapFile='map.db'
-    noPanels=False
-    width=0
-    height=0
-    room=None
-
-    keyUp = '.'
-    keyDown = '0'
-
-    settings = QtCore.QSettings('MudMapper', 'net.michaeldonat')
-
-
-    width = settings.value('width', 0).toInt()[0]
-    height = settings.value('height', 0).toInt()[0]
-    noServer = settings.value('server', False).toBool()
-    noPanels = settings.value('panels', False).toBool()
-    room = str(settings.value('room', '').toString()) if str(settings.value('room', '').toString()) is not '' else None
-    mapFile = str(settings.value('map', '').toString()) if str(settings.value('map', '').toString()) is not '' else None
-
-
-    for opt, arg in opts:
-        if opt in ("-m", "--map"):
-            mapFile=arg
-        if opt in ("-r", "--remote"):
-            spawnRemoteConnection = True
-        if opt == "--disable-connectivity":
-            noServer = True
-        if opt == "--no-panels":
-            noPanels = True
-        if opt == '--key-down':
-            keyDown = arg
-        if opt == '--key-up':
-            keyUp = arg
-        if opt == '--width':
-            width = arg
-        if opt == '--height':
-            height = arg
-        if opt == '--room':
-            room = arg
-        if opt == "--panels":
-            noPanels = False
-
-    Serializer.mapFile = mapFile
+    Serializer.mapFile = options.mapFile
 
     registry = model.Registry()
     navigator = model.Navigator()
@@ -102,15 +60,23 @@ if __name__ == '__main__':
     window = view.uiMainWindow()
     QProgressBar.setValue(20)
     application.processEvents()
-    if noPanels: window.hidePanels()
+    if options.noPanels: window.hidePanels()
     import roomClasses
     window.buildClasses(roomClasses)
     registry.mainWindow = window
 
-    if width and height: window.resize(int(width), int(height))
+    #adding panel actions
+    toolsPanelAction = window.uiComponentToolsPanel.toggleViewAction()
+    toolsPanelAction.setShortcut('CTRL+T')
+    window.menuView.addAction(toolsPanelAction)
+    propsPanelAction = window.uiComponentPropertiesPanel.toggleViewAction()
+    propsPanelAction.setShortcut('CTRL+P')
+    window.menuView.addAction(propsPanelAction)
 
-    window.compassU.setShortcut(QtGui.QApplication.translate("MainWindow", keyUp, None, QtGui.QApplication.UnicodeUTF8))
-    window.compassD.setShortcut(QtGui.QApplication.translate("MainWindow", keyDown, None, QtGui.QApplication.UnicodeUTF8))
+    if options.width and options.height: window.resize(int(options.width), int(options.height))
+
+    window.compassU.setShortcut(QtGui.QApplication.translate("MainWindow", options.keyUp, None, QtGui.QApplication.UnicodeUTF8))
+    window.compassD.setShortcut(QtGui.QApplication.translate("MainWindow", options.keyDown, None, QtGui.QApplication.UnicodeUTF8))
 
 
     roomProperties = modelui.RoomProperties(window)
@@ -177,6 +143,7 @@ if __name__ == '__main__':
     window.commandTrigger.clicked.connect(fireCommand)
     QProgressBar.setValue(80)
     application.processEvents()
+
     def dispatchServerCommand(command):
         print 'Dispatching %s' % command
         if command == 'navigate:exit:n': navigator.goNorth()
@@ -201,6 +168,9 @@ if __name__ == '__main__':
         if command == 'navigate:exit:dol': navigator.goDown()
         if command == 'revert': revertToLastRoom()
 
+        if command == 'map:undo': navigator.undoCreation()
+        if command == 'map:revert': revertToLastRoom()
+
         match =  re.match(r'navigate:custom:(.*)', command)
         if match is not None:
             navigator.goCustom(match.group(1))
@@ -212,6 +182,8 @@ if __name__ == '__main__':
         match =  re.match(r'lookup:([a-z0-9\-]*)', command)
         if match is not None:
             lookupRoom(match.group(1))
+
+
 
     def executeManualLink():
         leftRoomId = str(window.manualLinkRoomLeft.text())
@@ -318,10 +290,11 @@ if __name__ == '__main__':
     def switchColorsShowing(show):
         registry.applyColors = show
 
-    registry.blockCreation = True
+    registry.blockCreation = False
 
     def switchCreationBlock(show):
         registry.blockCreation = not show
+
 
     def renameCurrentZone():
         currentZone = mapModel.currentZone()
@@ -337,7 +310,7 @@ if __name__ == '__main__':
 
     window.menuActionShowClasses.toggled.connect(switchClassesShowing)
     window.menuActionShowColors.toggled.connect(switchColorsShowing)
-    window.actionEnableCreation.toggled.connect(switchCreationBlock)
+    #window.actionEnableCreation.toggled.connect(switchCreationBlock)
     window.actionRenameZone.triggered.connect(renameCurrentZone)
 
 
@@ -385,8 +358,8 @@ if __name__ == '__main__':
     QProgressBar.setValue(90)
     application.processEvents()
 
-    if not noServer:
-        if not spawnRemoteConnection:
+    if not options.noServer:
+        if not options.spawnRemoteConnection:
             registry.connection = broadcasterServer = network.Broadcaster(23923)
             broadcasterServer.dataReceived.connect(dispatchServerCommand)
         else:
@@ -530,7 +503,7 @@ if __name__ == '__main__':
         resop = openMap(Serializer.mapFile)
         if resop is not False and resop is not None:
             createLevel = False
-            if room: lookupRoom(room)
+            if options.room: lookupRoom(options.room)
     application.processEvents()
 
     if createLevel:

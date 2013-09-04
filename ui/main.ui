@@ -80,25 +80,23 @@
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="menuActionShowToolsPanel"/>
-    <addaction name="menuActionShowPropertiesPanel"/>
     <addaction name="menuActionKepOnTop"/>
     <addaction name="separator"/>
     <addaction name="menuActionEnableAntialiasing"/>
     <addaction name="separator"/>
     <addaction name="menuActionShowColors"/>
     <addaction name="menuActionShowClasses"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionEnableCreation"/>
     <addaction name="actionRenameZone"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuView"/>
    <addaction name="menuTools"/>
+   <addaction name="menuView"/>
   </widget>
   <widget class="QDockWidget" name="uiComponentToolsPanel">
    <property name="sizePolicy">
@@ -124,6 +122,9 @@
    </property>
    <property name="allowedAreas">
     <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Tools</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
@@ -812,6 +813,9 @@
    </property>
    <property name="allowedAreas">
     <set>Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Room Properties</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>

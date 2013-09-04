@@ -314,6 +314,8 @@ class RoomFactory:
         link.getView().redraw()
         QGraphicsScene.addItem(link.getView())
 
+        return link
+
     def spawnZone(self, name, id=None):
         id_ = uuid.uuid1() if id==None else id
         zone = Zone(name, id_)
@@ -366,6 +368,8 @@ class Registry:
 
 
 class Navigator(QtCore.QObject):
+    _lastCreatedRoom = None
+    _lastCreatedLink = None
     roomSelectedSignal=QtCore.pyqtSignal(object)
     __map=di.ComponentRequest('Map')
     __config=di.ComponentRequest('Config')
@@ -541,6 +545,9 @@ class Navigator(QtCore.QObject):
 
     def go(self, currentRoom, fromExit, toExit):
 
+        self._lastCreatedRoom = None
+        self._lastCreatedLink = None
+
         """
         To refactor this horrors
         Think about a proper navigator that can accept any object type and move it on the grid using coordinatesHelper
@@ -583,6 +590,7 @@ class Navigator(QtCore.QObject):
                     newRoom = destinationRoom.getModel()
                 else:
                     newRoom = self.__roomFactory.createAt(currentRoom.getView().pos(), otherLevel.getView())
+                    self._lastCreatedRoom = newRoom
 
                 currentRoom.addExit(fromExit)
                 newRoom.addExit(toExit)
@@ -592,7 +600,7 @@ class Navigator(QtCore.QObject):
                 #if fromExit == Direction.U: self.goLevelUp()
                 #else: self.goLevelDown()
 
-                self.__roomFactory.linkRoomsBetweenLevels(currentRoom, fromExit, newRoom, toExit)
+                self._lastCreatedLink = self.__roomFactory.linkRoomsBetweenLevels(currentRoom, fromExit, newRoom, toExit)
 
                 return
 
@@ -643,13 +651,33 @@ class Navigator(QtCore.QObject):
                     newRoom = destinationRoom.getModel()
                 else:
                     newRoom = self.__roomFactory.createInDirection(fromExit, currentRoom.getView().pos(), currentRoom.getView().scene())
+                    self._lastCreatedRoom = newRoom
                     newRoom.addExit(toExit)
                     self.markVisitedRoom(newRoom)
 
-                self.__roomFactory.linkRooms(currentRoom, fromExit, newRoom, toExit, currentRoom.getView().scene())
+                self._lastCreatedLink = link = self.__roomFactory.linkRooms(currentRoom, fromExit, newRoom, toExit, currentRoom.getView().scene())
                 """
                 @todo: Need to refactor this so navigator doesnt create set active
                 """
+
+    def undoCreation(self):
+        if self._lastCreatedRoom is not None:
+            if self.__registry.currentlyVisitedRoom.getId() is self._lastCreatedRoom.getId():
+                if self.__registry.previouslyVisitedRoom is not None:
+                    roomId = self.__registry.previouslyVisitedRoom.getId()
+                    roomId = str(roomId)
+                    if roomId not in self.__map.rooms().keys(): return False
+                    room = self.__map.rooms()[roomId]
+                    self.markVisitedRoom(room)
+            self._lastCreatedRoom.delete()
+            self._lastCreatedRoom = None
+            self._lastCreatedLink = None
+
+        if self._lastCreatedLink is not None:
+            self._lastCreatedLink.getLeft()[0].deleteLink(self._lastCreatedLink)
+            self._lastCreatedRoom = None
+            self._lastCreatedLink = None
+
 
     def mergeRooms(self, existingRoom, overlappingRoom):
         print 'running room merge for'
