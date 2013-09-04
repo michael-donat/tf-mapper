@@ -81,8 +81,9 @@ class uiMainWindow(window, base):
     def keyPressEvent(self, QKeyEvent):
 
         if QKeyEvent.key() in [QtCore.Qt.Key_Insert, QtCore.Qt.Key_Equal, QtCore.Qt.Key_Slash]:
-            self.__registry.roomShadow.stopProcess()
-            self.walkerModeSelector.setCurrentIndex(int(not self.walkerModeSelector.currentIndex()))
+            if self.uiComponentToolsPanel.isVisible():
+                self.__registry.roomShadow.stopProcess()
+                self.walkerModeSelector.setCurrentIndex(int(not self.walkerModeSelector.currentIndex()))
 
         if QKeyEvent.key() == QtCore.Qt.Key_Asterisk:
             self.__registry.roomShadow.stopProcess()
