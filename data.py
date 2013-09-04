@@ -162,13 +162,16 @@ class Serializer:
         if Serializer.mapFile[0] == '/' or (sys.platform == 'win32' and (Serializer.mapFile[1:3] == ':/' or Serializer.mapFile[1:3] == ':\\')):
             mapFile = Serializer.mapFile
 
+
         try:
             f = open(mapFile+'.txt', 'rb')
             decodeFile=False
         except IOError as e:
-            f = open(mapFile, 'rb')
-            decodeFile=True
-        except: return False
+            try:
+                f = open(mapFile, 'rb')
+                decodeFile=True
+            except: return False
+
 
         overall = (millis() - base)
         print 'File opened %s (%s) - %s' % (overall, millis() - base, mapFile)
