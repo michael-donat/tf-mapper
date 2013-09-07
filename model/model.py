@@ -65,6 +65,10 @@ class Map:
     def getZoneById(self, zoneId):
         return self.__zones[zoneId]
 
+    def getRoomById(self, id):
+        if id in self.__rooms:
+            return self.__rooms[id]
+
     def rooms(self):
         return self.__rooms
 
@@ -378,6 +382,7 @@ class Navigator(QtCore.QObject):
     __coordinatesHelper=di.ComponentRequest('CoordinatesHelper')
     __enableCreation=False
     __enableAutoPlacement=True
+    __enableSameUpDown=True
     __properties=di.ComponentRequest('Properties')
     def __init__(self):
         super(Navigator, self).__init__()
@@ -423,6 +428,9 @@ class Navigator(QtCore.QObject):
                 self.__registry.connection.send('map:mode:create\n')
             else:
                 self.__registry.connection.send('map:mode:walk\n')
+
+    def enableSameUpDown(self, enable):
+        self.__enableSameUpDown = bool(enable)
 
     def enableAutoPlacement(self, enable):
         self.__enableAutoPlacement = bool(enable)
@@ -577,7 +585,7 @@ class Navigator(QtCore.QObject):
 
         elif (self.__enableCreation and not self.__registry.blockCreation):
 
-            if fromExit in [Direction.U, Direction.D] or toExit in [Direction.D, Direction.U]:
+            if not self.__enableSameUpDown and (fromExit in [Direction.U, Direction.D] or toExit in [Direction.D, Direction.U]):
                 #print 'creating multilevel room'
                 #what happens when changing level?
                 #if create mode check for collision and if no create ate the same coordinates but on different scene
@@ -616,11 +624,12 @@ class Navigator(QtCore.QObject):
             """
 
             destinationRoom=None
-            destinationPoint = self.__coordinatesHelper.movePointInDirection(currentRoom.getView().pos(), fromExit)
-            for item in currentRoom.getView().scene().items(self.__coordinatesHelper.getSelectionAreaFromPoint(destinationPoint)):
-                if isinstance(item, view.Room):
-                    destinationRoom = item
-                    break
+            if not (fromExit in [Direction.U, Direction.D] or toExit in [Direction.D, Direction.U]):
+                destinationPoint = self.__coordinatesHelper.movePointInDirection(currentRoom.getView().pos(), fromExit)
+                for item in currentRoom.getView().scene().items(self.__coordinatesHelper.getSelectionAreaFromPoint(destinationPoint)):
+                    if isinstance(item, view.Room):
+                        destinationRoom = item
+                        break
 
             if not self.__enableAutoPlacement:
                 roomShadow = self.__registry.roomShadow
@@ -650,15 +659,34 @@ class Navigator(QtCore.QObject):
 
                 currentRoom.addExit(fromExit)
 
+                fromExitDirection = fromExit
+
+                if self.__enableSameUpDown and (fromExit in [Direction.U, Direction.D] or toExit in [Direction.D, Direction.U]):
+                    newRoomDirectionUD = None
+                    for tryPlacement in [Direction.N, Direction.NE, Direction.E, Direction.SE, Direction.S, Direction.SW, Direction.W, Direction.NW]:
+                        destinationPoint = self.__coordinatesHelper.movePointInDirection(currentRoom.getView().pos(), tryPlacement)
+                        newRoomDirectionUD = tryPlacement
+                        for item in currentRoom.getView().scene().items(self.__coordinatesHelper.getSelectionAreaFromPoint(destinationPoint)):
+                            if isinstance(item, view.Room):
+                                newRoomDirectionUD = None
+                                break
+                        if newRoomDirectionUD is not None:
+                            break
+                    if newRoomDirectionUD is None:
+                        return
+
+                    fromExitDirection = newRoomDirectionUD
+
                 if destinationRoom is not None:
                     destinationRoom.getModel().addExit(toExit)
                     self.markVisitedRoom(destinationRoom.getModel())
                     newRoom = destinationRoom.getModel()
                 else:
-                    newRoom = self.__roomFactory.createInDirection(fromExit, currentRoom.getView().pos(), currentRoom.getView().scene())
+                    newRoom = self.__roomFactory.createInDirection(fromExitDirection, currentRoom.getView().pos(), currentRoom.getView().scene())
                     self._lastCreatedRoom = newRoom
                     newRoom.addExit(toExit)
                     self.markVisitedRoom(newRoom)
+
 
                 self._lastCreatedLink = link = self.__roomFactory.linkRooms(currentRoom, fromExit, newRoom, toExit, currentRoom.getView().scene())
                 """

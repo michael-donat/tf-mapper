@@ -136,6 +136,7 @@ if __name__ == '__main__':
     window.goLevelDown.clicked.connect(navigator.goLevelDown)
     window.walkerModeSelector.currentIndexChanged.connect(navigator.enableCreation)
     window.autoPlacement.toggled.connect(navigator.enableAutoPlacement)
+    window.sameUpDown.toggled.connect(navigator.enableSameUpDown)
 
     def reportSceneRect():
         print window.mapView().sceneRect()
@@ -157,6 +158,15 @@ if __name__ == '__main__':
     window.commandTrigger.clicked.connect(fireCommand)
     QProgressBar.setValue(80)
     application.processEvents()
+
+    def commandDeleteActiveRoom():
+        if registry.currentlyVisitedRoom is not None:
+            commandDeleteRoomById(registry.currentlyVisitedRoom.getId())
+
+    def commandDeleteRoomById(roomId):
+        roomToDelete = mapModel.getRoomById(roomId)
+        if roomToDelete is not None:
+            roomToDelete.delete()
 
     def dispatchServerCommand(command):
         print 'Dispatching %s' % command
@@ -191,6 +201,12 @@ if __name__ == '__main__':
 
         if command == 'map:zoom:in': zoomIn()
         if command == 'map:zoom:out': zoomOut()
+
+        if command == 'map:room:delete': commandDeleteActiveRoom()
+
+        match =  re.match(r'map:room:delete:(.*)', command)
+        if match is not None:
+            commandDeleteRoomById(match.group(1))
 
         match =  re.match(r'navigate:custom:(.*)', command)
         if match is not None:
