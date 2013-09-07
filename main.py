@@ -185,6 +185,10 @@ if __name__ == '__main__':
         if command == 'map:undo': navigator.undoCreation()
         if command == 'map:revert': revertToLastRoom()
 
+        if command == 'map:mode:walk': window.walkerModeSelector.setCurrentIndex(int(0))
+        if command == 'map:mode:create': window.walkerModeSelector.setCurrentIndex(int(1))
+        if command == 'map:mode:toggle': window.walkerModeSelector.setCurrentIndex(int(not window.walkerModeSelector.currentIndex()))
+
         if command == 'map:zoom:in': zoomIn()
         if command == 'map:zoom:out': zoomOut()
 

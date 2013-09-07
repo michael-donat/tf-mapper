@@ -418,6 +418,11 @@ class Navigator(QtCore.QObject):
 
     def enableCreation(self, enable):
         self.__enableCreation = bool(enable)
+        if  hasattr(self.__registry, 'connection'):
+            if enable:
+                self.__registry.connection.send('map:mode:create\n')
+            else:
+                self.__registry.connection.send('map:mode:walk\n')
 
     def enableAutoPlacement(self, enable):
         self.__enableAutoPlacement = bool(enable)
