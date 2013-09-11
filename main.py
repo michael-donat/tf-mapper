@@ -202,8 +202,9 @@ if __name__ == '__main__':
         if command == 'map:zoom:in': zoomIn()
         if command == 'map:zoom:out': zoomOut()
 
-
         if command == 'map:room:delete': commandDeleteActiveRoom()
+
+        if command == 'path:clear': highlightPath(mapModel, registry.currentlyVisitedRoom, None)
 
         match =  re.match(r'map:room:delete:(.*)', command)
         if match is not None:
@@ -211,7 +212,7 @@ if __name__ == '__main__':
 
         match =  re.match(r'path:highlight:(.*)', command)
         if match is not None:
-            highlightPath(mapModel, registry.currentlyVisitedRoom, match.group(1))
+            highlightPath(mapModel, registry.currentlyVisitedRoom, str(match.group(1)))
 
 
         match =  re.match(r'navigate:custom:(.*)', command)

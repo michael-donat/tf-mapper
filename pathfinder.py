@@ -4,9 +4,7 @@ __author__ = 'donatm'
 
 def highlightPath(mapModel, fromRoom, toRoom):
 
-    if fromRoom is None: return
-
-    if toRoom not in mapModel.rooms(): return
+    print toRoom
 
     oldPath = mapModel.getPath()
 
@@ -15,12 +13,20 @@ def highlightPath(mapModel, fromRoom, toRoom):
         room.setHighlight(False)
         room.getView().update()
 
+    if fromRoom is None:
+        return
+
+    if toRoom not in mapModel.rooms():
+        return
+
     path = findPath(mapModel, fromRoom, mapModel.rooms()[toRoom])
     mapModel.setPath(path)
     for roomId in path:
         room = mapModel.rooms()[roomId]
         room.setHighlight(True)
         room.getView().update()
+
+    print path
 
 
 def findPath(mapModel, fromRoom, toRoom):
