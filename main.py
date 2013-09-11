@@ -7,6 +7,7 @@ from data import Importer
 import re
 from options import getOptions
 from callbacks import *
+from pathfinder import highlightPath
 
 from PyQt4 import QtCore, QtGui
 
@@ -191,6 +192,11 @@ if __name__ == '__main__':
 
         if command == 'map:zoom:in': zoomIn()
         if command == 'map:zoom:out': zoomOut()
+
+        match =  re.match(r'find:(.*)', command)
+        if match is not None:
+            print highlightPath(mapModel, registry.currentlyVisitedRoom, mapModel.rooms()[match.group(1)])
+            #find:1b9ac5b3-1aee-11e3-a383-a820664fd60d
 
         match =  re.match(r'navigate:custom:(.*)', command)
         if match is not None:
