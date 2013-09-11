@@ -7,6 +7,7 @@ from data import Importer
 import re
 from options import getOptions
 from callbacks import *
+from pathfinder import highlightPath
 
 from PyQt4 import QtCore, QtGui
 
@@ -169,7 +170,6 @@ if __name__ == '__main__':
             roomToDelete.delete()
 
     def dispatchServerCommand(command):
-        print 'Dispatching %s' % command
         if command == 'navigate:exit:n': navigator.goNorth()
         if command == 'navigate:exit:polnoc': navigator.goNorth()
         if command == 'navigate:exit:ne': navigator.goNorthEast()
@@ -202,11 +202,17 @@ if __name__ == '__main__':
         if command == 'map:zoom:in': zoomIn()
         if command == 'map:zoom:out': zoomOut()
 
+
         if command == 'map:room:delete': commandDeleteActiveRoom()
 
         match =  re.match(r'map:room:delete:(.*)', command)
         if match is not None:
             commandDeleteRoomById(match.group(1))
+
+        match =  re.match(r'path:highlight:(.*)', command)
+        if match is not None:
+            highlightPath(mapModel, registry.currentlyVisitedRoom, match.group(1))
+
 
         match =  re.match(r'navigate:custom:(.*)', command)
         if match is not None:

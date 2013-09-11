@@ -406,11 +406,16 @@ class Room(QtGui.QGraphicsItem):
         exitSize = self.__config.getExitLength()
         midPoint = self.__config.getMidPoint()
 
+        if self.getModel().isHighlighted():
+            painter.setBrush(QtCore.Qt.yellow)
+            painter.drawEllipse(0,0,objectSize,objectSize)
+
         if self.isSelected():
             painter.setPen(QtCore.Qt.DashLine)
             painter.drawRect(0,0,objectSize,objectSize)
         else:
             painter.setPen(QtCore.Qt.SolidLine)
+
 
         if self.__model.isCurrentlyVisited():
             currentColor = QtGui.QColor(255,255,255)
@@ -428,6 +433,7 @@ class Room(QtGui.QGraphicsItem):
             painter.setBrush(currentColor)
         else:
             painter.setPen(QtCore.Qt.SolidLine)
+
         painter.drawRect(exitSize, exitSize, edgeSize, edgeSize)
 
         if self.__model.hasExit(model.Direction.N):

@@ -32,8 +32,14 @@ class Map:
     __levels={}
     __links={}
     __zones={}
-
+    __path=[]
     __currentZone=None
+
+    def getPath(self):
+        return self.__path
+
+    def setPath(self, path):
+        self.__path = path
 
     def clear(self):
         for evel in self.__levels:

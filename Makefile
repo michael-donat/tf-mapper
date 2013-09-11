@@ -17,6 +17,7 @@ package-osx:
 	'cp' -rf dist/osx/MudMapper.app dist/osx/dmg/
 	ln -s /Applications dist/osx/dmg/Applications
 	hdiutil create dist/osx/MudMapper.dmg -srcfolder dist/osx/dmg/ -ov
+	rm -f dist/osx/dmg/Applications
 	mv dist/osx/MudMapper.dmg dist/
 
 package-win:

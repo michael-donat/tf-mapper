@@ -107,6 +107,7 @@ class CustomLink(Link):
     def isCustom(self): return True
 
 class Room:
+    __isHighlighted=False
     __exits=0
     __currentlyVisited=False
     __view=None
@@ -133,6 +134,12 @@ class Room:
         if self.PROP_LABEL not in properties: properties[ self.PROP_LABEL]=''
         if self.PROP_DISABLED not in properties: properties[ self.PROP_DISABLED]=False
         self.__properties=properties
+
+    def setHighlight(self, highlight):
+        self.__isHighlighted = highlight
+
+    def isHighlighted(self):
+        return self.__isHighlighted
 
     def hasMaskedExits(self):
         for index, link in self.__links.items():
