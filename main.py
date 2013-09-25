@@ -508,7 +508,7 @@ if __name__ == '__main__':
     #exitAction.triggered.connect(QtGui.qApp.quit)
 
     def createNewZone(name=None):
-        if name is None:
+        if name is None or name is False:
             zoneName = QtGui.QInputDialog.getText(window, 'New zone', 'Name', QtGui.QLineEdit.Normal, '')
             zoneName, ok = zoneName
 

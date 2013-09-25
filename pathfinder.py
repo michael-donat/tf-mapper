@@ -53,3 +53,6 @@ def findPath(mapModel, fromRoom, toRoom):
             log.append(destination.getId())
 
     return []
+
+def d_highlightPath():
+    pass
