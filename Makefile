@@ -2,6 +2,8 @@ all: osx package upload
 
 osx: build-osx package-osx upload-osx
 
+win: win-post package-win upload-win
+
 build-osx:
 	python2.7 make/osx-setup.py py2app  --dist-dir=dist/osx -bbuild/osx
 
