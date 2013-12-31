@@ -169,7 +169,23 @@ if __name__ == '__main__':
         if roomToDelete is not None:
             roomToDelete.delete()
 
+    def dumpImage():
+
+        scene = window.mapView().scene()
+        scene.clearSelection()
+        scene.setSceneRect(scene.itemsBoundingRect())
+
+        img = QtGui.QImage(scene.sceneRect().size().toSize(), QtGui.QImage.Format_ARGB32)
+        img.fill(QtCore.Qt.transparent)
+
+        painter = QtGui.QPainter(img)
+        scene.render(painter)
+        painter.end()
+
+        print img.save("/tmp/mapDump.png")
+
     def dispatchServerCommand(command):
+        if command == 'dumpImage': dumpImage()
         if command == 'navigate:exit:n': navigator.goNorth()
         if command == 'navigate:exit:polnoc': navigator.goNorth()
         if command == 'navigate:exit:ne': navigator.goNorthEast()
