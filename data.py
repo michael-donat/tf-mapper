@@ -316,7 +316,7 @@ class Serializer:
                 if leftRoom.getLevel().getId() == rightRoom.getLevel().getId():
                     factory.linkRooms(leftRoom, leftExit, rightRoom, rightExit, levelsById[rightRoom.getLevel().getId()].getView(), leftExitLabel, rightExitLabel, leftExitRebind, rightExitRebind)
                 else:
-                    factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit, leftExitRebind, rightExitRebind)
+                    factory.linkRoomsBetweenLevels(leftRoom, leftExit, rightRoom, rightExit, leftExitLabel, rightExitLabel, leftExitRebind, rightExitRebind)
             except: pass
 
         overall = (millis() - base)
