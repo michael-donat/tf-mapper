@@ -5,7 +5,7 @@ osx: build-osx package-osx upload-osx
 win: win-post package-win upload-win
 
 build-osx:
-	python2.7 make/osx-setup.py py2app  --dist-dir=dist/osx -bbuild/osx
+	python2.7 make/osx-setup.py py2app  --excludes="PyQt4.uic.port_v3" --dist-dir=dist/osx -bbuild/osx 
 
 win-pre:
 	cp -r ./* /Volumes/C/tf-mapper-build/
