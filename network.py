@@ -1,6 +1,6 @@
 __author__ = 'thornag'
 
-from PyQt4 import QtNetwork, QtCore
+from PyQt5 import QtNetwork, QtCore
 
 class Broadcaster(QtCore.QObject):
     __tcpServer=None
@@ -16,11 +16,11 @@ class Broadcaster(QtCore.QObject):
             raise Exception('Could not initialize socket server.')
         else:
             pass
-            #print 'Server listening on %s' % port
+            #print('Server listening on %s' % port)
 
         self.__tcpServer.newConnection.connect(self.registerClient)
 
-        #print self.__tcpServer
+        #print(self.__tcpServer)
 
     def tcpServer(self):
         return self.__tcpServer
@@ -33,26 +33,26 @@ class Broadcaster(QtCore.QObject):
 
     def killOldConnection(self):
         if not self.__clientSocket: return
-        self.__clientSocket.write('New connection received. Closing link...\n')
+        self.__clientSocket.write('New connection received. Closing link...\n'.encode())
         self.__clientSocket.close()
 
     def readClient(self, clientSocket):
 
         while clientSocket.canReadLine():
             data = clientSocket.readLine()
-            self.dataReceived.emit(data.trimmed().data())
-            print 'RECEIVED: %s' % data
+            self.dataReceived.emit(data.trimmed().data().decode("utf-8"))
+            print('RECEIVED: %s' % data.trimmed().data().decode("utf-8"))
 
         return
 
         data = clientSocket.readAll()
-        self.dataReceived.emit(data.trimmed().data())
-        print 'RECEIVED: %s' % data
+        self.dataReceived.emit(data.trimmed().data().decode("utf-8"))
+        print('RECEIVED: %s' % data.trimmed().data().decode("utf-8"))
 
     def send(self, data):
-        print 'SENDING: %s' % data
+        print('SENDING: %s' % data)
         if self.__clientSocket is not None:
-            self.__clientSocket.write(data)
+            self.__clientSocket.write(data.encode())
 
 class Listener(QtCore.QObject):
     __tcpSocket=None
@@ -66,18 +66,18 @@ class Listener(QtCore.QObject):
         self.__tcpSocket.connected.connect(self.startListening)
         self.__tcpSocket.error.connect(self.notifyError)
 
-        #print self.__tcpServer
+        #print(self.__tcpServer)
 
     def startListening(self):
         self.__tcpSocket.readyRead.connect(self.read)
 
     def notifyError(self):
-        print 'could not connect socket'
+        print('could not connect socket')
 
     def read(self):
         data = self.__tcpSocket.readAll()
-        self.dataReceived.emit(data.trimmed().data())
+        self.dataReceived.emit(data.trimmed().data().decode("utf-8"))
 
     def send(self, data):
-        self.__tcpSocket.write(data)
+        self.__tcpSocket.write(data.encode())
 

@@ -1,5 +1,5 @@
 import sys
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
 
 class Example(QtGui.QWidget):
@@ -49,7 +49,7 @@ class Example(QtGui.QWidget):
         
 def main():
     
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     ex = Example()
     ex.show()
     ex.raise_()

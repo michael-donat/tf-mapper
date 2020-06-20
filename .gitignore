@@ -43,3 +43,6 @@ version4/logdict2.7.3.final.0-1.log
 
 build
 .DS_Store
+
+run.sh
+.vscode

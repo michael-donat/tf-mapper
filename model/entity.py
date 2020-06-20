@@ -1,7 +1,7 @@
 __author__ = 'thornag'
 
-from PyQt4 import QtCore, QtGui
-import model
+from PyQt5 import QtCore
+from . import model
 
 import di
 
