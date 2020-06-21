@@ -179,13 +179,12 @@ class CoordinatesHelper:
 
 
     def snapToGrid(self, QPoint):
-        x = (QPoint.x() / self.__config.getSize()) * self.__config.getSize()
-        y = QPoint.y() / self.__config.getSize() * self.__config.getSize()
+        x = (QPoint.x() // self.__config.getSize()) * self.__config.getSize()
+        y = QPoint.y() // self.__config.getSize() * self.__config.getSize()
         if QPoint.x() % self.__config.getSize() > self.__config.getMidPoint():
             x += self.__config.getSize()
         if QPoint.y() % self.__config.getSize() > self.__config.getMidPoint():
             y += self.__config.getSize()
-
         return QtCore.QPoint(x, y)
 
     def centerFrom(self, QPoint):
