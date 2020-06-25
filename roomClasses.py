@@ -1,6 +1,6 @@
 __author__ = 'thornag'
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 
 def forest(roomView):
     color = QtGui.QColor()

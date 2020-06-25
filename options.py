@@ -1,5 +1,5 @@
 import sys, getopt
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore
 
 def getOptions():
     opts, args = getopt.getopt(sys.argv[1:], "rm:", ["map=", "remote", "disable-connectivity", "panels", "no-panels", "key-up=", "key-down=", "width=", "height=", "room="])
@@ -17,13 +17,12 @@ def getOptions():
 
     settings = QtCore.QSettings('MudMapper', 'net.michaeldonat')
 
-
-    width = settings.value('width', 0).toInt()[0]
-    height = settings.value('height', 0).toInt()[0]
-    noServer = settings.value('server', False).toBool()
-    noPanels = settings.value('panels', False).toBool()
-    room = str(settings.value('room', '').toString()) if str(settings.value('room', '').toString()) is not '' else None
-    mapFile = str(settings.value('map', '').toString()) if str(settings.value('map', '').toString()) is not '' else None
+    width = int(settings.value('width', 0))
+    height = int(settings.value('height', 0))
+    noServer = True if settings.value('server') == "true" else False
+    noPanels = True if settings.value('panels') == "true" else False
+    room = settings.value('room', None)
+    mapFile = settings.value('map', None)
 
 
     for opt, arg in opts:

@@ -7,7 +7,7 @@ class ComponentContainer:
         try:
             componentClass = self.components[component]
         except KeyError:
-            raise KeyError, "Unknown component named %r" % component
+            raise KeyError("Unknown component named %r" % component)
         return componentClass()
     def register(self, component, componentClass, *args, **kwargs):
         if callable(componentClass):

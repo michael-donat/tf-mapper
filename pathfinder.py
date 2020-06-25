@@ -4,7 +4,7 @@ __author__ = 'donatm'
 
 def highlightPath(mapModel, fromRoom, toRoom):
 
-    print toRoom
+    print(toRoom)
 
     oldPath = mapModel.getPath()
 
@@ -26,7 +26,7 @@ def highlightPath(mapModel, fromRoom, toRoom):
         room.setHighlight(True)
         room.getView().update()
 
-    print path
+    print(path)
 
 
 def findPath(mapModel, fromRoom, toRoom):
@@ -43,7 +43,7 @@ def findPath(mapModel, fromRoom, toRoom):
         if node == toRoom.getId():
             return path
         # enumerate all adjacent nodes, construct a new path and push it into the queue
-        for adjacent in mapModel.rooms()[node].getLinks().itervalues():
+        for adjacent in mapModel.rooms()[node].getLinks().values():
             destination = adjacent.getDestinationFor(mapModel.rooms()[node])
             if destination.getId() in log:
                 continue

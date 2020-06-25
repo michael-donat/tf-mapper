@@ -9,18 +9,17 @@ from options import getOptions
 from callbacks import *
 from pathfinder import highlightPath
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 if __name__ == '__main__':
-
-    application = QtGui.QApplication(sys.argv)
+    application = QtWidgets.QApplication(sys.argv)
     application.setStyle('plastique')
 
     QPixmap = QtGui.QPixmap("ui/icons/hychsohn_256x256x32_transparent.png")
-    QSplashScreen = QtGui.QSplashScreen(QPixmap)
+    QSplashScreen = QtWidgets.QSplashScreen(QPixmap)
     QSplashScreen.show()
 
-    QProgressBar = QtGui.QProgressBar(QSplashScreen)
+    QProgressBar = QtWidgets.QProgressBar(QSplashScreen)
     QProgressBar.setMinimum(0)
     QProgressBar.setMaximum(100)
     QProgressBar.setTextVisible(False)
@@ -90,8 +89,8 @@ if __name__ == '__main__':
 
     if options.width and options.height: window.resize(int(options.width), int(options.height))
 
-    window.compassU.setShortcut(QtGui.QApplication.translate("MainWindow", options.keyUp, None, QtGui.QApplication.UnicodeUTF8))
-    window.compassD.setShortcut(QtGui.QApplication.translate("MainWindow", options.keyDown, None, QtGui.QApplication.UnicodeUTF8))
+    window.compassU.setShortcut(QtWidgets.QApplication.translate("MainWindow", options.keyUp, None))
+    window.compassD.setShortcut(QtWidgets.QApplication.translate("MainWindow", options.keyDown, None))
 
 
     roomProperties = modelui.RoomProperties(window)
@@ -112,13 +111,13 @@ if __name__ == '__main__':
 
     def zoomOut():
         window.mapView().scale(0.8, 0.8)
-        #print window.mapView().transform()
+        #print(window.mapView().transform())
 
     registry.zoonInFunction = zoomIn
     registry.zoonOutFunction = zoomOut
 
     def deb(str):
-        print str
+        print(str)
 
     window.compassN.clicked.connect(navigator.goNorth)
     window.compassNE.clicked.connect(navigator.goNorthEast)
@@ -140,17 +139,17 @@ if __name__ == '__main__':
     window.sameUpDown.toggled.connect(navigator.enableSameUpDown)
 
     def reportSceneRect():
-        print window.mapView().sceneRect()
+        print(window.mapView().sceneRect())
 
     def reportActiveRoom():
-        print registry.currentlyVisitedRoom.getId()
+        print(registry.currentlyVisitedRoom.getId())
 
     def reportServerStatus():
-        print registry.broadcasterServer.tcpServer().isListening()
+        print(registry.broadcasterServer.tcpServer().isListening())
 
     def dumpRoom():
         room = registry.currentlyVisitedRoom
-        print registry.currentlyVisitedRoom
+        print(registry.currentlyVisitedRoom)
 
 
     def fireCommand():
@@ -182,7 +181,7 @@ if __name__ == '__main__':
         scene.render(painter)
         painter.end()
 
-        print img.save("/tmp/mapDump.png")
+        print(img.save("/tmp/mapDump.png"))
 
     def dispatchServerCommand(command):
         if command == 'dumpImage': dumpImage()
@@ -358,7 +357,7 @@ if __name__ == '__main__':
 
     def renameCurrentZone():
         currentZone = mapModel.currentZone()
-        zoneName = QtGui.QInputDialog.getText(window, 'Rename zone', 'Name', QtGui.QLineEdit.Normal, currentZone.name())
+        zoneName = QtWidgets.QInputDialog.getText(window, 'Rename zone', 'Name', QtWidgets.QLineEdit.Normal, currentZone.name())
         zoneName, ok = zoneName
 
         if not ok:
@@ -376,8 +375,8 @@ if __name__ == '__main__':
 
     def showCreationColorPicker():
         if registry.defColor:
-            color = QtGui.QColorDialog.getColor(QtGui.QColor(registry.defColor))
-        else: color = QtGui.QColorDialog.getColor()
+            color = QtWidgets.QColorDialog.getColor(QtGui.QColor(registry.defColor))
+        else: color = QtWidgets.QColorDialog.getColor()
 
         if not color.isValid(): return
         registry.setDefaultColor(color)
@@ -405,7 +404,7 @@ if __name__ == '__main__':
 
     def processZoneSelect(zoneindex):
         if zoneindex == -1: return
-        zoneId = window.selectZone.itemData(zoneindex).toString()
+        zoneId = window.selectZone.itemData(zoneindex)
         navigator.changeZone(zoneId)
         navigator.switchLevel(0)
 
@@ -432,12 +431,12 @@ if __name__ == '__main__':
     settings = QtCore.QSettings('MudMapper', 'net.michaeldonat')
 
     def showPreferences():
-        width = settings.value('width', 400).toInt()[0]
-        height = settings.value('height', 200).toInt()[0]
-        server = settings.value('server', False).toBool()
-        panels = settings.value('panels', False).toBool()
-        room = str(settings.value('room', '').toString())
-        map = str(settings.value('map', '').toString())
+        width = int(settings.value('width', 400))
+        height = int(settings.value('height', 200))
+        server = settings.value('server', False) == True
+        panels = settings.value('panels', False) == True
+        room = str(settings.value('room', ''))
+        map = str(settings.value('map', ''))
 
         datalist = [('Width', width), ('Height', height), ('Disable socket server', server),('Show panels', panels),('Start room', room), ('Map file', map)]
 
@@ -457,14 +456,14 @@ if __name__ == '__main__':
     def openMap(fileName=None):
 
         if not fileName or fileName is None:
-            fileName = QtGui.QFileDialog.getOpenFileName(None, 'Open map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
-            if not fileName or fileName is None or str(fileName[0]) is "":
+            fileName = QtWidgets.QFileDialog.getOpenFileName(None, 'Open map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
+            if not fileName or fileName is None or str(fileName[0]) == "":
                     return
 
-        QProgressBar = QtGui.QProgressDialog(window)
+        QProgressBar = QtWidgets.QProgressDialog(window)
         QProgressBar.setMinimum(0)
         QProgressBar.setMaximum(100)
-        QProgressBar.setLabelText('Loading %s' % fileName)
+        QProgressBar.setLabelText(f'Loading {fileName}')
         QProgressBar.setFixedWidth(250)
 
         QProgressBar.show()
@@ -488,9 +487,9 @@ if __name__ == '__main__':
 
     def dumpMap():
         if Serializer.mapFile is None:
-            fileName = QtGui.QFileDialog.getSaveFileNameAndFilter(None, 'Save map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
+            fileName = QtWidgets.QFileDialog.getSaveFileName(None, 'Save map...', Serializer.getHomeDir(), 'Map (*.map *.db)')
 
-            if str(fileName[0]) is "":
+            if str(fileName[0]) == "":
                 return
             Serializer.mapFile = str(fileName[0])
         Serializer.saveMap('123', mapModel)
@@ -525,7 +524,7 @@ if __name__ == '__main__':
 
     def createNewZone(name=None):
         if name is None or name is False:
-            zoneName = QtGui.QInputDialog.getText(window, 'New zone', 'Name', QtGui.QLineEdit.Normal, '')
+            zoneName = QtWidgets.QInputDialog.getText(window, 'New zone', 'Name', QtWidgets.QLineEdit.Normal, '')
             zoneName, ok = zoneName
 
             if not ok:

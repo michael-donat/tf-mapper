@@ -1,6 +1,6 @@
 __author__ = 'thornag'
 
-from PyQt4 import QtNetwork, QtCore
+from PyQt5 import QtNetwork, QtCore
 
 class Listener(QtCore.QObject):
     __tcpSocket=None
@@ -13,7 +13,7 @@ class Listener(QtCore.QObject):
 
         self.__tcpSocket.newConnection.connected(self.startListening)
 
-        #print self.__tcpServer
+        #print(self.__tcpServer)
 
     def startListening(self):
         self.__tcpSocket.readyRead.connect(self.read)

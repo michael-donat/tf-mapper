@@ -1,7 +1,7 @@
 import di, view
 import math, uuid
-from entity import *
-from PyQt4 import QtCore, QtGui
+from .entity import *
+from PyQt5 import QtCore, QtGui, QtWidgets
 import json, base64
 
 __author__ = 'thornag'
@@ -19,7 +19,7 @@ class Zone:
     def getLevelByIndex(self, levelIndex):
         return self.__levels[levelIndex]
     def levelByIndexExists(self, levelIndex):
-        return levelIndex in self.__levels.iterkeys()
+        return levelIndex in self.__levels.keys()
     def id(self):
         return self.__id
     def name(self):
@@ -179,13 +179,12 @@ class CoordinatesHelper:
 
 
     def snapToGrid(self, QPoint):
-        x = (QPoint.x() / self.__config.getSize()) * self.__config.getSize()
-        y = QPoint.y() / self.__config.getSize() * self.__config.getSize()
+        x = (QPoint.x() // self.__config.getSize()) * self.__config.getSize()
+        y = QPoint.y() // self.__config.getSize() * self.__config.getSize()
         if QPoint.x() % self.__config.getSize() > self.__config.getMidPoint():
             x += self.__config.getSize()
         if QPoint.y() % self.__config.getSize() > self.__config.getMidPoint():
             y += self.__config.getSize()
-
         return QtCore.QPoint(x, y)
 
     def centerFrom(self, QPoint):
@@ -261,7 +260,7 @@ class RoomFactory:
     def createLabelAt(self, QPoint, QGraphicsScene, labeltext='LABEL'):
         text = view.Label(labeltext)
         QGraphicsScene.addItem(text)
-        text.setFlags(QtGui.QGraphicsItem.ItemIsSelectable | QtGui.QGraphicsItem.ItemIsFocusable | QtGui.QGraphicsItem.ItemIsMovable);
+        text.setFlags(QtWidgets.QGraphicsItem.ItemIsSelectable | QtWidgets.QGraphicsItem.ItemIsFocusable | QtWidgets.QGraphicsItem.ItemIsMovable);
         text.setPos(QtCore.QPointF(QPoint))
 
     def createAt(self, QPoint, QGraphicsScene, Id=None, properties=None):
@@ -290,7 +289,7 @@ class RoomFactory:
         return room
 
     def spawnLink(self, linkLess=False, id=None, isCustomLink=False):
-        #print isCustomLink
+        #print(isCustomLink)
         link = Link() if not isCustomLink else CustomLink()
         id_ = uuid.uuid1() if id==None else id
         link.setId(id_)
@@ -409,7 +408,7 @@ class Navigator(QtCore.QObject):
             self.__registry.mainWindow.mapView().setScene(self.__map.getLevelByIndex(newLevel).getView())
             scene = self.__registry.mainWindow.mapView().scene().getModel()
             view.centerOn(center)
-            #print scene
+            #print(scene)
 
     def goLevelDown(self):
         return self.switchLevel(self.__registry.currentLevel.getMapIndex() - 1)
@@ -442,11 +441,11 @@ class Navigator(QtCore.QObject):
         self.__enableAutoPlacement = bool(enable)
 
     def goUp(self):
-        #print 'goUp'
+        #print('goUp')
         return self.goFromActive(Direction.U, Direction.D)
 
     def goDown(self):
-        #print 'goDown'
+        #print('goDown')
         return self.goFromActive(Direction.D, Direction.U)
 
     def goNorth(self):
@@ -475,7 +474,7 @@ class Navigator(QtCore.QObject):
 
     def goFromActive(self, fromExit, toExit):
         if self.__registry.currentlyVisitedRoom is None:
-            return QtGui.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtGui.QMessageBox.Ok)
+            return QtWidgets.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtWidgets.QMessageBox.Ok)
 
         currentRoom = self.__registry.currentlyVisitedRoom
 
@@ -484,7 +483,7 @@ class Navigator(QtCore.QObject):
     def dropRoomFromShadow(self):
         if self.__registry.currentlyVisitedRoom is None:
             self.__registry.roomShadow.stopProcess()
-            return QtGui.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtGui.QMessageBox.Ok)
+            return QtWidgets.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtWidgets.QMessageBox.Ok)
 
         currentRoom = self.__registry.currentlyVisitedRoom
         fromExit = self.__registry.roomShadow.exitBy()
@@ -506,7 +505,7 @@ class Navigator(QtCore.QObject):
         if destinationRoom is not None:
             if(destinationRoom.getModel().hasExit(toExit)):
                 self.__registry.roomShadow.stopProcess()
-                return QtGui.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is already an exit at entry direction from destination room', QtGui.QMessageBox.Ok)
+                return QtWidgets.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is already an exit at entry direction from destination room', QtWidgets.QMessageBox.Ok)
 
             destinationRoom.getModel().addExit(toExit)
             self.markVisitedRoom(destinationRoom.getModel())
@@ -523,7 +522,7 @@ class Navigator(QtCore.QObject):
 
     def goFollow(self, direction):
         if self.__registry.currentlyVisitedRoom is None:
-            return QtGui.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtGui.QMessageBox.Ok)
+            return QtWidgets.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtWidgets.QMessageBox.Ok)
 
         currentRoom = self.__registry.currentlyVisitedRoom
 
@@ -532,7 +531,7 @@ class Navigator(QtCore.QObject):
             sourceSide = link.getSourceSideFor(currentRoom)
             if sourceSide[2] is not None and sourceSide[2] == direction:
                 return self.markVisitedRoom(link.getDestinationFor(currentRoom))
-                #print link.getSourceSideFor(currentRoom)[2]
+                #print(link.getSourceSideFor(currentRoom)[2])
             pass
 
         #still here? then maybe a custom link?
@@ -543,7 +542,7 @@ class Navigator(QtCore.QObject):
 
     def goCustom(self, direction):
         if self.__registry.currentlyVisitedRoom is None:
-            return QtGui.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtGui.QMessageBox.Ok)
+            return QtWidgets.QMessageBox.question(self.__registry.mainWindow, 'Alert', 'There is no active room selected', QtWidgets.QMessageBox.Ok)
 
         currentRoom = self.__registry.currentlyVisitedRoom
 
@@ -552,7 +551,7 @@ class Navigator(QtCore.QObject):
             sourceSide = link.getSourceSideFor(currentRoom)
             if sourceSide[3] is not None and len(sourceSide[3]) and sourceSide[3] == direction:
                 return self.markVisitedRoom(link.getDestinationFor(currentRoom))
-            #print link.getSourceSideFor(currentRoom)[2]
+            #print(link.getSourceSideFor(currentRoom)[2])
             pass
 
         #still here? then maybe a custom link?
@@ -581,7 +580,7 @@ class Navigator(QtCore.QObject):
 
             if exitLink.getSourceSideFor(currentRoom)[3] is not None: return
 
-            #print exitLink
+            #print(exitLink)
             destinationRoom = exitLink.getDestinationFor(currentRoom)
             self.markVisitedRoom(destinationRoom)
 
@@ -592,7 +591,7 @@ class Navigator(QtCore.QObject):
         elif (self.__enableCreation and not self.__registry.blockCreation):
 
             if not self.__enableSameUpDown and (fromExit in [Direction.U, Direction.D] or toExit in [Direction.D, Direction.U]):
-                #print 'creating multilevel room'
+                #print('creating multilevel room')
                 #what happens when changing level?
                 #if create mode check for collision and if no create ate the same coordinates but on different scene
                 otherLevelIndex = self.__registry.currentLevel.getMapIndex()
@@ -721,9 +720,9 @@ class Navigator(QtCore.QObject):
 
 
     def mergeRooms(self, existingRoom, overlappingRoom):
-        print 'running room merge for'
-        print existingRoom
-        print overlappingRoom
+        print('running room merge for')
+        print(existingRoom)
+        print(overlappingRoom)
         for exit, link in existingRoom.getLinks().items():
             if overlappingRoom.hasExit(exit):
                 raise Exception('Cannot merge rooms as some exits are overlapping')
@@ -749,9 +748,9 @@ class Navigator(QtCore.QObject):
         self.changeZone(roomModel.getLevel().zone())
         self.switchLevel(roomModel.getLevel().getMapIndex())
 
-        roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
+        roomModel.getView().setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, False)
         roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
-        roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
+        roomModel.getView().setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
 
 
     def markVisitedRoom(self, roomModel):
@@ -771,17 +770,17 @@ class Navigator(QtCore.QObject):
         if len(roomModel.getView().scene().views()):
             if self.__registry.centerAt:
                 #workaround to a bug with centerAt
-                roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
+                roomModel.getView().setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, False)
                 roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
-                roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
+                roomModel.getView().setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
                 pass
             else:
                 roomPositionWithinScene = roomModel.getView().pos()
                 roomPositionWithinView = roomModel.getView().scene().views()[0].mapFromScene(roomPositionWithinScene)
                 if roomPositionWithinView.x() < 10 or roomPositionWithinView.y() < 10:
-                    roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, False)
+                    roomModel.getView().setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, False)
                     roomModel.getView().scene().views()[0].centerOn(roomModel.getView().pos())
-                    roomModel.getView().setFlag(QtGui.QGraphicsItem.ItemIsMovable, True)
+                    roomModel.getView().setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
 
 
         for item in roomModel.getView().scene().selectedItems():
@@ -791,7 +790,7 @@ class Navigator(QtCore.QObject):
         roomModel.getView().update()
 
         for i in range(0, self.__registry.mainWindow.selectZone.count()):
-            if self.__registry.mainWindow.selectZone.itemData(i).toString() == roomModel.getLevel().zone():
+            if self.__registry.mainWindow.selectZone.itemData(i) == roomModel.getLevel().zone():
                 self.__registry.mainWindow.selectZone.blockSignals(True)
                 self.__registry.mainWindow.selectZone.setCurrentIndex(i)
                 self.__registry.mainWindow.selectZone.blockSignals(False)
@@ -843,14 +842,4 @@ class Clipboard:
 
 
         data = {'rooms':items, 'links':links}
-        QtGui.QApplication.clipboard().setText(base64.standard_b64encode(json.dumps(data)))
-
-
-
-
-
-
-
-
-
-
+        QtWidgets.QApplication.clipboard().setText(json.dumps(data))

@@ -1,7 +1,7 @@
 
-from PyQt4 import QtGui, QtCore
-import entity
-import model
+from PyQt5 import QtGui, QtCore, QtWidgets
+from . import entity
+from . import model
 import di
 
 
@@ -21,19 +21,19 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
 
 
     def getItems(self):
-        items = set(self.__room.getLinks().values()+self.__room.getCustomLinks())
+        items = set(list(self.__room.getLinks().values())+self.__room.getCustomLinks())
         return list(items)
 
 
     def rowCount(self, QModelIndex):
-        items = set(self.__room.getLinks().values()+self.__room.getCustomLinks())
+        items = set(list(self.__room.getLinks().values())+self.__room.getCustomLinks())
         return len(items)
     def columnCount(self, QModelIndex):
         #1-exit, 2-label, 3-destination
         return 6
     def data(self, QModelIndex, role):
         if role == QtCore.Qt.DisplayRole or role == QtCore.Qt.EditRole:
-            items = set(self.__room.getLinks().values()+self.__room.getCustomLinks())
+            items = set(list(self.__room.getLinks().values())+self.__room.getCustomLinks())
             items = list(items)
             link = items[QModelIndex.row()]
             sourceSide = link.getSourceSideFor(self.__room)
@@ -65,13 +65,13 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
                 items = self.getItems()
                 item = items[QModelIndex.row()]
                 sourceSide = item.getSourceSideFor(self.__room)
-                item.replaceSourceSideFor(self.__room, sourceSide[1], data.toString() if len(data.toString()) else None, sourceSide[3])
+                item.replaceSourceSideFor(self.__room, sourceSide[1], str(data) if len(str(data)) else None, sourceSide[3])
                 return True
             if QModelIndex.column() == self.COLUMN_REBIND:
                 items = self.getItems()
                 item = items[QModelIndex.row()]
                 sourceSide = item.getSourceSideFor(self.__room)
-                item.replaceSourceSideFor(self.__room, sourceSide[1], sourceSide[2], data.toString() if len(data.toString()) else None)
+                item.replaceSourceSideFor(self.__room, sourceSide[1], sourceSide[2], str(data) if len(str(data)) else None)
                 return True
 
     def flags(self, QModelIndex):
@@ -82,7 +82,7 @@ class PropertiesExitsTableModel(QtCore.QAbstractTableModel):
 
     def doubleClicked(self, QModelIndex):
         if QModelIndex.column() == self.COLUMN_GO_BUTTON:
-            roomId = str(self.index(QModelIndex.row(), self.COLUMN_DESTINATION).data().toString())
+            roomId = str(self.index(QModelIndex.row(), self.COLUMN_DESTINATION).data())
             self.__navigator.markVisitedRoom(self.__map.rooms()[roomId])
         if QModelIndex.column() == self.COLUMN_REMOVE_BUTTON:
             items = self.getItems()
@@ -111,7 +111,7 @@ class RoomProperties(QtCore.QObject):
         self.__uiDisabled = mainWindow.uiPropertiesDisabled
         self.__uiExitsTable = mainWindow.uiPropertiesExits
         self.__uiExitsTable.verticalHeader().hide()
-        self.__uiExitsTable.horizontalHeader().setResizeMode(QtGui.QHeaderView.ResizeToContents)
+        self.__uiExitsTable.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeToContents)
 
         mainWindow.uiPropertiesColorPicker.clicked.connect(self.pickColor)
 
@@ -125,9 +125,9 @@ class RoomProperties(QtCore.QObject):
     def pickColor(self):
         color = self.__room.getProperty(model.Room.PROP_COLOR)
         if color is not None and len(color):
-            QColor = QtGui.QColorDialog.getColor(QtGui.QColor(color))
+            QColor = QtWidgets.QColorDialog.getColor(QtGui.QColor(color))
         else:
-            QColor = QtGui.QColorDialog.getColor()
+            QColor = QtWidgets.QColorDialog.getColor()
         if not QColor.isValid(): return
         self.__uiColor.setText(str(QColor.name()))
         self.__uiColor.textEdited.emit('dummy')
@@ -159,7 +159,7 @@ class RoomProperties(QtCore.QObject):
         #self.__uiExitsTable.clicked.connect(model.clicked)
 
         #for index in range(model.rowCount(None)):
-        #    button = QtGui.QToolButton()
+        #    button = QtWidgets.QToolButton()
         #    button.setText(str(model.index(index, PropertiesExitsTableModel.COLUMN_DESTINATION).data().toString()))
         #    button.clicked.connect(lambda: self.__navigator.markVisitedRoom(self.__map.rooms()[str(model.index(index, PropertiesExitsTableModel.COLUMN_DESTINATION).data().toString())]))
         #    self.__uiExitsTable.setIndexWidget(model.index(index, PropertiesExitsTableModel.COLUMN_GO_BUTTON), button)

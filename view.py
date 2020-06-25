@@ -1,5 +1,5 @@
 
-from PyQt4 import uic, QtGui, QtCore, QtOpenGL
+from PyQt5 import uic, QtGui, QtCore, QtOpenGL, QtWidgets
 import di, model.model as model
 import json, base64
 import types
@@ -27,7 +27,7 @@ class uiMainWindow(window, base):
         self.__mapView = uiMapView()
         self.__mapView.enableAntialiasing(True)
 
-        self.uiMapViewFrame.setLayout(QtGui.QVBoxLayout())
+        self.uiMapViewFrame.setLayout(QtWidgets.QVBoxLayout())
         self.uiMapViewFrame.layout().addWidget(self.__mapView)
         #self.switchDisplaying()
         self.__mapView.show()
@@ -53,7 +53,7 @@ class uiMainWindow(window, base):
         fileMenu = menubar.addMenu('Shortcuts')
         shorts = shortcuts.shortcuts()
         for room in shorts:
-            exitAction = QtGui.QAction(QtCore.QString(room['name']), fileMenu)
+            exitAction = QtWidgets.QAction(room['name'], fileMenu)
             exitAction.setToolTip(room['room'])
             exitAction.triggered.connect(lambda dummy, roomId=room['room']: self.__navigator.viewRoom(roomId))
             fileMenu.addAction(exitAction)
@@ -70,9 +70,9 @@ class uiMainWindow(window, base):
 
     def setKeepOnTop(self, keep):
         if keep:
-            self.setWindowFlags(self.windowFlags() | QtCore.Qt.WindowStaysOnTopHint)
+            self.setWindowFlag(QtCore.Qt.WindowStaysOnTopHint, True)
         else:
-            self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowStaysOnTopHint)
+            self.setWindowFlag(QtCore.Qt.WindowStaysOnTopHint, False)
         self.show()
 
     def mapView(self):
@@ -90,7 +90,7 @@ class uiMainWindow(window, base):
             self.autoPlacement.setChecked(not self.autoPlacement.isChecked())
 
         if QKeyEvent.key() == QtCore.Qt.Key_Shift:
-            self.__mapView.setDragMode(QtGui.QGraphicsView.RubberBandDrag)
+            self.__mapView.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
 
         if QKeyEvent.key() == QtCore.Qt.Key_Escape:
             self.__registry.roomShadow.stopProcess()
@@ -119,9 +119,9 @@ class uiMainWindow(window, base):
 
     def keyReleaseEvent(self, QKeyEvent):
         if QKeyEvent.key() == QtCore.Qt.Key_Shift:
-            self.__mapView.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
+            self.__mapView.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
 
-class uiMapLevel(QtGui.QGraphicsScene):
+class uiMapLevel(QtWidgets.QGraphicsScene):
     __model=None
     def __init__(self):
         super(uiMapLevel, self).__init__()
@@ -134,7 +134,7 @@ class uiMapLevel(QtGui.QGraphicsScene):
         return self.__model
 
 
-class uiMapView(QtGui.QGraphicsView):
+class uiMapView(QtWidgets.QGraphicsView):
     __coordinatesHelper=di.ComponentRequest('CoordinatesHelper')
     __roomFactory=di.ComponentRequest('RoomFactory')
     __registry=di.ComponentRequest('Registry')
@@ -147,7 +147,7 @@ class uiMapView(QtGui.QGraphicsView):
         else:
             self.setRenderHints(QtGui.QPainter.RenderHints())
             self.update()
-        print self.renderHints()
+        print(self.renderHints())
 
     def setScene(self, scene):
 
@@ -181,15 +181,15 @@ class uiMapView(QtGui.QGraphicsView):
     def __init__(self):
         super(uiMapView, self).__init__()
         #self.setDragMode(QtGui.QGraphicsView.RubberBandDrag)
-        self.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
+        self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
         #self.setRenderHints(QtGui.QPainter.Antialiasing | QtGui.QPainter.TextAntialiasing | QtGui.QPainter.SmoothPixmapTransform | QtGui.QPainter.HighQualityAntialiasing | QtGui.QPainter.NonCosmeticDefaultPen)
-        self.setResizeAnchor(QtGui.QGraphicsView.AnchorViewCenter)
+        self.setResizeAnchor(QtWidgets.QGraphicsView.AnchorViewCenter)
         #self.setViewportUpdateMode(QtGui.QGraphicsView.MinimalViewportUpdate)
 
     def contextMenuEvent(self, event):
         eventPos = event.pos()
-        menu = QtGui.QMenu()
-        action = QtGui.QAction(str.format('Add room at {0}x{1}', eventPos.x(), eventPos.y()), self)
+        menu = QtWidgets.QMenu()
+        action = QtWidgets.QAction(str.format('Add room at {0}x{1}', eventPos.x(), eventPos.y()), self)
 
         createAt = self.coordinatesHelper().centerFrom(self.mapToScene(eventPos))
 
@@ -197,14 +197,14 @@ class uiMapView(QtGui.QGraphicsView):
 
         menu.addAction(action)
 
-        action = QtGui.QAction(str.format('Paste at {0}x{1}', eventPos.x(), eventPos.y()), self)
+        action = QtWidgets.QAction(str.format('Paste at {0}x{1}', eventPos.x(), eventPos.y()), self)
         action.setDisabled(True)
-        if QtGui.QApplication.clipboard().text():
+        if QtWidgets.QApplication.clipboard().text():
             action.setDisabled(False)
-            action.triggered.connect(lambda: self.roomFactory().pasteAt(createAt, self.scene(), json.loads(base64.standard_b64decode(QtGui.QApplication.clipboard().text()))))
+            action.triggered.connect(lambda: self.roomFactory().pasteAt(createAt, self.scene(), json.loads(QtWidgets.QApplication.clipboard().text())))
         menu.addAction(action)
 
-        action = QtGui.QAction(str.format('Create label at {0}x{1}', eventPos.x(), eventPos.y()), self)
+        action = QtWidgets.QAction(str.format('Create label at {0}x{1}', eventPos.x(), eventPos.y()), self)
         action.triggered.connect(lambda: self.roomFactory().createLabelAt(createAt, self.scene()))
         menu.addAction(action)
 
@@ -212,13 +212,13 @@ class uiMapView(QtGui.QGraphicsView):
         menu.exec_(event.globalPos())
         event.accept()
 
-class Link(QtGui.QGraphicsLineItem):
+class Link(QtWidgets.QGraphicsLineItem):
     __coordinateshelper=di.ComponentRequest('CoordinatesHelper')
     __model=None
 
     def __init__(self):
         super(Link, self).__init__()
-        self.setCacheMode(QtGui.QGraphicsItem.DeviceCoordinateCache)
+        self.setCacheMode(QtWidgets.QGraphicsItem.DeviceCoordinateCache)
 
     def setModel(self, model):
         self.__model = model
@@ -239,7 +239,7 @@ class Link(QtGui.QGraphicsLineItem):
         self.setZValue(-1)
         self.update()
 
-class ShadowLink(QtGui.QGraphicsLineItem):
+class ShadowLink(QtWidgets.QGraphicsLineItem):
     __registry=di.ComponentRequest('Registry')
     __coordinateshelper=di.ComponentRequest('CoordinatesHelper')
     def __init__(self):
@@ -250,7 +250,7 @@ class ShadowLink(QtGui.QGraphicsLineItem):
         self.setLine(startPoint.x(), startPoint.y(), endPoint.x(), endPoint.y())
         self.update()
 
-class RoomShadow(QtGui.QGraphicsItem):
+class RoomShadow(QtWidgets.QGraphicsItem):
     __config = di.ComponentRequest('Config')
     __registry=di.ComponentRequest('Registry')
     __navigator=di.ComponentRequest('Navigator')
@@ -291,7 +291,7 @@ class RoomShadow(QtGui.QGraphicsItem):
         if not self.inProcess(): return
         self.__navigator.dropRoomFromShadow()
         self.stopProcess()
-        #print 'fired priocess'
+        #print('fired priocess')
 
     def paint(self, painter, option, widget):
 
@@ -300,7 +300,7 @@ class RoomShadow(QtGui.QGraphicsItem):
         painter.setPen(QtCore.Qt.DashLine)
         painter.drawRect(0,0,objectSize,objectSize)
 
-class Room(QtGui.QGraphicsItem):
+class Room(QtWidgets.QGraphicsItem):
     __boundingRect=None
     __config = di.ComponentRequest('Config')
     __registry= di.ComponentRequest('Registry')
@@ -314,9 +314,9 @@ class Room(QtGui.QGraphicsItem):
 
         self.color = self.defColor = QtGui.QColor(100,100,100)
 
-        self.setFlags(QtGui.QGraphicsItem.ItemSendsGeometryChanges | QtGui.QGraphicsItem.ItemIsSelectable | QtGui.QGraphicsItem.ItemIsMovable | QtGui.QGraphicsItem.ItemIsFocusable)
+        self.setFlags(QtWidgets.QGraphicsItem.ItemSendsGeometryChanges | QtWidgets.QGraphicsItem.ItemIsSelectable | QtWidgets.QGraphicsItem.ItemIsMovable | QtWidgets.QGraphicsItem.ItemIsFocusable)
 
-        #self.setFlag(QtGui.QGraphicsItem.ItemIsFocusable)
+        #self.setFlag(QtWidgets.QGraphicsItem.ItemIsFocusable)
 
     def setModel(self, model):
         self.__model = model
@@ -577,9 +577,9 @@ class Room(QtGui.QGraphicsItem):
 
         label = self.__model.getProperty(model.Room.PROP_LABEL)
         if len(label):
-            font = QtGui.QFont(QtGui.QApplication.font())
+            font = QtGui.QFont(QtWidgets.QApplication.font())
             font.setPointSize(font.pointSize()*1.3)
-            font.setWeight(100)
+            font.setWeight(80)
             painter.setFont(font)
             label= label.rjust(2,' ')
             label = label.ljust(3,' ')
@@ -589,7 +589,7 @@ class Room(QtGui.QGraphicsItem):
         #return pixmap
 
     #def mousePressEvent(self, QGraphicsSceneMouseEvent):
-    #    print QGraphicsSceneMouseEvent.modifiers() & QtCore.Qt.ShiftModifier
+    #    print(QGraphicsSceneMouseEvent.modifiers() & QtCore.Qt.ShiftModifier)
     #    if not QGraphicsSceneMouseEvent.modifiers() & QtCore.Qt.ShiftModifier:
     #        for item in self.scene().selectedItems():
     #            item.setSelected(False)#
@@ -600,7 +600,7 @@ class Room(QtGui.QGraphicsItem):
        self.__navigator.markVisitedRoom(self.__model)
 
     def itemChange(self, QGraphicsItem_GraphicsItemChange, QVariant):
-        if QGraphicsItem_GraphicsItemChange == QtGui.QGraphicsItem.ItemPositionChange:
+        if QGraphicsItem_GraphicsItemChange == QtWidgets.QGraphicsItem.ItemPositionChange:
             originPoint = QVariant.toPoint()
             if  abs(originPoint.x() - self.getModel().position().x()) > (2 * self.__config.getSize()) or \
                 abs(originPoint.y() - self.getModel().position().y()) > (2 * self.__config.getSize()):
@@ -608,7 +608,7 @@ class Room(QtGui.QGraphicsItem):
 
             return self.__coordinatesHelper.snapToGrid(QVariant.toPoint())
 
-        if QGraphicsItem_GraphicsItemChange == QtGui.QGraphicsItem.ItemPositionHasChanged:
+        if QGraphicsItem_GraphicsItemChange == QtWidgets.QGraphicsItem.ItemPositionHasChanged:
             self.getModel().setPositionFromView()
             links = self.getModel().getLinks()
             for link in links:
@@ -622,7 +622,7 @@ class Room(QtGui.QGraphicsItem):
 
         return super(Room, self).itemChange(QGraphicsItem_GraphicsItemChange, QVariant)
 
-class Label(QtGui.QGraphicsTextItem):
+class Label(QtWidgets.QGraphicsTextItem):
     def __init__(self, text):
         super(Label, self).__init__(text)
         font = QtGui.QFont()

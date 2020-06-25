@@ -6,7 +6,7 @@ import textwrap, string
 import os, shutil, sys
 import model.model as model
 import view
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 import di
 import sys
 
@@ -22,7 +22,7 @@ class Serializer:
         zones = []
         zonesUnsorted = []
 
-        for zone in mapObject.zones().itervalues():
+        for zone in mapObject.zones().values():
             zonesUnsorted.append(zone)
 
         zonesSorted = sorted(zonesUnsorted, key=lambda zone: zone.id())
@@ -33,7 +33,7 @@ class Serializer:
         zonesData = zones
 
         levels = []
-        #print 'Gathering levels'
+        #print('Gathering levels')
         levelsUnsorted = []
         for index, level in mapObject.levels().items():
             levelsUnsorted.append(level)
@@ -43,13 +43,13 @@ class Serializer:
         for level in levelsSorted:
             levels.append([level.getId(), level.getMapIndex(), level.getView().sceneRect().x(),level.getView().sceneRect().y(), level.getView().sceneRect().width(), level.getView().sceneRect().height(), level.zone()])
 
-        #print 'Serializing levels'
+        #print('Serializing levels')
         #levelsData = base64.standard_b64encode(json.dumps(levels))
         levelsData = levels
-        #print 'Done -----'
+        #print('Done -----')
 
         rooms = []
-        #print 'Gathering rooms'
+        #print('Gathering rooms')
         for index, room in mapObject.rooms().items():
             newSettings = {}
             for key, value in room.getSettings().items():
@@ -58,33 +58,33 @@ class Serializer:
                 if value == 'True': value=True
                 newSettings[key] = value
             rooms.append([room.getId(), room.getLevel().getId(), room.getView().pos().x(), room.getView().pos().y(), newSettings])
-        #print 'Serializing rooms'
+        #print('Serializing rooms')
         #roomsData = base64.standard_b64encode(json.dumps(rooms))
         roomsData = sorted(rooms, key=lambda room: room[0])
-        #print 'Done -----'
+        #print('Done -----')
 
         customLinksSource = []
 
         links = []
-        #print 'Gathering links'
+        #print('Gathering links')
         for index, link in mapObject.links().items():
             if link.isCustom():
                 customLinksSource.append(link)
                 continue
             links.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getLeft()[3], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2], link.getRight()[3]])
-        #print 'Serializing links'
+        #print('Serializing links')
         #linksData = base64.standard_b64encode(json.dumps(links))
         linksData = sorted(links, key=lambda link: link[0]+str(link[1])+link[4]+str(link[5]))
-        #print 'Done -----'
+        #print('Done -----')
 
         customLinks = []
-        #print 'Gathering custom links'
+        #print('Gathering custom links')
         for link in customLinksSource:
             customLinks.append([link.getLeft()[0].getId(), link.getLeft()[1], link.getLeft()[2], link.getLeft()[3], link.getRight()[0].getId(), link.getRight()[1], link.getRight()[2], link.getRight()[3]])
-        #print 'Serializing links'
+        #print('Serializing links')
         #linksData = base64.standard_b64encode(json.dumps(links))
         customLinksData = sorted(customLinks, key=lambda link: link[0]+str(link[1])+link[4]+str(link[5]))
-        #print 'Done -----'
+        #print('Done -----')
 
         labels = []
         for index, level in mapObject.levels().items():
@@ -94,13 +94,13 @@ class Serializer:
 
         labels = sorted(labels, key=lambda label: label[0])
 
-        #print 'Creating data dictionary'
-        mapData = fileData = dict([('zones', zonesData),('levels', levelsData),('rooms', roomsData), ('links', linksData), ('customLinks', customLinksData), ('labels', labels)])
+        #print('Creating data dictionary')
+        mapData = fileData = dict([('links', linksData),('customLinks', customLinksData), ('labels', labels), ('zones', zonesData),('levels', levelsData),('rooms', roomsData)])
 
-        #print 'Serializing it'
+        #print('Serializing it')
         fileData = json.dumps(fileData, indent=1)
 
-        if Serializer.mapFile is None or Serializer.mapFile is '':
+        if Serializer.mapFile is None or Serializer.mapFile == '':
             Serializer.mapFile = 'map.db'
 
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
@@ -119,21 +119,19 @@ class Serializer:
         if os.path.exists(mapFile):
             shutil.move(mapFile, mapFile+'.bak')
 
-        fileData = fileData
-
-        #print 'Writing data dictionary'
+        #print('Writing data dictionary')
         f = open(mapFile, 'wb')
-        f.write(fileData)
+        f.write(fileData.encode())
         f.close()
 
-        print 'Zones: %s' % len(mapData['zones'])
-        print 'Levels: %s' % len(mapData['levels'])
-        print 'Rooms: %s' % len(mapData['rooms'])
-        print 'Links: %s' % len(mapData['links'])
-        print 'Labels: %s' % len(mapData['labels'])
-        print 'Saved %s to %s ' % (Serializer.humanize_bytes(os.path.getsize(mapFile)), mapFile)
+        print('Zones: %s' % len(mapData['zones']))
+        print('Levels: %s' % len(mapData['levels']))
+        print('Rooms: %s' % len(mapData['rooms']))
+        print('Links: %s' % len(mapData['links']))
+        print('Labels: %s' % len(mapData['labels']))
+        print('Saved %s to %s ' % (Serializer.humanize_bytes(os.path.getsize(mapFile)), mapFile))
 
-        #print ' ------ SAVE COMPLETE -------'
+        #print(' ------ SAVE COMPLETE -------')
 
     @staticmethod
     def getHomeDir():
@@ -144,7 +142,7 @@ class Serializer:
     @staticmethod
     def loadMap(window, mapView, QProgressBar, application):
 
-        if Serializer.mapFile is None or Serializer.mapFile is '':
+        if Serializer.mapFile is None or Serializer.mapFile == '':
             return
 
         import time
@@ -153,7 +151,7 @@ class Serializer:
 
         base = millis()
 
-        print 'Start %s' % base
+        print('Start %s' % base)
 
         baseDir = os.getenv("USERPROFILE") if sys.platform == 'win32' else os.getenv("HOME")
         baseDir = baseDir+'/.tf-mapper/'
@@ -174,12 +172,12 @@ class Serializer:
 
 
         overall = (millis() - base)
-        print 'File opened %s (%s) - %s' % (overall, millis() - base, mapFile)
+        print('File opened %s (%s) - %s' % (overall, millis() - base, mapFile))
 
         mapData = f.read()
 
         overall = (millis() - base)
-        print 'File read %s (%s)' % (overall, millis() - overall)
+        print('File read %s (%s)' % (overall, millis() - overall))
 
         f.close()
 
@@ -189,21 +187,21 @@ class Serializer:
         except: pass
 
         overall = (millis() - base)
-        print 'File decompressed read %s (%s)' % (overall, millis() - overall)
+        print('File decompressed read %s (%s)' % (overall, millis() - overall))
 
         try:
             if not mapData[:1] == '{':
-                mapData = base64.standard_b64decode(mapData)
+                mapData = mapData.decode("utf-8")
         except: pass
 
         try:
-            mapData = json.loads(mapData)
+            mapData = json.loads(mapData.encode())
         except: return False
 
         overall = (millis() - base)
-        print 'File decoded %s (%s)' % (overall, millis() - overall)
+        print('File decoded %s (%s)' % (overall, millis() - overall))
 
-        if isinstance(mapData['levels'], basestring):
+        if isinstance(mapData['levels'], str):
             levels = json.loads(base64.standard_b64decode(mapData['levels']))
             rooms = json.loads(base64.standard_b64decode(mapData['rooms']))
             links = json.loads(base64.standard_b64decode(mapData['links']))
@@ -226,7 +224,7 @@ class Serializer:
 
         factory = Serializer.factory
 
-        from PyQt4 import QtCore
+        from PyQt5 import QtCore
 
         levelsById = {}
 
@@ -248,7 +246,7 @@ class Serializer:
         window.selectZone.blockSignals(False)
         window.selectZone.setCurrentIndex(-1)
         window.selectZone.setCurrentIndex(0)
-        Serializer.registry.setCurrentZone(window.selectZone.itemData(0).toString())
+        Serializer.registry.setCurrentZone(window.selectZone.itemData(0))
 
         mapModelRegistry = Serializer.registry
 
@@ -263,7 +261,7 @@ class Serializer:
             levelsById[levelModel.getId()] = levelModel
 
         overall = (millis() - base)
-        print 'Levels created %s (%s)' % (overall, millis() - overall)
+        print('Levels created %s (%s)' % (overall, millis() - overall))
 
         QProgressBar.setValue(45)
         application.processEvents()
@@ -274,7 +272,7 @@ class Serializer:
             roomModel = factory.createAt(QtCore.QPointF(room[2], room[3]), levelsById[room[1]].getView(), room[0], room[4])
 
         overall = (millis() - base)
-        print 'Rooms created %s (%s)' % (overall, millis() - overall)
+        print('Rooms created %s (%s)' % (overall, millis() - overall))
 
         QProgressBar.setValue(55)
         application.processEvents()
@@ -320,7 +318,7 @@ class Serializer:
             except: pass
 
         overall = (millis() - base)
-        print 'Links created %s (%s)' % (overall, millis() - overall)
+        print('Links created %s (%s)' % (overall, millis() - overall))
 
         QProgressBar.setValue(65)
         application.processEvents()
@@ -330,18 +328,18 @@ class Serializer:
         aaa = Serializer.registry
 
         overall = (millis() - base)
-        print 'Completed created %s (%s)' % (overall, millis() - overall)
+        print('Completed created %s (%s)' % (overall, millis() - overall))
 
         return True
 
     @staticmethod
     def humanize_bytes(bytes, precision=1):
         abbrevs = (
-            (1<<50L, 'PB'),
-            (1<<40L, 'TB'),
-            (1<<30L, 'GB'),
-            (1<<20L, 'MB'),
-            (1<<10L, 'kB'),
+            (1<<50, 'PB'),
+            (1<<40, 'TB'),
+            (1<<30, 'GB'),
+            (1<<20, 'MB'),
+            (1<<10, 'kB'),
             (1, 'bytes')
         )
         if bytes == 1:
@@ -356,8 +354,8 @@ class Importer():
     def importCmud(fileName=None):
 
         if fileName is False or fileName is None:
-            fileName = QtGui.QFileDialog.getOpenFileName(None, 'Open CMUD map for import...', Serializer.getHomeDir(), 'Map (*.dbm)')
-            if not fileName or fileName is None or str(fileName[0]) is "":
+            fileName = QtWidgets.QFileDialog.getOpenFileName(None, 'Open CMUD map for import...', Serializer.getHomeDir(), 'Map (*.dbm)')
+            if not fileName or fileName is None or str(fileName[0]) == "":
                 return
             fileName = str(fileName)
 
@@ -398,7 +396,7 @@ class Importer():
 
         factory = Serializer.factory
 
-        from PyQt4 import QtCore
+        from PyQt5 import QtCore
 
         levels = Serializer.registry.levels()
 
